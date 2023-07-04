@@ -1,0 +1,21 @@
+.item-icon {
+    --icon-size: 64px;
+    --icon-pos-x: 0;
+    --icon-pos-y: 0;
+    --icon-image: url(../img/item/item.png);
+    height: var(--icon-size);
+    width: var(--icon-size);
+    display: inline-block;
+    background-image: var(--icon-image);
+    image-rendering: pixelated;
+    background-size: calc(var(--icon-size) * 16);
+    background-position: calc(var(--icon-size) * var(--icon-pos-x)) calc(var(--icon-size) * var(--icon-pos-y));
+}
+
+.item-icon[data-item-type='weapon'] {
+    --icon-image: url(../img/item/weapon.png);
+}
+
+.item-icon[data-item-id='magnifier'] { --icon-pos-x: 0; --icon-pos-y: 0; }
+
+.item-icon[data-item-id='sword'] { --icon-pos-x: 0; --icon-pos-y: 0; }
