@@ -44,7 +44,7 @@ class Weapon extends Item {
         if (this.attribute.attack <= 0) return { state: 'fail', failReason: 'action_invalid' };
 
         if (++this.damage >= this.attribute.health) this.disabled = true;
-
+        
         return {
             state: 'success',
             data: {

@@ -14,7 +14,8 @@ class Player {
             healthDamage:       function() {},
             healthRegeneration: function() {},
             dead:               function() {},
-            updateAttribute:    function() {}
+            updateAttribute:    function() {},
+            updateHotbar:       function() {}
         };
 
         this.create(world);
@@ -73,19 +74,53 @@ class Player {
         };
     }
 
+    /**
+     * 玩家移动到指定位置
+     * @param {Number} y Y坐标
+     * @param {Number} x X坐标
+     * @returns 方块数据
+     */
     goto(y, x) {
         if (this.world.getSelectedRoom().getSelectedStage().map[y][x].searched) return;
         this.lastPos = [y, x];
         let r = this.world.getSelectedRoom().getSelectedStage().goto(y, x);
         this.boundEvent.goto(r);
         if (r.type == 'monster') {
+            let killFail = false,
+                defFail  = false;
             if (this.hotbar[this.selectedSlot]?.type == 'weapon') {
-                this.hotbar[this.selectedSlot].attack();
+                // 攻击阶段
+                let atk = this.hotbar[this.selectedSlot].attack();
+                if (atk.state == 'success') {
+                    if (atk.data.attack >= r.data.health) {
+                        
+                    } else {
+                        killFail = true;
+                    }
+                } else {
+                    killFail = true;
+                }
+
+                // 防御阶段
+                if (killFail) {
+                    let def = this.hotbar[this.selectedSlot].defense(r.data.attack);
+                    if (def.state == 'success') {
+                        this.damage(def.data.undefendedDamage);
+                    } else {
+                        defFail = true;
+                    }
+                }
             } else {
-                this.damage(1);
+                defFail = true;
             }
             
+            if (defFail) {
+                this.damage(r?.data?.attack ? r.data.attack : 0);
+            }
         }
+
+        this.updateHotbar();
+
         return r;
     }
 
@@ -158,6 +193,8 @@ class Player {
             this.hotbar[solt] = item;
         }
 
+        this.updateHotbar();
+
         return {
             state: 'success',
             data: {
@@ -169,5 +206,13 @@ class Player {
 
     selectSlot(value) {
         this.selectedSlot = value;
+        this.updateHotbar();
+    }
+
+    updateHotbar() {
+        this.boundEvent.updateHotbar({
+            hotbar: this.hotbar,
+            selectedSlot: this.selectedSlot
+        });
     }
 }

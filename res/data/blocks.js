@@ -10,6 +10,10 @@ let db_blocks = [
         type: 'stair'
     }, {
         id: 'monster',
-        type: 'monster'
+        type: 'monster',
+        data: {
+            attack: 1,
+            health: 1
+        }
     }
 ];

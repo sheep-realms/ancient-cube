@@ -86,7 +86,8 @@ class Stage {
             return {
                 state: 'event',
                 pos:   [y, x],
-                type:  this.map[y][x].type
+                type:  this.map[y][x].type,
+                data:  this.map[y][x]?.data
             }
         } else {
             let s = this.search(y, x);

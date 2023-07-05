@@ -92,6 +92,10 @@ $(document).ready(() => {
         p.goto(y, x)
     });
 
+    $('#player-hotbar').on('click', '.player-hotbar-item', function() {
+        p.selectSlot($(this).data('slot'));
+    });
+
     p.bind('goto', function(e) {
         $sel = $(`#map-${e.pos[0]}-${e.pos[1]}`);
         if (e.state == 'search') {
@@ -194,6 +198,18 @@ $(document).ready(() => {
 
     p.bind('dead', function(e) {
         screenEffectPlayerDeath(e.lastPos[0], e.lastPos[1]);
+    });
+
+    p.bind('updateHotbar', function(e) {
+        let damage = e.hotbar[1].damage;
+        let health = e.hotbar[1].attribute.health;
+        let value = (health - damage) / health;
+        if (value < 0) value = 0;
+        if (value > 1) value - 1;
+        $('#player-hotbar-1 .item-damage-value').attr('style', `--value: ${value * 100}%;`);
+        if (value != 1) $('#player-hotbar-1 .item-damage-bar').removeClass('hide');
+        $('.player-hotbar-item').removeClass('selected');
+        $('#player-hotbar-' + e.selectedSlot).addClass('selected');
     });
 });
 
