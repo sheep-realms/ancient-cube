@@ -4,6 +4,7 @@ let game = new Game();
 
 let resource = new Resource();
 resource.data.blocks = db_blocks;
+resource.data.items = db_items;
 
 let w = new World();
 w.create();

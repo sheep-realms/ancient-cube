@@ -9,7 +9,9 @@ let db_items = [
             attribute: {
                 attack: 1,
                 defense: 1,
-                cost: 1
+                attack_cost: 1,
+                defense_cost: 1,
+                health: 75
             }
         }
     }, {
@@ -19,7 +21,9 @@ let db_items = [
             attribute: {
                 attack: 1,
                 defense: 0,
-                cost: 0
+                attack_cost: 0,
+                defense_cost: 0,
+                health: 50
             }
         }
     }
