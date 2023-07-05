@@ -210,6 +210,20 @@ $(document).ready(() => {
         if (value != 1) $('#player-hotbar-1 .item-damage-bar').removeClass('hide');
         $('.player-hotbar-item').removeClass('selected');
         $('#player-hotbar-' + e.selectedSlot).addClass('selected');
+
+        $('#player-hotbar-1 .item-damage-value').removeClass('damage-1 damage-2 damage-3 damage-4');
+
+        if(value >= 0.75) {
+            
+        } else if(value >= 0.5) {
+            $('#player-hotbar-1 .item-damage-value').addClass('damage-1');
+        } else if(value >= 0.25) {
+            $('#player-hotbar-1 .item-damage-value').addClass('damage-2');
+        } else if(value >= 0.1) {
+            $('#player-hotbar-1 .item-damage-value').addClass('damage-3');
+        } else {
+            $('#player-hotbar-1 .item-damage-value').addClass('damage-4');
+        }
     });
 });
 

@@ -117,6 +117,8 @@ class Player {
             if (defFail) {
                 this.damage(r?.data?.attack ? r.data.attack : 0);
             }
+        } else {
+            if (this.hotbar[this.selectedSlot]?.type == 'weapon') this.hotbar[this.selectedSlot].attack();
         }
 
         this.updateHotbar();
