@@ -79,7 +79,12 @@ class Player {
         let r = this.world.getSelectedRoom().getSelectedStage().goto(y, x);
         this.boundEvent.goto(r);
         if (r.type == 'monster') {
-            this.damage(1);
+            if (this.hotbar[this.selectedSlot]?.type == 'weapon') {
+                this.hotbar[this.selectedSlot].attack();
+            } else {
+                this.damage(1);
+            }
+            
         }
         return r;
     }
@@ -110,5 +115,59 @@ class Player {
 
     regeneration() {
 
+    }
+
+    /**
+     * 给予物品
+     * @param {Item} item 物品
+     * @returns 状态和数据
+     */
+    give(item) {
+        if (item instanceof Item == false) return { state: 'fail', failReason: 'item_invalid' };
+        let index = this.inventory.push(item);
+        return {
+            state: 'success',
+            data: {
+                item: item,
+                inventoryIndex: index - 1
+            }
+        }
+    }
+
+    /**
+     * 切换快捷栏物品
+     * @param {Number} solt 快捷栏槽位
+     * @param {Number} index 物品栏索引
+     * @returns 状态和数据
+     */
+    switchHotbarItem(solt, index) {
+        let item, hotbarItem;
+        if (this.inventory[index] == undefined && this.hotbar[solt] == undefined) {
+            return { state: 'fail', failReason: 'null' };
+        } else if (this.hotbar[solt] == undefined) {
+            item = this.inventory.splice(index, 1)[0];
+            this.hotbar[solt] = item;
+        } else if (this.inventory[index] == undefined) {
+            hotbarItem = this.hotbar[solt];
+            this.hotbar[solt] = undefined;
+            this.inventory.push(hotbarItem);
+        } else {
+            item = this.inventory[index];
+            hotbarItem = this.hotbar[solt];
+            this.inventory[index] = hotbarItem;
+            this.hotbar[solt] = item;
+        }
+
+        return {
+            state: 'success',
+            data: {
+                solt: solt,
+                inventoryIndex: index
+            }
+        }
+    }
+
+    selectSlot(value) {
+        this.selectedSlot = value;
     }
 }

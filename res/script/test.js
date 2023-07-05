@@ -10,6 +10,10 @@ let w = new World();
 w.create();
 
 let p = new Player(w);
+let psi = p.give(new Item('magnifier')).data.inventoryIndex;
+let pwi = p.give(new Weapon('sword')).data.inventoryIndex;
+p.switchHotbarItem(1, pwi);
+p.switchHotbarItem(0, psi);
 
 // let ts_map = [
 //     ['air', 'air', 'air', 'chest', 'monster'],

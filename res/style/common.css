@@ -356,8 +356,29 @@
     width: 64px;
     margin: 8px;
     background-color: rgba(0, 0, 0, 0.2);
+    position: relative;
 }
 
 .player-hotbar-item+.player-hotbar-item {
     margin-left: 0;
+}
+
+.player-hotbar-item .item-damage-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.player-hotbar-item .item-damage-bar .item-damage-value {
+    --value: 100%;
+    width: var(--value);
+    height: 4px;
+    background-color: #0084ff;
+}
+
+.player-hotbar-item .item-damage-bar .item-damage-value.hide {
+    display: none;
 }
