@@ -8,17 +8,21 @@ class NumberProviders {
 
     create(type, data) {
         this.type = type;
+        if (typeof data == 'number') data = { value: data };
         this.data = data;
     }
 
     getValue(...initValue) {
         switch (this.type) {
+            // 常数
             case 'constant':
                 return this.data?.value;
 
+            // 随机平均分布
             case 'uniform':
                 return Math.round(Math.random() * (this.data?.max - this.data?.min) + this.data?.min);
 
+            // 透镜
             case 'lens':
                 if (this.data.input?.min == undefined) this.data.input.min = 0;
                 if (this.data.output?.min == undefined) this.data.output.min = 0;
