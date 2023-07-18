@@ -72,19 +72,24 @@ function getHealthDamageIcon(e) {
     return icon;
 }
 
-$(document).ready(() => {
+function loadMap(stage) {
+    $('#map').html('');
     $('#map').attr(
         'style',
-        `--map-size: ${Math.max(w.room[0].stage[0].size.height, w.room[0].stage[0].size.width)};` +
-        `--map-size-height: ${w.room[0].stage[0].size.height};` +
-        `--map-size-width: ${w.room[0].stage[0].size.width};`
+        `--map-size: ${Math.max(stage.size.height, stage.size.width)};` +
+        `--map-size-height: ${stage.size.height};` +
+        `--map-size-width: ${stage.size.width};`
     );
-    for (let i = 0; i < w.room[0].stage[0].size.height; i++) {
+    for (let i = 0; i < stage.size.height; i++) {
         $('#map').append(`<div id="map-${i}" class="map-row"></div>`);
-        for (let j = 0; j < w.room[0].stage[0].size.width; j++) {
+        for (let j = 0; j < stage.size.width; j++) {
             $(`#map-${i}`).append(`<div id="map-${i}-${j}" class="map-block" data-pos-y="${i}" data-pos-x="${j}"></div>`);
         }
     }
+}
+
+$(document).ready(() => {
+    loadMap(w.room[0].stage[0]);
 
     $('#map').on('click', '.map-block', function() {
         let x = $(this).data('pos-x');
@@ -224,6 +229,10 @@ $(document).ready(() => {
         } else {
             $('#player-hotbar-1 .item-damage-value').addClass('damage-4');
         }
+    });
+
+    p.bind('updateMap', function(e) {
+        loadMap(e);
     });
 });
 

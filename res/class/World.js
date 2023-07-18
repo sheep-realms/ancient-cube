@@ -22,6 +22,10 @@ class World {
         return this.room[room].goto(stage, y, x);
     }
 
+    switchStage(stage) {
+        return this.room[this.selectedRoom].switchStage(stage);
+    }
+
     setBlock(room, stage, y, x, id, data = undefined) {
         return this.room[room].setBlock(stage, y, x, id, data);
     }

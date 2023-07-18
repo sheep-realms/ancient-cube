@@ -19,3 +19,4 @@
 .item-icon[data-item-id='magnifier'] { --icon-pos-x: 0; --icon-pos-y: 0; }
 
 .item-icon[data-item-id='sword'] { --icon-pos-x: 0; --icon-pos-y: 0; }
+.item-icon[data-item-id='dagger'] { --icon-pos-x: -1; --icon-pos-y: 0; }

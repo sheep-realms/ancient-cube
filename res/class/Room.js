@@ -8,7 +8,11 @@ class Room {
     }
 
     create() {
-        this.stage[0] = new Stage();
+        this.newStage();
+    }
+
+    newStage() {
+        this.stage.push(new Stage());
     }
 
     search(stage, y, x) {
@@ -17,6 +21,13 @@ class Room {
 
     goto(stage, y, x) {
         return this.stage[stage].goto(y, x);
+    }
+
+    switchStage(stage) {
+        this.selectedStage = stage;
+        if (this.stage[stage] == undefined) {
+            this.stage[stage] = new Stage();
+        }
     }
 
     setBlock(stage, y, x, id, data = undefined) {

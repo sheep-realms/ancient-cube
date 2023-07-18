@@ -15,7 +15,8 @@ class Player {
             healthRegeneration: function() {},
             dead:               function() {},
             updateAttribute:    function() {},
-            updateHotbar:       function() {}
+            updateHotbar:       function() {},
+            updateMap:          function() {}
         };
 
         this.create(world);
@@ -204,6 +205,11 @@ class Player {
                 inventoryIndex: index
             }
         }
+    }
+
+    switchStage(stage) {
+        this.world.switchStage(stage);
+        this.boundEvent.updateMap(this.world.getSelectedRoom().getSelectedStage());
     }
 
     selectSlot(value) {

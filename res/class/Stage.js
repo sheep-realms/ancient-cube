@@ -20,6 +20,12 @@ class Stage {
         }
     }
 
+    clear() {
+        this.generated = false;
+        this.map  = [];
+        this.create();
+    }
+
     search(y, x) {
         if (this.generated == false) this.generate([y, x]);
         if (y >= this.size.height || y < 0) return;
