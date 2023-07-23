@@ -1,15 +1,27 @@
 class LootTable {
-    constructor(value) {
+    constructor(value, from = {}) {
         this.data = {
             type: 'generic',
             randomSeed: 0,
             pools: []
         };
+        this.from = {
+            world: undefined,
+            room: undefined,
+            stage: undefined,
+            player: undefined,
+            item: undefined
+        };
 
-        this.create(value);
+        this.create(value, from);
     }
 
-    create(value) {
+    /**
+     * 创建战利品表
+     * @param {String|Object} value 战利品表ID或战利品表对象
+     * @param {Object} from 来源信息
+     */
+    create(value, from = {}) {
         if (typeof value == 'object') {
             this.data = {...this.data, ...value};
         } else if (typeof value == 'string') {
@@ -18,28 +30,45 @@ class LootTable {
                 this.data = {...this.data, ...d};
             }
         }
-        
+        if (typeof from == 'object') {
+            this.from = {...this.from, ...from};
+        }
     }
 
+    /**
+     * 获取战利品
+     * @returns {Array<Item>} 物品列表
+     */
     getItem() {
         let items = [];
         this.data.pools.forEach(e => {
             let b = this.conditionsTest(e?.conditions);
 
             if (b) {
-                let item = this.weightedRandom(e.entries);
-                if (this.conditionsTest(item?.conditions)) items.push(new Item(item.name));
+                let r = e?.rolls != undefined ? e.rolls : 1
+                if (typeof r == 'object') {
+                    r = new NumberProviders(r).getValue();
+                }
+                for (let i = 0; i < r; i++) {
+                    let item = this.weightedRandom(e.entries);
+                    if (this.conditionsTest(item?.conditions)) items.push(new Item(item.name));
+                }
             }
         });
         return items;
     }
 
+    /**
+     * 测试条件列表
+     * @param {Array<Object>} value 条件列表
+     * @returns {Boolean} 测试是否通过
+     */
     conditionsTest(value) {
         let b = true;
         try {
             if (value != undefined) {
                 value.forEach(e => {
-                    let p = new Predicate(e);
+                    let p = new Predicate(e, this.data.randomSeed);
                     b = p.test() && b;
                 });
             }
@@ -60,7 +89,7 @@ class LootTable {
             weights[i] = options[i].weight + (weights[i - 1] || 0);
         }
         
-        var random = Math.random() * weights[weights.length - 1];
+        var random = SMath.randomFloat(this.randomSeed) * weights[weights.length - 1];
         
         for (i = 0; i < weights.length; i++)
             if (weights[i] > random)
@@ -71,23 +100,34 @@ class LootTable {
 }
 
 class Predicate {
-    constructor(value) {
+    constructor(value, seed = 0) {
         this.data = {
             condition: 'empty'
         };
+        this.randomSeed = seed;
 
         this.create(value);
     }
 
-    create(value) {
+    /**
+     * 创建战利品表谓词
+     * @param {Object} value 战利品表谓词
+     */
+    create(value, seed = 0) {
         this.data = {...this.data, ...value};
     }
 
+    /**
+     * 测试条件
+     * @returns {Boolean} 测试是否通过
+     */
     test() {
         switch (this.data.condition) {
+            // 空
             case 'empty':
                 return true;
             
+            // 检查设备时间
             case 'device_time_check':
                 let d = new Date();
                 let now = d.getTime();
@@ -95,12 +135,14 @@ class Predicate {
                 if (this.data.max > now && this.data.min < now) return true;
                 return false;
 
+            // 掷硬币
             case 'random_chance':
-                let r = Math.random()
+                let r = SMath.randomFloat(this.randomSeed);
 
                 if (r < this.data.chance) return true;
                 return false;
 
+            // 不可能
             case 'impossible':
             default:
                 return false;
