@@ -5,11 +5,13 @@ let game = new Game();
 let resource = new Resource();
 resource.data.blocks = db_blocks;
 resource.data.items = db_items;
+resource.data.loottable = db_loottable;
 
 let w = new World();
 w.create();
 
 let p = new Player(w);
+w.playerJoin(p);
 let psi = p.give(new Item('magnifier')).data.inventoryIndex;
 let pwi = p.give(new Weapon('sword')).data.inventoryIndex;
 p.switchHotbarItem(1, pwi);

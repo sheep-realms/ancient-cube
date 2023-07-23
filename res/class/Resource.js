@@ -17,4 +17,8 @@ class Resource {
             return e.id == id;
         });
     }
+
+    getLootTable(id) {
+        return this.data.loottable[id];
+    }
 }

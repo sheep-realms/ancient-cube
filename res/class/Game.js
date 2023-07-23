@@ -29,7 +29,7 @@ class Game {
             airCount     = blockCount - useBlocks;
 
         if (useBlocks > blockCount) {
-            log.error('Used blocks exceed the maximum available blocks.', 'class/Game.js > randomStageGenerate()');
+            log.error('Used blocks exceed the maximum available blocks.', 'class/Game.js > Gams > randomStageGenerate()');
             return;
         }
 

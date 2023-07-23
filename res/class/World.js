@@ -8,6 +8,7 @@ class World {
         };
         this.room = [];
         this.selectedRoom = 0;
+        this.player = undefined;
     }
 
     create() {
@@ -20,6 +21,10 @@ class World {
 
     goto(room, stage, y, x) {
         return this.room[room].goto(stage, y, x);
+    }
+
+    playerJoin(player) {
+        this.player = player;
     }
 
     switchStage(stage) {
