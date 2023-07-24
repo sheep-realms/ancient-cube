@@ -20,6 +20,7 @@
     --map-size-height: 5;
     --map-size-width: 5;
     margin: 32px;
+    user-select: none;
 }
 
 .map-row {

@@ -1,6 +1,11 @@
 class Game {
     constructor() {
-
+        this.config = {
+            security: {
+                loot_table_stack_depth_limit: 256,
+                number_providers_stack_depth_limit: 256
+            }
+        };
     }
 
     randomSort(arr) {
@@ -10,7 +15,7 @@ class Game {
             len = arr.length;
 
         for (index = 0; index < len; index++) {
-            randomIndex      = Math.floor(Math.random() * (len - index)) + index;
+            randomIndex      = Math.floor(SMath.randomFloat() * (len - index)) + index;
 
             temp             = arr[index];
             arr[index]       = arr[randomIndex];

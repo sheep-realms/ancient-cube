@@ -1,5 +1,5 @@
 class LootTable {
-    constructor(value, from = {}) {
+    constructor(value, from = {}, stackDepth = 0) {
         this.data = {
             type: 'generic',
             randomSeed: 0,
@@ -12,6 +12,7 @@ class LootTable {
             player: undefined,
             item: undefined
         };
+        this.stackDepth = stackDepth + 1;
 
         this.create(value, from);
     }
@@ -41,6 +42,12 @@ class LootTable {
      */
     getItem() {
         let items = [];
+        // 禁止套娃
+        if (this.stackDepth >= game.config.security.loot_table_stack_depth_limit) {
+            log.error('Loot Table Error: Stack Overflow', 'class/LootTable.js > LootTable > getItem()');
+            return items;
+        }
+        // 随机池
         this.data.pools.forEach(e => {
             let b = this.conditionsTest(e?.conditions);
 
@@ -51,7 +58,22 @@ class LootTable {
                 }
                 for (let i = 0; i < r; i++) {
                     let item = this.weightedRandom(e.entries);
-                    if (this.conditionsTest(item?.conditions)) items.push(new Item(item.name));
+                    if (this.conditionsTest(item?.conditions)) {
+                        switch (item.type) {
+                            case 'item':
+                                items.push(new Item(item.name));
+                                break;
+                            
+                            case 'loot_table':
+                                let lt = new LootTable(item.name, this.from, this.stackDepth);
+                                items = [...items, ...lt.getItem()];
+                                break;
+                        
+                            case 'empty':
+                            default:
+                                break;
+                        }
+                    }
                 }
             }
         });
@@ -86,7 +108,7 @@ class LootTable {
     
         for (i = 0; i < options.length; i++) {
             options[i].weight = options[i]?.weight != undefined ? options[i].weight : 1;
-            weights[i] = options[i].weight + (weights[i - 1] || 0);
+            weights[i]        = options[i].weight + (weights[i - 1] || 0);
         }
         
         var random = SMath.randomFloat(this.randomSeed) * weights[weights.length - 1];
