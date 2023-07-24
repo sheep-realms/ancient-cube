@@ -93,7 +93,8 @@ class Stage {
                 state: 'event',
                 pos:   [y, x],
                 type:  this.map[y][x].type,
-                data:  this.map[y][x]?.data
+                data:  this.map[y][x]?.data,
+                block: this.map[y][x]
             }
         } else {
             let s = this.search(y, x);
@@ -101,12 +102,14 @@ class Stage {
                 return {
                     state:  'search',
                     pos:    [y, x],
-                    search: s
+                    search: s,
+                    block:  this.map[y][x]
                 }
             } else {
                 return {
                     state: 'none',
-                    pos:   [y, x]
+                    pos:   [y, x],
+                    block: this.map[y][x]
                 }
             }
         }

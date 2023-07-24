@@ -85,7 +85,7 @@ function loadMap(stage) {
     for (let i = 0; i < stage.size.height; i++) {
         $('#map').append(`<div id="map-${i}" class="map-row"></div>`);
         for (let j = 0; j < stage.size.width; j++) {
-            $(`#map-${i}`).append(`<div id="map-${i}-${j}" class="map-block" data-pos-y="${i}" data-pos-x="${j}"></div>`);
+            $(`#map-${i}`).append(BlockConstructor.getBlock(stage.map[i][j]));
         }
     }
 }
@@ -104,37 +104,7 @@ $(document).ready(() => {
     });
 
     p.bind('goto', function(e) {
-        $sel = $(`#map-${e.pos[0]}-${e.pos[1]}`);
-        if (e.state == 'search') {
-            $sel.addClass('searched');
-            let str = '';
-            let strList = [];
-            if (e.search.stair > 0) {
-                strList.push(`<div class="search-icon stair-${e.search.stair}"></div>`);
-            }
-            if (e.search.chest > 0) {
-                strList.push(`<div class="search-icon chest-${e.search.chest}"></div>`);
-            }
-            if (e.search.monster > 0) {
-                strList.push(`<div class="search-icon monster-${e.search.monster}"></div>`);
-            }
-
-            for (let i = 0; i < strList.length; i++) {
-                if (i % 2 == 0) {
-                    str += `<div class="search-icon-row">${strList[i]}`
-                    if (i + 1 >= strList.length) {
-                        str += '</div>';
-                    }
-                } else {
-                    str += `${strList[i]}</div>`
-                }
-            }
-
-            $sel.html(str);
-        } else if (e.state == 'event') {
-            $sel.addClass('searched');
-            $sel.html(`${e.type}`);
-        }
+        $(`#map-${e.pos[0]}-${e.pos[1]}`).replaceWith(BlockConstructor.getBlock(e.block));
     });
 
     p.bind('updateAttribute', function(e) {

@@ -2,8 +2,10 @@ class Item {
     constructor(id) {
         this.id = '';
         this.type = '';
+        this.count = 1;
         this.damage = 0;
         this.disabled = false;
+        this.data = {};
 
         this.create(id);
     }
@@ -19,6 +21,26 @@ class Item {
             }
         }
         return this;
+    }
+
+    /**
+     * 合并物品堆尝试
+     * @param {Item} item 物品对象
+     * @returns {Number} 合并后数量
+     */
+    join(item) {
+        if (item.type != 'weapon') {
+            if (
+                this.id   === item.id   &&
+                this.type === item.type &&
+                Object.entries(this.data).toString() === Object.entries(item.data).toString()
+            ) {
+                this.count += item.count;
+            }
+            return this.count;
+        } else {
+            return -1;
+        }
     }
 }
 
@@ -82,5 +104,9 @@ class Weapon extends Item {
                 disabled: this.disabled
             }
         }
+    }
+
+    join() {
+        return -1;
     }
 }

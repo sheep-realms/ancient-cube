@@ -1,9 +1,9 @@
-class LibSMath {
+class SMath {
     constructor() {
 
     }
 
-    random(max = 1, min = 0, seed = 0) {
+    static random(max = 1, min = 0, seed = 0) {
         if (seed == 0 || seed == '' || seed == undefined) {
             seed = Math.random() * Math.pow(2, 53);
         }
@@ -13,7 +13,7 @@ class LibSMath {
         return Math.ceil( min + rnd * (max - min) );
     }
 
-    randomFloat(seed = 0) {
+    static randomFloat(seed = 0) {
         if (seed == 0 || seed == '' || seed == undefined) {
             seed = Math.random() * Math.pow(2, 53);
         }
@@ -21,5 +21,3 @@ class LibSMath {
         return ((seed * 9301 + 49297) % 233280) / 233280.0;
     }
 }
-
-const SMath = new LibSMath();
