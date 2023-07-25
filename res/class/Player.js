@@ -82,7 +82,12 @@ class Player {
      * @returns 方块数据
      */
     goto(y, x) {
-        if (this.world.getSelectedRoom().getSelectedStage().map[y][x].searched) return;
+        let block = this.world.getSelectedRoom().getSelectedStage().map[y][x];
+        if (block.searched) {
+            if (block.type != 'stair') return;
+            this.switchStage(this.world.getSelectedRoom().stage.length);
+            return;
+        }
         this.lastPos = [y, x];
         let r = this.world.getSelectedRoom().getSelectedStage().goto(y, x);
         this.boundEvent.goto(r);

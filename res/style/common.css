@@ -54,6 +54,14 @@
     filter: brightness(0.9);
 }
 
+.map-block.searched.stair:hover {
+    filter: brightness(1.1);
+}
+
+.map-block.searched.stair:active {
+    filter: brightness(0.9);
+}
+
 .map-block.searched {
     background-color: #AAA;
     background-position: -100% 0;

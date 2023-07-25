@@ -75,25 +75,13 @@ function getHealthDamageIcon(e) {
 }
 
 function loadMap(stage) {
-    $('#map').html('');
-    $('#map').attr(
-        'style',
-        `--map-size: ${Math.max(stage.size.height, stage.size.width)};` +
-        `--map-size-height: ${stage.size.height};` +
-        `--map-size-width: ${stage.size.width};`
-    );
-    for (let i = 0; i < stage.size.height; i++) {
-        $('#map').append(`<div id="map-${i}" class="map-row"></div>`);
-        for (let j = 0; j < stage.size.width; j++) {
-            $(`#map-${i}`).append(BlockConstructor.getBlock(stage.map[i][j]));
-        }
-    }
+    $('#map').replaceWith(MapConstructor.getMap(stage));
 }
 
 $(document).ready(() => {
     loadMap(w.room[0].stage[0]);
 
-    $('#map').on('click', '.map-block', function() {
+    $('#game').on('click', '.map-block', function() {
         let x = $(this).data('pos-x');
         let y = $(this).data('pos-y');
         p.goto(y, x)

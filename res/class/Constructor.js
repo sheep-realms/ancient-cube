@@ -1,7 +1,5 @@
 class BlockConstructor {
-    constructor() {
-
-    }
+    constructor() {}
 
     static getBlock(block) {
         if (block.searched) {
@@ -47,7 +45,7 @@ class BlockConstructor {
                             x: block.pos.x,
                             y: block.pos.y
                         },
-                        class: 'searched'
+                        class: 'searched ' + block.type
                     }
                 );
             }
@@ -76,5 +74,22 @@ class BlockConstructor {
             ...data
         };
         return `<div id="map-${data.pos.y}-${data.pos.x}" class="map-block ${data.class}" data-pos-y="${data.pos.y}" data-pos-x="${data.pos.x}">${content}</div>`;
+    }
+}
+
+class MapConstructor {
+    constructor() {}
+
+    static getMap(stage) {
+        let before = `<div id="map" style="--map-size: ${Math.max(stage.size.height, stage.size.width)}; --map-size-height: ${stage.size.height}; --map-size-width: ${stage.size.width};">`;
+        let str = '';
+        for (let i = 0; i < stage.size.height; i++) {
+            str += `<div id="map-${i}" class="map-row">`;
+            for (let j = 0; j < stage.size.width; j++) {
+                str += BlockConstructor.getBlock(stage.map[i][j]);
+            }
+            str += `</div>`;
+        }
+        return before + str + '</div>';
     }
 }

@@ -88,6 +88,15 @@ class Stage {
     goto(y, x) {
         if (this.generated == false) this.generate([y, x]);
         if (this.map[y][x].type != 'air') {
+            if (this.map[y][x].type == 'stair' && this.map[y][x].searched) {
+                return {
+                    state: 'stair',
+                    pos:   [y, x],
+                    type:  this.map[y][x].type,
+                    data:  this.map[y][x]?.data,
+                    block: this.map[y][x]
+                }
+            }
             this.map[y][x].searched = true;
             return {
                 state: 'event',
