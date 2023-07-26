@@ -102,16 +102,16 @@ class LootTable {
     }
 
     weightedRandom(options) {
-        var i;
+        let i;
     
-        var weights = [];
+        let weights = [];
     
         for (i = 0; i < options.length; i++) {
             options[i].weight = options[i]?.weight != undefined ? options[i].weight : 1;
             weights[i]        = options[i].weight + (weights[i - 1] || 0);
         }
         
-        var random = SMath.randomFloat(this.randomSeed) * weights[weights.length - 1];
+        let random = SMath.randomFloat(this.randomSeed) * weights[weights.length - 1];
         
         for (i = 0; i < weights.length; i++)
             if (weights[i] > random)

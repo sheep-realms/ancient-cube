@@ -3,6 +3,12 @@ let db_items = [
         id: 'magnifier',
         type: 'search'
     }, {
+        id: 'emerald',
+        type: 'item'
+    }, {
+        id: 'monster_crystal',
+        type: 'item'
+    }, {
         id: 'sword',
         type: 'weapon',
         data: {

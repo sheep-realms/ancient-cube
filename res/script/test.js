@@ -12,10 +12,10 @@ w.create();
 
 let p = new Player(w);
 w.playerJoin(p);
-let psi = p.give(new Item('magnifier')).data.inventoryIndex;
-let pwi = p.give(new Weapon('sword')).data.inventoryIndex;
-p.switchHotbarItem(1, pwi);
-p.switchHotbarItem(0, psi);
+let psi = p.replaceItem(0, new Item('magnifier'));
+let pwi = p.replaceItem(1, new Weapon('sword'));
+p.switchHotbarItem(1, 1);
+p.switchHotbarItem(0, 0);
 
 // let ts_map = [
 //     ['air', 'air', 'air', 'chest', 'monster'],

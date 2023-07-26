@@ -1,6 +1,15 @@
+/**
+ * 方块构造器
+ * @class
+ */
 class BlockConstructor {
     constructor() {}
 
+    /**
+     * 构造方块
+     * @param {Block} block 方块对象
+     * @returns {String} DOM
+     */
     static getBlock(block) {
         if (block.searched) {
             if (block.type == 'air') {
@@ -77,9 +86,18 @@ class BlockConstructor {
     }
 }
 
+/**
+ * 地图构造器
+ * @class
+ */
 class MapConstructor {
     constructor() {}
 
+    /**
+     * 构造地图
+     * @param {Stage} stage 楼层对象
+     * @returns {String} DOM
+     */
     static getMap(stage) {
         let before = `<div id="map" style="--map-size: ${Math.max(stage.size.height, stage.size.width)}; --map-size-height: ${stage.size.height}; --map-size-width: ${stage.size.width};">`;
         let str = '';

@@ -163,16 +163,50 @@ class Player {
     /**
      * 给予物品
      * @param {Item} item 物品
-     * @returns 状态和数据
+     * @returns {Object} 状态和数据
      */
     give(item) {
         if (item instanceof Item == false) return { state: 'fail', failReason: 'item_invalid' };
-        let index = this.inventory.push(item);
+        let items = this.inventory.filter(function(e) {
+            return e.id == item.id;
+        });
+        if (items.length <= 0) {
+            this.inventory.push(item);
+        } else {
+            let joined = false;
+            items.forEach(e => {
+                let r = e.join(item);
+                if (r != -1) {
+                    joined = true;
+                    return;
+                }
+            });
+            if (!joined) {
+                this.inventory.push(item);
+            }
+        }
         return {
             state: 'success',
             data: {
                 item: item,
-                inventoryIndex: index - 1
+            }
+        }
+    }
+
+    /**
+     * 替换物品
+     * @param {Number} index 物品栏索引
+     * @param {Item} item 物品
+     * @returns {Object} 状态和数据
+     */
+    replaceItem(index, item) {
+        if (item instanceof Item == false) return { state: 'fail', failReason: 'item_invalid' };
+        this.inventory[index] = item;
+        return {
+            state: 'success',
+            data: {
+                item: item,
+                inventoryIndex: index
             }
         }
     }
@@ -181,7 +215,7 @@ class Player {
      * 切换快捷栏物品
      * @param {Number} solt 快捷栏槽位
      * @param {Number} index 物品栏索引
-     * @returns 状态和数据
+     * @returns {Object} 状态和数据
      */
     switchHotbarItem(solt, index) {
         let item, hotbarItem;
