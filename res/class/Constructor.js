@@ -59,15 +59,28 @@ class BlockConstructor {
                 );
             }
         } else {
-            return this.getBlockContainer(
-                '',
-                {
-                    pos: {
-                        x: block.pos.x,
-                        y: block.pos.y
+            if (block.type == 'wall') {
+                return this.getBlockContainer(
+                    '',
+                    {
+                        pos: {
+                            x: block.pos.x,
+                            y: block.pos.y
+                        },
+                        class: 'wall'
                     }
-                }
-            );
+                );
+            } else {
+                return this.getBlockContainer(
+                    '',
+                    {
+                        pos: {
+                            x: block.pos.x,
+                            y: block.pos.y
+                        }
+                    }
+                );
+            }
         }
     }
 

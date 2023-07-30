@@ -171,3 +171,9 @@ class Predicate {
         }
     }
 }
+
+class ItemModifier {
+    constructor() {
+        
+    }
+}

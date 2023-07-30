@@ -1,7 +1,12 @@
 class Game {
     constructor() {
         this.config = {
+            view: {
+                block_size_minimum: '55px',
+                screen_scale: 1
+            },
             security: {
+                damage_maximum: 1024,
                 loot_table_stack_depth_limit: 256,
                 number_providers_stack_depth_limit: 256
             }

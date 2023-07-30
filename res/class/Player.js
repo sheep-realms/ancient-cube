@@ -133,6 +133,7 @@ class Player {
     }
 
     damage(value) {
+        if (value       >  game.config.security.damage_maximum) value = game.config.security.damage_maximum;
         if (value       <= 0) return;
         if (this.health <= 0) return;
         let lastHealth  = this.health;

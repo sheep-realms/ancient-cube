@@ -14,5 +14,18 @@ let db_loottable = {
                 ]
             }
         ]
+    },
+    chest_generic: {
+        type: 'chest',
+        pools: [
+            {
+                entries: [
+                    {
+                        type: 'item',
+                        name: 'emerald'
+                    }
+                ]
+            }
+        ]
     }
 };
