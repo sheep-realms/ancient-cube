@@ -3,6 +3,10 @@ class Room {
         this.name          = 'room';
         this.stage         = [];
         this.selectedStage = 0;
+        this.generator     = undefined;
+        this.features      = {
+            waterlogged: false
+        };
 
         this.create();
     }
