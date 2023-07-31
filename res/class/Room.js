@@ -1,22 +1,34 @@
 class Room {
-    constructor() {
-        this.name          = 'room';
-        this.stage         = [];
-        this.selectedStage = 0;
-        this.generator     = undefined;
-        this.features      = {
-            waterlogged: false
-        };
+    constructor(generator) {
+        this.name             = 'room';
+        this.stage            = [];
+        this.selectedStage    = 0;
+        this.generator        = undefined;
+        this.lastCreatedStage = -1;
 
-        this.create();
+        this.create(generator);
     }
 
-    create() {
+    create(generator) {
+        this.setGenerator(generator);
         this.newStage();
     }
 
-    newStage() {
-        this.stage.push(new Stage());
+    newStage(stage) {
+        if (stage == undefined) {
+            stage = this.lastCreatedStage + 1;
+        }
+        this.lastCreatedStage = stage;
+
+        let g;
+
+        if (this.generator != undefined) {
+            g = this.generator.getStage(stage);
+        }
+
+        let s = new Stage(g);
+        
+        this.stage[stage] = s;
     }
 
     search(stage, y, x) {
@@ -30,7 +42,7 @@ class Room {
     switchStage(stage) {
         this.selectedStage = stage;
         if (this.stage[stage] == undefined) {
-            this.stage[stage] = new Stage();
+            this.newStage(stage);
         }
     }
 
@@ -40,5 +52,9 @@ class Room {
 
     getSelectedStage() {
         return this.stage[this.selectedStage];
+    }
+
+    setGenerator(generator) {
+        this.generator = generator;
     }
 }

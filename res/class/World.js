@@ -11,8 +11,8 @@ class World {
         this.player = undefined;
     }
 
-    create() {
-        this.room[0] = new Room();
+    create(generator) {
+        this.room[0] = new Room(generator);
     }
 
     search(room, stage, y, x) {

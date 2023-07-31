@@ -2,7 +2,9 @@ class Resource {
     constructor() {
         this.data = {
             blocks: [],
-            items: []
+            items: [],
+            loottable: {},
+            generator: {}
         };
     }
 
@@ -20,5 +22,9 @@ class Resource {
 
     getLootTable(id) {
         return this.data.loottable[id];
+    }
+
+    getGenerator(id) {
+        return this.data.generator[id];
     }
 }

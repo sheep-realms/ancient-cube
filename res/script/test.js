@@ -6,9 +6,10 @@ let resource = new Resource();
 resource.data.blocks = db_blocks;
 resource.data.items = db_items;
 resource.data.loottable = db_loottable;
+resource.data.generator = db_generator;
 
 let w = new World();
-w.create();
+w.create(new Generator('test'));
 
 let p = new Player(w);
 w.playerJoin(p);

@@ -1,20 +1,31 @@
 class Stage {
-    constructor(height = '5', width = '5') {
-        this.name = 'stage';
-        this.size = {
-            height: height,
-            width:  width
+    constructor(generator) {
+        this.name      = 'stage';
+        this.size      = {
+            height: 5,
+            width:  5
         };
-        this.map  = [];
+        this.map       = [];
+        this.generator = generator;
         this.generated = false;
+        this.features  = {
+            waterlogged: false
+        };
 
-        this.create(height, width);
+        this.create();
     }
 
-    create(height = this.size.height, width = this.size.width) {
-        for (let i = 0; i < height; i++) {
+    create(height = '5', width = '5') {
+        if (this.generator != undefined) {
+            this.size.height = this.generator.size.height;
+            this.size.width = this.generator.size.width;
+        } else {
+            this.size.height = height;
+            this.size.width = width;
+        }
+        for (let i = 0; i < this.size.height; i++) {
             this.map[i] = [];
-            for (let j = 0; j < width; j++) {
+            for (let j = 0; j < this.size.width; j++) {
                 this.map[i][j] = new Block('air', i, j);
             }
         }
@@ -139,7 +150,23 @@ class Stage {
     }
 
     generate(start = [0, 0]) {
-        this.setMap(game.randomStageGenerate(this.size.height, this.size.width, start, {chestCount:5, monsterCount:6, stairCount: 2}));
+        if (this.generator != undefined) {
+            let chest = this.generator.blocks.find(function(e) {
+                return e.id == 'chest';
+            });
+            let monster = this.generator.blocks.find(function(e) {
+                return e.id == 'monster';
+            });
+            let stair = this.generator.blocks.find(function(e) {
+                return e.id == 'stair';
+            });
+            let chestCount = chest != undefined ? chest.count : 0;
+            let monsterCount = monster != undefined ? monster.count : 0;
+            let stairCount = stair != undefined ? stair.count : 0;
+            this.setMap(game.randomStageGenerate(this.generator.size.height, this.generator.size.width, start, {chestCount:chestCount, monsterCount:monsterCount, stairCount: stairCount}));
+        } else {
+            this.setMap(game.randomStageGenerate(this.size.height, this.size.width, start, {chestCount:5, monsterCount:6, stairCount: 2}));
+        }
         this.generated = true;
     }
 }
