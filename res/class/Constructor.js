@@ -95,7 +95,7 @@ class BlockConstructor {
             },
             ...data
         };
-        return `<div id="map-${data.pos.y}-${data.pos.x}" class="map-block ${data.class}" data-pos-y="${data.pos.y}" data-pos-x="${data.pos.x}">${content}</div>`;
+        return `<div id="map-${data.pos.y}-${data.pos.x}" class="map-block ${data.class}" data-pos-y="${data.pos.y}" data-pos-x="${data.pos.x}">${content}<div class="cover"><div class="attack"></div></div></div>`;
     }
 }
 

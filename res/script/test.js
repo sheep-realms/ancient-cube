@@ -190,6 +190,12 @@ $(document).ready(() => {
         } else {
             $('#player-hotbar-1 .item-damage-value').addClass('damage-4');
         }
+
+        if (e.hotbar[e.selectedSlot].type == 'weapon') {
+            $('#game').addClass('action-attack');
+        } else {
+            $('#game').removeClass('action-attack');
+        }
     });
 
     p.bind('updateMap', function(e) {
