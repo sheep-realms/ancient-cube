@@ -3,6 +3,8 @@ class Game {
         this.config = {
             view: {
                 block_size_minimum: '55px',
+                screen_safety_height: '90vh',
+                screen_safety_width: '90vw',
                 screen_scale: 1
             },
             security: {

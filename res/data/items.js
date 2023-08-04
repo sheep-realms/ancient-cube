@@ -9,6 +9,15 @@ let db_items = [
         id: 'monster_crystal',
         type: 'item'
     }, {
+        id: 'soul_camera',
+        type: 'item'
+    }, {
+        id: 'soul_camera_using',
+        type: 'item'
+    }, {
+        id: 'soul_camera_used',
+        type: 'item'
+    }, {
         id: 'sword',
         type: 'weapon',
         data: {

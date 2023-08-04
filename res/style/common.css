@@ -3,6 +3,12 @@
     padding: 0;
 }
 
+:root {
+    --maze-config-view-block-size-minimum: 55px;
+    --maze-config-view-screen-safety-height: 90vh;
+    --maze-config-view-screen-safety-width: 90vw;
+}
+
 #game {
     display: flex;
     align-items: center;
@@ -29,7 +35,15 @@
 }
 
 .map-block {
-    --block-size: calc(max(min(90vh / var(--map-size-height), 90vw / var(--map-size-width)), 55px));
+    --block-size: calc(
+            max(
+                min(
+                    var(--maze-config-view-screen-safety-height) / var(--map-size-height),
+                    var(--maze-config-view-screen-safety-width) / var(--map-size-width)
+                ),
+                var(--maze-config-view-block-size-minimum)
+            )
+        );
     width: var(--block-size);
     height: var(--block-size);
     background-color: #888;
