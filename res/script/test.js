@@ -2,6 +2,8 @@ let log = new Log();
 
 let game = new Game();
 
+game.debug = new Debuger();
+
 let resource = new Resource();
 resource.data.blocks = db_blocks;
 resource.data.items = db_items;
@@ -17,6 +19,16 @@ let psi = p.replaceItem(0, new Item('magnifier'));
 let pwi = p.replaceItem(1, new Weapon('sword'));
 p.switchHotbarItem(1, 1);
 p.switchHotbarItem(0, 0);
+
+let messager = new Messager('#message');
+
+log.bind('errorMessageOutput', function(e) {
+    messager.send(e.message, 'color: red;');
+});
+
+game.debug.bind('debugMessageOutput', function(e) {
+    messager.send(`[DEBUG] ${e.name} = ${e.value}`, 'color: lightgray; font-style: italic;');
+});
 
 // let ts_map = [
 //     ['air', 'air', 'air', 'chest', 'monster'],

@@ -2,11 +2,13 @@ class Player {
     constructor(world) {
         this.health       = 6;
         this.healthMax    = 6;
+        this.isDead       = false;
         this.attribute    = [];
         this.lastPos      = [0, 0];
         this.inventory    = [];
         this.hotbar       = [];
         this.selectedSlot = 0;
+        this.discarded    = [];
         this.world        = {};
 
         this.boundEvent   = {
@@ -25,6 +27,7 @@ class Player {
     create(world) {
         this.world = world;
         this.attribute.push(new Attribute('health_max', 6, 'system'));
+        this.health = 6;
     }
 
     bind(event, action = function() {}) {
@@ -82,6 +85,7 @@ class Player {
      * @returns 方块数据
      */
     goto(y, x) {
+        if (this.isDead && !game.debug.player_dead_action) return;
         let block = this.world.getSelectedRoom().getSelectedStage().map[y][x];
         if (block.searched) {
             if (block.type != 'stair') return;
@@ -89,6 +93,8 @@ class Player {
             return;
         }
         this.lastPos = [y, x];
+        this.clearDiscard();
+
         let r = this.world.getSelectedRoom().getSelectedStage().goto(y, x);
         this.boundEvent.goto(r);
         if (r.type == 'monster') {
@@ -133,9 +139,9 @@ class Player {
     }
 
     damage(value) {
+        if (this.isDead || game.debug.player_no_damage) return;
         if (value       >  game.config.security.damage_maximum) value = game.config.security.damage_maximum;
         if (value       <= 0) return;
-        if (this.health <= 0) return;
         let lastHealth  = this.health;
         let deathDefend = false;
         if (value == this.health && value > 1) {
@@ -151,9 +157,12 @@ class Player {
             deathDefend: deathDefend
         });
 
-        if (this.health <= 0) this.boundEvent.dead({
-            lastPos: this.lastPos
-        });
+        if (this.health <= 0) this.dead();
+        
+        if (this.healthMax <= 0) {
+            log.error('Player Health Exception: Player.healthMax <= 0', 'class/Player.js > Player > damage()');
+        }
+
         return this.health;
     }
 
@@ -167,6 +176,7 @@ class Player {
      * @returns {Object} 状态和数据
      */
     give(item) {
+        if (this.isDead && !game.debug.player_dead_action) return;
         if (item instanceof Item == false) return { state: 'fail', failReason: 'item_invalid' };
         let items = this.inventory.filter(function(e) {
             return e.id == item.id;
@@ -201,6 +211,7 @@ class Player {
      * @returns {Object} 状态和数据
      */
     replaceItem(index, item) {
+        if (this.isDead && !game.debug.player_dead_action) return;
         if (item instanceof Item == false) return { state: 'fail', failReason: 'item_invalid' };
         this.inventory[index] = item;
         return {
@@ -219,6 +230,7 @@ class Player {
      * @returns {Object} 状态和数据
      */
     switchHotbarItem(solt, index) {
+        if (this.isDead && !game.debug.player_dead_action) return;
         let item, hotbarItem;
         if (this.inventory[index] == undefined && this.hotbar[solt] == undefined) {
             return { state: 'fail', failReason: 'null' };
@@ -248,11 +260,14 @@ class Player {
     }
 
     switchStage(stage) {
+        if (this.isDead && !game.debug.player_dead_action) return;
+        this.clearDiscard();
         this.world.switchStage(stage);
         this.boundEvent.updateMap(this.world.getSelectedRoom().getSelectedStage());
     }
 
     selectSlot(value) {
+        if (this.isDead && !game.debug.player_dead_action) return;
         this.selectedSlot = value;
         this.updateHotbar();
     }
@@ -261,6 +276,34 @@ class Player {
         this.boundEvent.updateHotbar({
             hotbar: this.hotbar,
             selectedSlot: this.selectedSlot
+        });
+    }
+    
+    discardItem(index) {
+        if (this.isDead && !game.debug.player_dead_action) return;
+        if (this.inventory[index] != undefined) {
+            let item = this.inventory.splice(index, 1)[0];
+            this.discarded.unshift(item);
+        }
+    }
+
+    recoveryItem() {
+        if (this.isDead && !game.debug.player_dead_action) return;
+        if (this.discarded.length > 1) {
+            let item = this.discarded.shift();
+            this.inventory.push(item);
+        }
+    }
+
+    clearDiscard() {
+        if (this.isDead && !game.debug.player_dead_action) return;
+        this.discarded = [];
+    }
+
+    dead() {
+        this.isDead = true;
+        this.boundEvent.dead({
+            lastPos: this.lastPos
         });
     }
 }

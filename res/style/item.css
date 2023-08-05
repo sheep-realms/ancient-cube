@@ -19,6 +19,9 @@
 .item-icon[data-item-id='magnifier'] { --icon-pos-x: 0; --icon-pos-y: 0; }
 .item-icon[data-item-id='emerald'] { --icon-pos-x: -1; --icon-pos-y: 0; }
 .item-icon[data-item-id='monster_crystal'] { --icon-pos-x: -2; --icon-pos-y: 0; }
+.item-icon[data-item-id='soul_camera'] { --icon-pos-x: -3; --icon-pos-y: 0; }
+.item-icon[data-item-id='soul_camera_using'] { --icon-pos-x: -4; --icon-pos-y: 0; }
+.item-icon[data-item-id='soul_camera_used'] { --icon-pos-x: -5; --icon-pos-y: 0; }
 
 .item-icon[data-item-id='sword'] { --icon-pos-x: 0; --icon-pos-y: 0; }
 .item-icon[data-item-id='dagger'] { --icon-pos-x: -1; --icon-pos-y: 0; }

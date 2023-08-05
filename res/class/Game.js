@@ -13,6 +13,7 @@ class Game {
                 number_providers_stack_depth_limit: 256
             }
         };
+        this.debug = {};
     }
 
     randomSort(arr) {

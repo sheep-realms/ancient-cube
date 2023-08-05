@@ -1,15 +1,19 @@
 class Log {
     constructor() {
-        this.logs      = [];
-        this.logTypes  = ['log', 'warn', 'error'];
-        this.logFlags  = [       'warn', 'error'];
+        this.logs       = [];
+        this.logTypes   = ['log', 'warn', 'error'];
+        this.logFlags   = [       'warn', 'error'];
 
-        this.logBefore = {
+        this.logBefore  = {
             common: '[MAZE]',
             log:    '[LOG]',
             warn:   '[WARN]',
             error:  '[ERROR]',
         };
+
+        this.boundEvent = {
+            errorMessageOutput: function() {}
+        }
     }
 
     log(type, message, from = '') {
@@ -42,6 +46,14 @@ class Log {
     }
 
     error(message, from = '') {
+        this.boundEvent.errorMessageOutput({
+            message: message,
+            from: from
+        });
         return this.log('error', message, from);
+    }
+
+    bind(event, action = function() {}) {
+        return this.boundEvent[event] = action;
     }
 }
