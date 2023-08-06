@@ -25,6 +25,12 @@ class Debuger {
         });
     }
 
+    debugSet(type, path, value, valueType = 'boolean') {
+        if (typeof value !== valueType || value === this['__' + type][path]) return;
+        this.debugOutput(type + '_' + path, value);
+        return this['__' + type][path] = value;
+    }
+
     get master() {
         return this.__master;
     }
@@ -40,9 +46,7 @@ class Debuger {
     }
 
     set player_dead_action(value) {
-        if (typeof value !== 'boolean' || value === this.player_dead_action) return;
-        this.debugOutput('player_dead_action', value);
-        return this.__player.dead_action = value;
+        return this.debugSet('player', 'dead_action', value);
     }
 
     get player_no_damage() {
@@ -50,9 +54,7 @@ class Debuger {
     }
 
     set player_no_damage(value) {
-        if (typeof value !== 'boolean' || value === this.player_no_damage) return;
-        this.debugOutput('player_no_damage', value);
-        return this.__player.no_damage = value;
+        return this.debugSet('player', 'no_damage', value);
     }
 
     get item_no_damage() {
@@ -60,8 +62,6 @@ class Debuger {
     }
 
     set item_no_damage(value) {
-        if (typeof value !== 'boolean' || value === this.item_no_damage) return;
-        this.debugOutput('item_no_damage', value);
-        return this.__item.no_damage = value;
+        return this.debugSet('item', 'no_damage', value);
     }
 }
