@@ -72,55 +72,60 @@ class Game {
 
     /**
      * 获取选区边界切片
-     * @param {Array<Array>} data 选中的方块
+     * @param {Array<Array<Number>>} data 选中的方块
+     * @returns {Array<Array<Array<Number>>>} 选区贴图切片ID
      */
     generateSelectedBlockBorder(data = []) {
         let r = [];
         let d = JSON.parse(JSON.stringify(data));
-        let tt = [
+
+        // 四角贴图码表
+        const tt = [
             [0, 2, 0, 2, 1, 3, 1, 4],
             [0, 1, 0, 1, 2, 3, 2, 4],
             [0, 2, 0, 2, 1, 3, 1, 4],
             [0, 1, 0, 1, 2, 3, 2, 4]
         ];
+        // 四角判定索引表
+        const bm = [
+            [3, 0, 1],
+            [1, 2, 4],
+            [4, 7, 6],
+            [6, 5, 3]
+        ]
+
+        // 行
         for (let i = 0; i < data.length; i++) {
             r[i] = [];
+            // 列
             for (let j = 0; j < data[i].length; j++) {
-                if (d[i][j] == 0) {
+                // 非选区返回空值
+                if (d[i][j] === 0) {
                     r[i][j] = [0, 0, 0, 0];
                     continue;
                 }
 
+                // 兜底
+                if (d[i - 1] === undefined) d[i - 1] = [];
+                if (d[i]     === undefined) d[i]     = [];
+                if (d[i + 1] === undefined) d[i + 1] = [];
+
+                // 四角判定选区
+                let b = [
+                    d[i - 1][j - 1] ?? 0,   d[i - 1][j] ?? 0,   d[i - 1][j + 1] ?? 0,
+                    d[i]    [j - 1] ?? 0,                       d[i]    [j + 1] ?? 0,
+                    d[i + 1][j - 1] ?? 0,   d[i + 1][j] ?? 0,   d[i + 1][j + 1] ?? 0,
+                ];
+
+                // 编码
                 let r1 = [];
-                let t1, t2, t3;
-
-                if (d[i - 1] == undefined) d[i - 1] = [];
-                if (d[i]     == undefined) d[i]     = [];
-                if (d[i + 1] == undefined) d[i + 1] = [];
-
-                // ↖
-                t1 = (d[i]    [j - 1] != undefined ? d[i]    [j - 1] : 0) << 2;
-                t2 = (d[i - 1][j - 1] != undefined ? d[i - 1][j - 1] : 0) << 1;
-                t3 =  d[i - 1][j]     != undefined ? d[i - 1][j]     : 0;
-                r1[0] = tt[0][t1 + t2 + t3];
-
-                // ↗
-                t1 = (d[i - 1][j]     != undefined ? d[i - 1][j]     : 0) << 2;
-                t2 = (d[i - 1][j + 1] != undefined ? d[i - 1][j + 1] : 0) << 1;
-                t3 =  d[i]    [j + 1] != undefined ? d[i]    [j + 1] : 0;
-                r1[1] = tt[1][t1 + t2 + t3];
-                
-                // ↘
-                t1 = (d[i]    [j + 1] != undefined ? d[i]    [j + 1] : 0) << 2;
-                t2 = (d[i + 1][j + 1] != undefined ? d[i + 1][j + 1] : 0) << 1;
-                t3 =  d[i + 1][j]     != undefined ? d[i + 1][j]     : 0;
-                r1[2] = tt[2][t1 + t2 + t3];
-
-                // ↙
-                t1 = (d[i + 1][j]     != undefined ? d[i + 1][j]     : 0) << 2;
-                t2 = (d[i + 1][j - 1] != undefined ? d[i + 1][j - 1] : 0) << 1;
-                t3 =  d[i]    [j - 1] != undefined ? d[i]    [j - 1] : 0;
-                r1[3] = tt[3][t1 + t2 + t3];
+                for (let k = 0; k < 4; k++) {
+                    r1[k] = tt[k][
+                        (   b[bm[k][0]] << 2) + 
+                        (   b[bm[k][1]] << 1) + 
+                            b[bm[k][2]]
+                    ];
+                }
 
                 r[i][j] = r1;
             }
