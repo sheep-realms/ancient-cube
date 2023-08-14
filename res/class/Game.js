@@ -69,4 +69,63 @@ class Game {
 
         return map;
     }
+
+    /**
+     * 获取选区边界切片
+     * @param {Array<Array>} data 选中的方块
+     */
+    generateSelectedBlockBorder(data = []) {
+        let r = [];
+        let d = JSON.parse(JSON.stringify(data));
+        let tt = [
+            [0, 2, 0, 2, 1, 3, 1, 4],
+            [0, 1, 0, 1, 2, 3, 2, 4],
+            [0, 2, 0, 2, 1, 3, 1, 4],
+            [0, 1, 0, 1, 2, 3, 2, 4]
+        ];
+        for (let i = 0; i < data.length; i++) {
+            r[i] = [];
+            for (let j = 0; j < data[i].length; j++) {
+                if (d[i][j] == 0) {
+                    r[i][j] = [0, 0, 0, 0];
+                    continue;
+                }
+
+                let r1 = [];
+                let t1, t2, t3;
+
+                if (d[i - 1] == undefined) d[i - 1] = [];
+                if (d[i]     == undefined) d[i]     = [];
+                if (d[i + 1] == undefined) d[i + 1] = [];
+
+                // ↖
+                t1 = (d[i]    [j - 1] != undefined ? d[i]    [j - 1] : 0) << 2;
+                t2 = (d[i - 1][j - 1] != undefined ? d[i - 1][j - 1] : 0) << 1;
+                t3 =  d[i - 1][j]     != undefined ? d[i - 1][j]     : 0;
+                r1[0] = tt[0][t1 + t2 + t3];
+
+                // ↗
+                t1 = (d[i - 1][j]     != undefined ? d[i - 1][j]     : 0) << 2;
+                t2 = (d[i - 1][j + 1] != undefined ? d[i - 1][j + 1] : 0) << 1;
+                t3 =  d[i]    [j + 1] != undefined ? d[i]    [j + 1] : 0;
+                r1[1] = tt[1][t1 + t2 + t3];
+                
+                // ↘
+                t1 = (d[i]    [j + 1] != undefined ? d[i]    [j + 1] : 0) << 2;
+                t2 = (d[i + 1][j + 1] != undefined ? d[i + 1][j + 1] : 0) << 1;
+                t3 =  d[i + 1][j]     != undefined ? d[i + 1][j]     : 0;
+                r1[2] = tt[2][t1 + t2 + t3];
+
+                // ↙
+                t1 = (d[i + 1][j]     != undefined ? d[i + 1][j]     : 0) << 2;
+                t2 = (d[i + 1][j - 1] != undefined ? d[i + 1][j - 1] : 0) << 1;
+                t3 =  d[i]    [j - 1] != undefined ? d[i]    [j - 1] : 0;
+                r1[3] = tt[3][t1 + t2 + t3];
+
+                r[i][j] = r1;
+            }
+        }
+
+        return r;
+    }
 }

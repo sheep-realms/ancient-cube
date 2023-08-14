@@ -9,6 +9,7 @@ class Stage {
         this.generator = generator;
         this.generated = false;
         this.features  = {
+            foggy: false,
             waterlogged: false
         };
 
