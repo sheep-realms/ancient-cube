@@ -160,3 +160,19 @@
     background-color: rgba(255, 255, 255, 0.25);
     opacity: 1;
 }
+
+
+#keys-bar {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    color: #FFFFFF;
+    text-shadow: 0.1em 0.1em 0 #222222;
+    padding-right: 16px;
+    padding-bottom: 8px;
+    font-size: 18px;
+}
+
+#keys-bar .pixel-hotkeys-key-label {
+    padding-right: 8px;
+}

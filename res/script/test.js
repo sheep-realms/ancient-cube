@@ -30,6 +30,22 @@ game.debug.bind('debugMessageOutput', function(e) {
     messager.send(`[DEBUG] ${e.name} = ${e.value}`, 'color: lightgray; font-style: italic;');
 });
 
+let patchPanel = new PatchPanel();
+patchPanel.bind('#game');
+patchPanel.init(p);
+patchPanel.listen();
+
+let pixelHotkeys = new PixelHotkeys();
+pixelHotkeys.setImage('../img/keys.png');
+pixelHotkeys.setMap(img2keys);
+pixelHotkeys.setIndex(index_keys);
+
+let translator = new Translator();
+function $t(key, variable={}) {
+    return translator.output(key, variable);
+}
+translator.load(lang_zh_cn);
+
 // let ts_map = [
 //     ['air', 'air', 'air', 'chest', 'monster'],
 //     ['air', 'air', 'air', 'monster', 'air'],
@@ -93,6 +109,8 @@ function loadMap(stage) {
 
 $(document).ready(() => {
     loadMap(w.room[0].stage[0]);
+
+    $('#keys-bar').html(pixelHotkeys.getKeyDOM('msl | ' + $t('gui.action.search')));
 
     $('#game').on('click', '.map-block', function() {
         let x = $(this).data('pos-x');
@@ -205,8 +223,10 @@ $(document).ready(() => {
 
         if (e.hotbar[e.selectedSlot].type == 'weapon') {
             $('#game').addClass('action-attack');
+            $('#keys-bar').html(pixelHotkeys.getKeyDOM('msl | ' + $t('gui.action.attack')));
         } else {
             $('#game').removeClass('action-attack');
+            $('#keys-bar').html(pixelHotkeys.getKeyDOM('msl | ' + $t('gui.action.search')));
         }
     });
 
