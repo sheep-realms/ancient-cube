@@ -20,7 +20,7 @@ class Debuger {
 
     debugOutput(name, value) {
         this.boundEvent.debugMessageOutput({
-            name: name,
+            name:  name,
             value: value
         });
     }

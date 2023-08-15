@@ -48,7 +48,7 @@ class Log {
     error(message, from = '') {
         this.boundEvent.errorMessageOutput({
             message: message,
-            from: from
+            from:    from
         });
         return this.log('error', message, from);
     }

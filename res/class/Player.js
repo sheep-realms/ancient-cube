@@ -25,7 +25,7 @@ class Player {
     }
 
     create(world) {
-        this.world = world;
+        this.world  = world;
         this.attribute.push(new Attribute('health_max', 6, 'system'));
         this.health = 6;
     }
@@ -197,7 +197,7 @@ class Player {
             }
         }
         return {
-            state: 'success',
+            state:    'success',
             data: {
                 item: item,
             }
@@ -215,9 +215,9 @@ class Player {
         if (item instanceof Item == false) return { state: 'fail', failReason: 'item_invalid' };
         this.inventory[index] = item;
         return {
-            state: 'success',
+            state:              'success',
             data: {
-                item: item,
+                item:           item,
                 inventoryIndex: index
             }
         }
@@ -235,17 +235,17 @@ class Player {
         if (this.inventory[index] == undefined && this.hotbar[solt] == undefined) {
             return { state: 'fail', failReason: 'null' };
         } else if (this.hotbar[solt] == undefined) {
-            item = this.inventory.splice(index, 1)[0];
-            this.hotbar[solt] = item;
+            item                  = this.inventory.splice(index, 1)[0];
+            this.hotbar[solt]     = item;
         } else if (this.inventory[index] == undefined) {
-            hotbarItem = this.hotbar[solt];
-            this.hotbar[solt] = undefined;
+            hotbarItem            = this.hotbar[solt];
+            this.hotbar[solt]     = undefined;
             this.inventory.push(hotbarItem);
         } else {
-            item = this.inventory[index];
-            hotbarItem = this.hotbar[solt];
+            item                  = this.inventory[index];
+            hotbarItem            = this.hotbar[solt];
             this.inventory[index] = hotbarItem;
-            this.hotbar[solt] = item;
+            this.hotbar[solt]     = item;
         }
 
         this.updateHotbar();
@@ -274,7 +274,7 @@ class Player {
 
     updateHotbar() {
         this.boundEvent.updateHotbar({
-            hotbar: this.hotbar,
+            hotbar:       this.hotbar,
             selectedSlot: this.selectedSlot
         });
     }

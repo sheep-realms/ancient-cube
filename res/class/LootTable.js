@@ -1,16 +1,16 @@
 class LootTable {
     constructor(value, from = {}, stackDepth = 0) {
         this.data = {
-            type: 'generic',
+            type:       'generic',
             randomSeed: 0,
-            pools: []
+            pools:      []
         };
         this.from = {
-            world: undefined,
-            room: undefined,
-            stage: undefined,
+            world:  undefined,
+            room:   undefined,
+            stage:  undefined,
             player: undefined,
-            item: undefined
+            item:   undefined
         };
         this.stackDepth = stackDepth + 1;
 
@@ -108,7 +108,7 @@ class LootTable {
     
         for (i = 0; i < options.length; i++) {
             options[i].weight = options[i]?.weight != undefined ? options[i].weight : 1;
-            weights[i]        = options[i].weight + (weights[i - 1] || 0);
+            weights[i]        = options[i] .weight + (weights[i - 1] || 0);
         }
         
         let random = SMath.randomFloat(this.randomSeed) * weights[weights.length - 1];
@@ -126,9 +126,9 @@ class Predicate {
         this.data = {
             condition: 'empty'
         };
-        this.randomSeed = seed;
+        this.randomSeed = 0;
 
-        this.create(value);
+        this.create(value, seed);
     }
 
     /**
@@ -137,6 +137,7 @@ class Predicate {
      */
     create(value, seed = 0) {
         this.data = {...this.data, ...value};
+        this.randomSeed = seed;
     }
 
     /**
@@ -151,7 +152,7 @@ class Predicate {
             
             // 检查设备时间
             case 'device_time_check':
-                let d = new Date();
+                let d   = new Date();
                 let now = d.getTime();
 
                 if (this.data.max > now && this.data.min < now) return true;

@@ -1,11 +1,11 @@
 class Messager {
     constructor($sel) {
-        this.$sel = $sel;
+        this.$sel          = $sel;
         this.lastMessageID = 0;
     }
 
     send(message = '', style = '') {
-        let sel = this.$sel,
+        let sel   = this.$sel,
             msgid = this.lastMessageID++;
         $(sel).append(`<div class="message-item" data-message-id="${msgid}" style="${style}"></div>`);
         $(`${sel} .message-item[data-message-id=${msgid}]`).text(message);

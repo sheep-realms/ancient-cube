@@ -1,14 +1,14 @@
 class World {
     constructor() {
-        this.name = 'world';
-        this.size = {
+        this.name         = 'world';
+        this.size         = {
             height: 5,
             width:  5,
             stage:  1
         };
-        this.room = [];
+        this.room         = [];
         this.selectedRoom = 0;
-        this.player = undefined;
+        this.player       = undefined;
     }
 
     create(generator) {

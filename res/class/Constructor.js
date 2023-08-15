@@ -113,7 +113,7 @@ class MapConstructor {
      */
     static getMap(stage) {
         let before = `<div id="map" style="--map-size: ${Math.max(stage.size.height, stage.size.width)}; --map-size-height: ${stage.size.height}; --map-size-width: ${stage.size.width};">`;
-        let str = '';
+        let str    = '';
         for (let i = 0; i < stage.size.height; i++) {
             str += `<div id="map-${i}" class="map-row">`;
             for (let j = 0; j < stage.size.width; j++) {

@@ -1,7 +1,7 @@
 class Generator {
     constructor(value) {
         this.data = {
-            type: 'generic',
+            type:   'generic',
             stages: []
         };
 

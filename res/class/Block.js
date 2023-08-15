@@ -1,16 +1,16 @@
 class Block {
     constructor(id = 'air', y = 0, x = 0) {
-        this.name = 'block';
-        this.id   = 'air';
-        this.type = 'air';
-        this.data = {};
+        this.name     = 'block';
+        this.id       = 'air';
+        this.type     = 'air';
+        this.data     = {};
         this.searched = false;
-        this.search = {
-            stair: 0,
-            chest: 0,
+        this.search   = {
+            stair:   0,
+            chest:   0,
             monster: 0
         };
-        this.pos = {
+        this.pos      = {
             x: x,
             y: y
         };
@@ -19,7 +19,7 @@ class Block {
     }
 
     create(id = 'air') {
-        this.id = id;
+        this.id   = id;
         this.type = id;
         return this;
     }
