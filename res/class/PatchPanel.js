@@ -16,10 +16,13 @@ class PatchPanel {
             hotbar_7:  55,
             hotbar_8:  56,
             hotbar_9:  57,
+            hide_hud:  112,
+            help:      113,
             debug:     114
         };
         this.__map     = [];
         this.player    = undefined;
+        this.messager  = undefined;
     }
 
     init(player) {
@@ -48,6 +51,7 @@ class PatchPanel {
 
     input(event) {
         // console.log(event.keyCode)
+        // console.log(event)
         switch (this.__map[event.keyCode]) {
             case 'hotbar_1':
                 this.player.selectSlot(0);
@@ -55,6 +59,28 @@ class PatchPanel {
 
             case 'hotbar_2':
                 this.player.selectSlot(1);
+                break;
+            
+            case 'hide_hud':
+                event.preventDefault();
+                if ($(this.boundDOM.game).hasClass('hide-hud') || $(this.boundDOM.game).hasClass('hide-hud-half')) {
+                    $(this.boundDOM.game).removeClass('hide-hud hide-hud-half');
+                } else {
+                    if (event.shiftKey) {
+                        $(this.boundDOM.game).addClass('hide-hud-half');
+                    } else {
+                        $(this.boundDOM.game).addClass('hide-hud');
+                    }
+                }
+                break;
+
+            case 'help':
+                event.preventDefault();
+                this.messager.send('[F1] Hide HUD');
+                this.messager.send('[Shift + F1] Half hide HUD');
+                this.messager.send('[F2] Help');
+                this.messager.send('[F3] Debug');
+                this.messager.send('[1 ~ 2] Select slot');
                 break;
 
             case 'debug':

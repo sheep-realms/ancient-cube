@@ -176,3 +176,13 @@
 #keys-bar .pixel-hotkeys-key-label {
     padding-right: 8px;
 }
+
+#game.hide-hud #topbar,
+#game.hide-hud #bottombar {
+    display: none;
+}
+
+#game.hide-hud-half #topbar,
+#game.hide-hud-half #bottombar {
+    opacity: 0.5;
+}

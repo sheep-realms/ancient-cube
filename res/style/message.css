@@ -19,3 +19,11 @@
     opacity: 0;
     transition: opacity 1s;
 }
+
+#game.hide-hud #message {
+    display: none;
+}
+
+#game.hide-hud-half #message {
+    opacity: 0.5;
+}

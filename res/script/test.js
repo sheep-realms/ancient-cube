@@ -32,6 +32,7 @@ game.debug.bind('debugMessageOutput', function(e) {
 
 let patchPanel = new PatchPanel();
 patchPanel.bind('#game');
+patchPanel.messager = messager;
 patchPanel.init(p);
 patchPanel.listen();
 
