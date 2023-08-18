@@ -108,7 +108,23 @@ function loadMap(stage) {
     $('#map').replaceWith(MapConstructor.getMap(stage));
 }
 
+
+let preloadImages = [
+    'res/img/block/default.png',
+    'res/img/event/chest.png',
+    'res/img/gui/cover.png',
+    'res/img/gui/heart.png',
+    'res/img/gui/keys.png',
+    'res/img/icon/search.png',
+    'res/img/item/item.png',
+    'res/img/item/weapon.png'
+];
+
 $(document).ready(() => {
+    preloadImages.forEach(e => {
+        $('#preload').append(`<img src="${e}">`);
+    });
+
     loadMap(w.room[0].stage[0]);
 
     $('#keys-bar').html(pixelHotkeys.getKeyDOM('msl | ' + $t('gui.action.search')));

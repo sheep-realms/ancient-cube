@@ -9,6 +9,17 @@
     --maze-config-view-screen-safety-width: 90vw;
 }
 
+#preload {
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    position: fixed;
+    overflow: hidden;
+    top: -5000px;
+    left: -5000px;
+    pointer-events: none;
+}
+
 #game {
     display: flex;
     align-items: center;
