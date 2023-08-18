@@ -47,16 +47,31 @@ class BlockConstructor {
                     }
                 );
             } else {
-                return this.getBlockContainer(
-                    block.type,
-                    {
-                        pos: {
-                            x: block.pos.x,
-                            y: block.pos.y
-                        },
-                        class: 'searched ' + block.type
-                    }
-                );
+                switch (block.type) {
+                    case 'chest':
+                        return this.getBlockContainer(
+                            `<div class="event ${block.type} ${block.damaged ? 'damaged' : ''}"></div>`,
+                            {
+                                pos: {
+                                    x: block.pos.x,
+                                    y: block.pos.y
+                                },
+                                class: 'searched ' + block.type
+                            }
+                        );
+                
+                    default:
+                        return this.getBlockContainer(
+                            block.type,
+                            {
+                                pos: {
+                                    x: block.pos.x,
+                                    y: block.pos.y
+                                },
+                                class: 'searched ' + block.type
+                            }
+                        );
+                }
             }
         } else {
             if (block.type == 'wall') {

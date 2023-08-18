@@ -5,6 +5,7 @@ class Block {
         this.type     = 'air';
         this.data     = {};
         this.searched = false;
+        this.damaged  = false;
         this.search   = {
             stair:   0,
             chest:   0,

@@ -96,7 +96,7 @@ class Player {
         this.clearDiscard();
 
         let r = this.world.getSelectedRoom().getSelectedStage().goto(y, x);
-        this.boundEvent.goto(r);
+
         if (r.type == 'monster') {
             let killFail = false,
                 defFail  = false;
@@ -105,7 +105,7 @@ class Player {
                 let atk = this.hotbar[this.selectedSlot].attack();
                 if (atk.state == 'success') {
                     if (atk.data.attack >= r.data.health) {
-                        
+                        r.block.damaged = true;
                     } else {
                         killFail = true;
                     }
@@ -130,8 +130,14 @@ class Player {
                 this.damage(r?.data?.attack ? r.data.attack : 0);
             }
         } else {
-            if (this.hotbar[this.selectedSlot]?.type == 'weapon') this.hotbar[this.selectedSlot].attack();
+            if (this.hotbar[this.selectedSlot]?.type == 'weapon') {
+                this.hotbar[this.selectedSlot].attack();
+                if (r.type == 'chest') r.block.damaged = true;
+            }
+            
         }
+
+        this.boundEvent.goto(r);
 
         this.updateHotbar();
 

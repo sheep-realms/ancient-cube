@@ -133,6 +133,26 @@
 .search-icon.monster-8 {--icon-pos-x: -7; --icon-pos-y: -2;}
 .search-icon.monster-n {--icon-pos-x: -8; --icon-pos-y: -2;}
 
+.map-block .event {
+    position: absolute;
+    width: 87.5%;
+    height: 87.5%;
+    pointer-events: none;
+    image-rendering: pixelated;
+    background-size: 800%;
+    background-position: 0 0;
+}
+
+.map-block .event.chest {
+    background-image: url(../img/event/chest.png);
+    background-position: 0 -100%;
+}
+
+.map-block .event.chest.damaged {
+    background-image: url(../img/event/chest.png);
+    background-position: 0 -200%;
+}
+
 .map-block .cover {
     position: absolute;
     top: 0;
