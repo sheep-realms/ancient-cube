@@ -112,6 +112,8 @@ function loadMap(stage) {
 let preloadImages = [
     'res/img/block/default.png',
     'res/img/event/chest.png',
+    'res/img/event/monster.png',
+    'res/img/event/misc.png',
     'res/img/gui/cover.png',
     'res/img/gui/heart.png',
     'res/img/gui/keys.png',

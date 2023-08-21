@@ -49,6 +49,7 @@ class BlockConstructor {
             } else {
                 switch (block.type) {
                     case 'chest':
+                    case 'monster':
                         return this.getBlockContainer(
                             `<div class="event ${block.type} ${block.damaged ? 'damaged' : ''}"></div>`,
                             {
@@ -59,6 +60,19 @@ class BlockConstructor {
                                 class: 'searched ' + block.type
                             }
                         );
+
+                    case 'stair':
+                        return this.getBlockContainer(
+                            `<div class="event ${block.type}"></div>`,
+                            {
+                                pos: {
+                                    x: block.pos.x,
+                                    y: block.pos.y
+                                },
+                                class: 'searched ' + block.type
+                            }
+                        );
+
                 
                     default:
                         return this.getBlockContainer(

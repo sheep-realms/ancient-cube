@@ -160,8 +160,21 @@
 }
 
 .map-block .event.chest.damaged {
-    background-image: url(../img/event/chest.png);
     background-position: 0 -200%;
+}
+
+.map-block .event.monster {
+    background-image: url(../img/event/monster.png);
+    background-position: 0 0;
+}
+
+.map-block .event.monster.damaged {
+    background-position: 0 -100%;
+}
+
+.map-block .event.stair {
+    background-image: url(../img/event/misc.png);
+    background-position: 0 0;
 }
 
 .map-block .cover {
