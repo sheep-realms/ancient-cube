@@ -9,6 +9,7 @@ class Stage {
         this.generator = generator;
         this.generated = false;
         this.features  = {
+            chaos:       false,
             foggy:       false,
             waterlogged: false
         };
@@ -67,6 +68,7 @@ class Stage {
         // return searchingBlock;
 
         let search = {
+            chaos:   this.features.chaos,
             stair:   0,
             chest:   0,
             monster: 0
@@ -152,6 +154,9 @@ class Stage {
 
     generate(start = [0, 0]) {
         if (this.generator != undefined) {
+            if (this.generator?.features != undefined) {
+                this.features = {...this.features, ...this.generator.features};
+            }
             let chest   = this.generator.blocks.find(function(e) {
                 return e.id == 'chest';
             });

@@ -12,9 +12,7 @@ let db_generator = {
                     height: 5,
                     width:  5
                 },
-                features: {
-                    waterlogged: false
-                },
+                features: {},
                 blocks: [
                     {
                         id: 'chest',
@@ -40,9 +38,7 @@ let db_generator = {
                     height: 5,
                     width:  5
                 },
-                features: {
-                    waterlogged: false
-                },
+                features: {},
                 blocks: [
                     {
                         id: 'chest',
@@ -68,9 +64,7 @@ let db_generator = {
                     height: 5,
                     width:  5
                 },
-                features: {
-                    waterlogged: false
-                },
+                features: {},
                 blocks: [
                     {
                         id: 'chest',
@@ -97,7 +91,7 @@ let db_generator = {
                     width:  5
                 },
                 features: {
-                    waterlogged: false
+                    chaos: true
                 },
                 blocks: [
                     {
@@ -117,16 +111,14 @@ let db_generator = {
             }, {
                 stage: {
                     min: 5,
-                    max: Infinity
+                    max: 8
                 },
                 type: 'generic',
                 size: {
                     height: 6,
                     width:  6
                 },
-                features: {
-                    waterlogged: false
-                },
+                features: {},
                 blocks: [
                     {
                         id: 'chest',
@@ -137,6 +129,32 @@ let db_generator = {
                     }, {
                         id: 'monster',
                         count: 10
+                    }, {
+                        id: 'stair',
+                        count: 2
+                    }
+                ]
+            }, {
+                stage: {
+                    min: 10,
+                    max: Infinity
+                },
+                type: 'generic',
+                size: {
+                    height: 7,
+                    width:  7
+                },
+                features: {},
+                blocks: [
+                    {
+                        id: 'chest',
+                        data: {
+                            loot_table: 'chest_generic'
+                        },
+                        count: 10
+                    }, {
+                        id: 'monster',
+                        count: 14
                     }, {
                         id: 'stair',
                         count: 2

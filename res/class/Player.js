@@ -10,6 +10,7 @@ class Player {
         this.selectedSlot = 0;
         this.discarded    = [];
         this.world        = {};
+        this.statistics   = {};
 
         this.boundEvent   = {
             goto:               function() {},
@@ -28,6 +29,7 @@ class Player {
         this.world  = world;
         this.attribute.push(new Attribute('health_max', 6, 'system'));
         this.health = 6;
+        this.statistics = new Statistics();
     }
 
     bind(event, action = function() {}) {
@@ -95,6 +97,8 @@ class Player {
         this.lastPos = [y, x];
         this.clearDiscard();
 
+        this.statistics.setStatistic('custom', 'move', 1);
+
         let r = this.world.getSelectedRoom().getSelectedStage().goto(y, x);
 
         if (r.type == 'monster') {
@@ -109,6 +113,7 @@ class Player {
                     } else {
                         killFail = true;
                     }
+                    this.statistics.setStatistic('custom', 'damage_dealt', Math.min(r.data.health, atk.data.attack));
                 } else {
                     killFail = true;
                 }
@@ -117,6 +122,7 @@ class Player {
                 if (killFail) {
                     let def = this.hotbar[this.selectedSlot].defense(r.data.attack);
                     if (def.state == 'success') {
+                        this.statistics.setStatistic('custom', 'damage_defended', def.data.defense);
                         this.damage(def.data.undefendedDamage);
                     } else {
                         defFail = true;
@@ -162,6 +168,8 @@ class Player {
             damage:      Math.min(this.health, value),
             deathDefend: deathDefend
         });
+
+        this.statistics.setStatistic('custom', 'damage_taken', Math.min(this.health, value));
 
         if (this.health <= 0) this.dead();
         

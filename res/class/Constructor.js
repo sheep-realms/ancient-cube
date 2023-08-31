@@ -16,13 +16,13 @@ class BlockConstructor {
                 let str = '';
                 let strList = [];
                 if (block.search.stair > 0) {
-                    strList.push(`<div class="search-icon stair-${block.search.stair}"></div>`);
+                    strList.push(`<div class="search-icon stair-${block.search.chaos ? 'n' : block.search.stair}"></div>`);
                 }
                 if (block.search.chest > 0) {
-                    strList.push(`<div class="search-icon chest-${block.search.chest}"></div>`);
+                    strList.push(`<div class="search-icon chest-${block.search.chaos ? 'n' : block.search.chest}"></div>`);
                 }
                 if (block.search.monster > 0) {
-                    strList.push(`<div class="search-icon monster-${block.search.monster}"></div>`);
+                    strList.push(`<div class="search-icon monster-${block.search.chaos ? 'n' : block.search.monster}"></div>`);
                 }
     
                 for (let i = 0; i < strList.length; i++) {
