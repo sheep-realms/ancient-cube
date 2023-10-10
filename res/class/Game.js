@@ -103,7 +103,7 @@ class Game {
             [1, 2, 4],
             [4, 7, 6],
             [6, 5, 3]
-        ]
+        ];
 
         // 行
         for (let i = 0; i < data.length; i++) {

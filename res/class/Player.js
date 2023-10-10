@@ -278,6 +278,7 @@ class Player {
         this.clearDiscard();
         this.world.switchStage(stage);
         this.boundEvent.updateMap(this.world.getSelectedRoom().getSelectedStage());
+        this.statistics.setStatistic('custom', 'stage_switch', 1);
     }
 
     selectSlot(value) {
