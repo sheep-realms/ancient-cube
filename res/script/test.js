@@ -131,6 +131,10 @@ $(document).ready(() => {
 
     $('#keys-bar').html(pixelHotkeys.getKeyDOM('msl | ' + $t('gui.action.search')));
 
+    $('#title-screen').click(function() {
+        $('#title-screen').addClass('hide');
+    });
+
     $('#game').on('click', '.map-block', function() {
         let x = $(this).data('pos-x');
         let y = $(this).data('pos-y');

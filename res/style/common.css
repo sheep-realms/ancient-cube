@@ -20,6 +20,56 @@
     pointer-events: none;
 }
 
+#title-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #D9D9D9;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    color: #000;
+    z-index: 10000;
+    user-select: none;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 1.5s ease-in, background-color .3s ease;
+}
+
+#title-screen img {
+    image-rendering: pixelated;
+    width: min(90vw, 748px);
+    margin-bottom: 64px;
+    pointer-events: none;
+}
+
+#title-screen .game-version {
+    position: fixed;
+    bottom: 0;
+    padding-bottom: 32px;
+    color: #888;
+}
+
+#title-screen.hide {
+    opacity: 0;
+    background-color: transparent;
+    pointer-events: none;
+}
+
+#title-screen .start-tip,
+#title-screen .game-version {
+    opacity: 1;
+    transition: opacity .15s;
+}
+
+#title-screen.hide .start-tip,
+#title-screen.hide .game-version {
+    opacity: 0;
+}
+
 #game {
     display: flex;
     align-items: center;
