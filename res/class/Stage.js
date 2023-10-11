@@ -147,7 +147,7 @@ class Stage {
     setMap(mapdata) {
         for (let i = 0; i < mapdata.length; i++) {
             for (let j = 0; j < mapdata[i].length; j++) {
-                this.setBlock(i, j, mapdata[i][j]);
+                this.setBlock(i, j, mapdata[i][j].id, mapdata[i][j]?.data);
             }
         }
     }
@@ -169,7 +169,8 @@ class Stage {
             let chestCount   = chest   != undefined ? chest  .count : 0;
             let monsterCount = monster != undefined ? monster.count : 0;
             let stairCount   = stair   != undefined ? stair  .count : 0;
-            this.setMap(game.randomStageGenerate(this.generator.size.height, this.generator.size.width, start, {chestCount:chestCount, monsterCount:monsterCount, stairCount: stairCount}));
+            // this.setMap(game.randomStageGenerate(this.generator.size.height, this.generator.size.width, start, {chestCount:chestCount, monsterCount:monsterCount, stairCount: stairCount}));
+            this.setMap(game.randomStageGenerate(this.generator.size.height, this.generator.size.width, start, {blocks: this.generator.blocks}));
         } else {
             this.setMap(game.randomStageGenerate(this.size.height, this.size.width, start, {chestCount:5, monsterCount:6, stairCount: 2}));
         }

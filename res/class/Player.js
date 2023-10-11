@@ -135,12 +135,28 @@ class Player {
             if (defFail) {
                 this.damage(r?.data?.attack ? r.data.attack : 0);
             }
-        } else {
+        } else if (r.type == 'chest') {
             if (this.hotbar[this.selectedSlot]?.type == 'weapon') {
                 this.hotbar[this.selectedSlot].attack();
-                if (r.type == 'chest') r.block.damaged = true;
+                r.block.damaged = true;
+            } else {
+                if (r.block?.data?.loot_table != undefined) {
+                    let chestLootTable = new LootTable(
+                        r.block.data.loot_table,
+                        {
+                            world:  this.world,
+                            room:   this.world.getSelectedRoom(),
+                            stage:  this.world.getSelectedRoom().getSelectedStage(),
+                            player: this,
+                            item:   this.getSelectedItem()
+                        }
+                    );
+
+                    this.giveItems(chestLootTable.getItem());
+                }
             }
-            
+        } else {
+            if (this.hotbar[this.selectedSlot]?.type == 'weapon') this.hotbar[this.selectedSlot].attack();
         }
 
         this.boundEvent.goto(r);
@@ -219,6 +235,20 @@ class Player {
     }
 
     /**
+     * 给予多个物品
+     * @param {Array<Item>} items 物品列表
+     * @returns {Array<Object>} 状态和数据
+     */
+    giveItems(items = []) {
+        if (this.isDead && !game.debug.player_dead_action) return;
+        let rs = [];
+        items.forEach(e => {
+            rs.push(this.give(e));
+        });
+        return rs;
+    }
+
+    /**
      * 替换物品
      * @param {Number} index 物品栏索引
      * @param {Item} item 物品
@@ -271,6 +301,10 @@ class Player {
                 inventoryIndex: index
             }
         }
+    }
+
+    getSelectedItem() {
+        return this.hotbar[this.selectedSlot];
     }
 
     switchStage(stage) {
