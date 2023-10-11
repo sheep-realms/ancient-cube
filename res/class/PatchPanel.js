@@ -4,6 +4,7 @@ class PatchPanel {
             game:  '',
             input: 'input:not([disabled])',
         };
+        this.enable    = true;
         this.inputMode = false;
         this.event     = {
             inventory: 69,
@@ -23,6 +24,14 @@ class PatchPanel {
         this.__map     = [];
         this.player    = undefined;
         this.messager  = undefined;
+    }
+
+    open() {
+        this.enable = true;
+    }
+
+    close() {
+        this.enable = false;
     }
 
     init(player) {
@@ -52,6 +61,7 @@ class PatchPanel {
     input(event) {
         // console.log(event.keyCode)
         // console.log(event)
+        if (!this.enable) return;
         switch (this.__map[event.keyCode]) {
             case 'hotbar_1':
                 this.player.selectSlot(0);

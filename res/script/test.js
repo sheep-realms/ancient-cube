@@ -31,6 +31,7 @@ game.debug.bind('debugMessageOutput', function(e) {
 });
 
 let patchPanel = new PatchPanel();
+patchPanel.close();
 patchPanel.bind('#game');
 patchPanel.messager = messager;
 patchPanel.init(p);
@@ -133,6 +134,7 @@ $(document).ready(() => {
 
     $('#title-screen').click(function() {
         $('#title-screen').addClass('hide');
+        patchPanel.open();
     });
 
     $('#game').on('click', '.map-block', function() {
