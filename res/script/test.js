@@ -48,6 +48,8 @@ function $t(key, variable={}) {
 }
 translator.load(lang_zh_cn);
 
+let tester = new Tester(w, p);
+
 // let ts_map = [
 //     ['air', 'air', 'air', 'chest', 'monster'],
 //     ['air', 'air', 'air', 'monster', 'air'],
@@ -147,6 +149,14 @@ $(document).ready(() => {
         p.selectSlot($(this).data('slot'));
     });
 
+    // 点击物品栏
+    $('#inventory').on('click', '.inventory-item', function() {
+        let slot = $(this).data('slot');
+        if (p.inventory[slot].type == 'weapon') {
+            p.switchHotbarItem(1, slot);
+        }
+    });
+
     p.bind('goto', function(e) {
         $(`#map-${e.pos[0]}-${e.pos[1]}`).replaceWith(BlockConstructor.getBlock(e.block));
     });
@@ -222,37 +232,19 @@ $(document).ready(() => {
     });
 
     p.bind('updateHotbar', function(e) {
-        let damage = e.hotbar[1].damage;
-        let health = e.hotbar[1].attribute.health;
-        let value = (health - damage) / health;
-        if (value < 0) value = 0;
-        if (value > 1) value - 1;
-        $('#player-hotbar-1 .item-damage-value').attr('style', `--value: ${value * 100}%;`);
-        if (value != 1) $('#player-hotbar-1 .item-damage-bar').removeClass('hide');
-        $('.player-hotbar-item').removeClass('selected');
-        $('#player-hotbar-' + e.selectedSlot).addClass('selected');
+        $('#player-hotbar').html(InventoryConstructor.getHotbar(e.hotbar, e.selectedSlot));
 
-        $('#player-hotbar-1 .item-damage-value').removeClass('damage-1 damage-2 damage-3 damage-4');
-
-        if(value >= 0.75) {
-            
-        } else if(value >= 0.5) {
-            $('#player-hotbar-1 .item-damage-value').addClass('damage-1');
-        } else if(value >= 0.25) {
-            $('#player-hotbar-1 .item-damage-value').addClass('damage-2');
-        } else if(value >= 0.1) {
-            $('#player-hotbar-1 .item-damage-value').addClass('damage-3');
-        } else {
-            $('#player-hotbar-1 .item-damage-value').addClass('damage-4');
-        }
-
-        if (e.hotbar[e.selectedSlot].type == 'weapon') {
+        if (e.hotbar[e.selectedSlot]?.type == 'weapon') {
             $('#game').addClass('action-attack');
             $('#keys-bar').html(pixelHotkeys.getKeyDOM('msl | ' + $t('gui.action.attack')));
         } else {
             $('#game').removeClass('action-attack');
             $('#keys-bar').html(pixelHotkeys.getKeyDOM('msl | ' + $t('gui.action.search')));
         }
+    });
+
+    p.bind('updateInventory', function(e) {
+        $('#inventory').html(InventoryConstructor.getInventory(e));
     });
 
     p.bind('updateMap', function(e) {

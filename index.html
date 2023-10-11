@@ -34,9 +34,11 @@
     <script src="res/class/PatchPanel.js"></script>
     <script src="res/class/PixelHotkeys.js"></script>
     <script src="res/class/Translator.js"></script>
+    <script src="res/class/Tester.js"></script>
     <script src="res/script/test.js"></script>
     <link rel="stylesheet" href="res/style/common.css">
     <link rel="stylesheet" href="res/style/hud.css">
+    <link rel="stylesheet" href="res/style/inventory.css">
     <link rel="stylesheet" href="res/style/message.css">
     <link rel="stylesheet" href="res/style/screen-effect.css">
     <link rel="stylesheet" href="res/style/item.css">
@@ -75,10 +77,10 @@
 
         <div id="bottombar">
             <div id="player-hotbar" class="">
-                <div id="player-hotbar-0" class="player-hotbar-item selected" data-slot="0">
+                <div id="player-hotbar-0" class="inventory-item player-hotbar-item selected" data-slot="0">
                     <div class="item-icon" data-item-id="magnifier"></div>
                 </div>
-                <div id="player-hotbar-1" class="player-hotbar-item" data-slot="1">
+                <div id="player-hotbar-1" class="inventory-item player-hotbar-item" data-slot="1">
                     <div class="item-icon" data-item-type="weapon" data-item-id="sword"></div>
                     <div class="item-damage-bar hide">
                         <div class="item-damage-value" style="--value: 100%;"></div>
@@ -96,6 +98,12 @@
         <div id="screen-mask" class=""></div>
 
         <div id="screen-effect"></div>
+
+        <div id="gui-screen" class="hide">
+            <div id="inventory">
+                
+            </div>
+        </div>
     </div>
 </body>
 </html>

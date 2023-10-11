@@ -57,7 +57,18 @@ class LootTable {
                     r = new NumberProviders(r).getValue();
                 }
                 for (let i = 0; i < r; i++) {
-                    let item = this.weightedRandom(e.entries);
+                    let item = undefined;
+                    let doi = 0;
+                    do {
+                        item = this.weightedRandom(e.entries);
+                        doi++;
+                        if (doi > 64) break;
+                    } while (item == undefined);
+                    if (item == undefined) {
+                        log.error('Loot Table Error: Random Exception', 'class/LootTable.js > LootTable > getItem()');
+                        return [];
+                    }
+
                     if (this.conditionsTest(item?.conditions)) {
                         switch (item.type) {
                             case 'item':
@@ -77,6 +88,7 @@ class LootTable {
                 }
             }
         });
+
         return items;
     }
 

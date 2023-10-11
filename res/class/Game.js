@@ -16,6 +16,11 @@ class Game {
         this.debug = {};
     }
 
+    /**
+     * 随机排序
+     * @param {Array} arr 项目列表
+     * @returns {Array} 随机后的项目列表
+     */
     randomSort(arr) {
         let index,
             randomIndex,
@@ -33,6 +38,11 @@ class Game {
         return arr;
     }
 
+    /**
+     * 统计生成器所用方块数
+     * @param {Array} blocks 方块列表
+     * @returns {Number} 计数
+     */
     generateBlockCount(blocks = []) {
         let i = 0;
         blocks.forEach(e => {
@@ -41,6 +51,14 @@ class Game {
         return i;
     }
 
+    /**
+     * 随机生成楼层地图
+     * @param {Number} height 楼层高度
+     * @param {Number} width 楼层宽度
+     * @param {Array<Number>} start 起始位置
+     * @param {Object} data 数据
+     * @returns {Array<Array>} 地图
+     */
     randomStageGenerate(height, width, start = [0, 0], data = {}) {
         // 计算方块数量是否合法
         let blockCount = height * width - 1,

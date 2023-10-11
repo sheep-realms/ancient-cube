@@ -44,6 +44,7 @@ class Room {
         if (this.stage[stage] == undefined) {
             this.newStage(stage);
         }
+        return this.selectedStage;
     }
 
     setBlock(stage, y, x, id, data = undefined) {

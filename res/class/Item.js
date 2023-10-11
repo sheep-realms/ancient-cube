@@ -62,8 +62,8 @@ class Weapon extends Item {
     }
 
     attack() {
-        if (this.disabled)              return { state: 'fail', failReason: 'item_disabled' };
-        if (this.attribute.attack <= 0) return { state: 'fail', failReason: 'action_invalid' };
+        if (this.disabled)             return { state: 'fail', failReason: 'item_disabled' };
+        if (this.attribute.attack < 0) return { state: 'fail', failReason: 'action_invalid' };
 
         if (!game.debug.item_no_damage) {
             this.damage++;
@@ -86,8 +86,8 @@ class Weapon extends Item {
     }
 
     defense(damageValue) {
-        if (this.disabled)               return { state: 'fail', failReason: 'item_disabled' };
-        if (this.attribute.defense <= 0) return { state: 'fail', failReason: 'action_invalid' };
+        if (this.disabled)              return { state: 'fail', failReason: 'item_disabled' };
+        if (this.attribute.defense < 0) return { state: 'fail', failReason: 'action_invalid' };
         
         if (!game.debug.item_no_damage) {
             this.damage++;

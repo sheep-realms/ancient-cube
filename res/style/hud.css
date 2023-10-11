@@ -115,21 +115,28 @@
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-.player-hotbar-item {
+.inventory-item {
     height: 64px;
     width: 64px;
-    margin: 8px;
     background-color: rgba(0, 0, 0, 0.2);
     position: relative;
-    opacity: 0.75;
+    opacity: 1;
     cursor: pointer;
 }
 
-.player-hotbar-item+.player-hotbar-item {
+#player-hotbar .inventory-item {
+    margin: 8px;
+}
+
+.inventory-item.player-hotbar-item {
+    opacity: 0.75;
+}
+
+#player-hotbar .inventory-item+.inventory-item {
     margin-left: 0;
 }
 
-.player-hotbar-item .item-damage-bar {
+.inventory-item .item-damage-bar {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -139,23 +146,34 @@
     opacity: 0.75;
 }
 
-.player-hotbar-item .item-damage-bar .item-damage-value {
+.inventory-item .item-damage-bar .item-damage-value {
     --value: 100%;
     width: var(--value);
     height: 4px;
     background-color: #00FF00;
 }
 
-.player-hotbar-item .item-damage-bar .item-damage-value.damage-1 { background-color: #80FF00; }
-.player-hotbar-item .item-damage-bar .item-damage-value.damage-2 { background-color: #FFFF00; }
-.player-hotbar-item .item-damage-bar .item-damage-value.damage-3 { background-color: #FF8000; }
-.player-hotbar-item .item-damage-bar .item-damage-value.damage-4 { background-color: #FF0000; }
+.inventory-item .item-count {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    color: #FFF;
+    display: block;
+    padding: 0.1em 0.25em;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.75);
+    font-weight: bold;
+}
 
-.player-hotbar-item .item-damage-bar.hide {
+.inventory-item .item-damage-bar .item-damage-value.damage-1 { background-color: #80FF00; }
+.inventory-item .item-damage-bar .item-damage-value.damage-2 { background-color: #FFFF00; }
+.inventory-item .item-damage-bar .item-damage-value.damage-3 { background-color: #FF8000; }
+.inventory-item .item-damage-bar .item-damage-value.damage-4 { background-color: #FF0000; }
+
+.inventory-item .item-damage-bar.hide {
     display: none;
 }
 
-.player-hotbar-item.selected {
+.inventory-item.player-hotbar-item.selected {
     /* top: -8px; */
     background-color: rgba(255, 255, 255, 0.25);
     opacity: 1;

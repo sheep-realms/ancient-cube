@@ -153,3 +153,105 @@ class MapConstructor {
         return before + str + '</div>';
     }
 }
+
+/**
+ * 物品栏构造器
+ * @class
+ */
+class InventoryConstructor {
+    constructor() {}
+
+    /**
+     * 构造单个物品栏
+     * @param {Item} item 物品
+     * @returns {String} DOM
+     */
+    static getItem(item, slot, data = {}) {
+        if (item == undefined) return InventoryConstructor.getAir(slot, data);
+        return `<div ${data?.id ? `id="${data.id}"` : ''} class="inventory-item${data?.class ? ` ${data.class}` : ''}" data-slot="${slot}">
+                <div class="item-icon" data-item-type="${item.type}" data-item-id="${item.id}"></div>
+                ${InventoryConstructor.getDamageBar(item)}
+                ${ item.count > 1 ? `<div class="item-count">${item.count}</div>` : '' }
+            </div>`;
+    }
+
+    static getAir(slot, data = {}) {
+        return `<div ${data?.id ? `id="${data.id}"` : ''} class="inventory-item${data?.class ? ` ${data.class}` : ''}" data-slot="${slot}">
+                <div class="item-icon" data-item-type="air" data-item-id="air"></div>
+            </div>`;
+    }
+
+    /**
+     * 构造整个物品栏
+     * @param {Array<Item>} inventory 物品栏
+     * @returns {String} DOM
+     */
+    static getInventory(inventory) {
+        let dom = '';
+        for (let i = 0; i < inventory.length; i++) {
+            dom += InventoryConstructor.getItem(
+                inventory[i],
+                i,
+                {
+                    id: `inventory-slot-${i}`
+                }
+            );
+        }
+
+        return dom;
+    }
+
+    /**
+     * 构造耐久度条
+     * @param {Item} item 物品
+     * @returns {String} DOM
+     */
+    static getDamageBar(item) {
+        if (item?.attribute == undefined) {
+            return '';
+        } else if (item.attribute?.health == undefined || item.attribute?.health == 0) {
+            return '';
+        }
+
+        let value = (item.attribute.health - item.damage) / item.attribute.health,
+            type  = '';
+
+        if(value >= 0.75) {
+            
+        } else if(value >= 0.5) {
+            type = 'damage-1';
+        } else if(value >= 0.25) {
+            type = 'damage-2';
+        } else if(value >= 0.1) {
+            type = 'damage-3';
+        } else {
+            type = 'damage-4';
+        }
+
+        return `<div class="item-damage-bar${ item.damage > 0 ? '' : ' hide' }">
+                <div class="item-damage-value ${type}" style="--value: ${ value * 100 }%;"></div>
+            </div>`;
+    }
+
+    /**
+     * 构造快捷栏
+     * @param {Array<Item>} hotbar 快捷栏
+     * @param {Number} selected 已选择的栏位
+     * @returns {String} DOM
+     */
+    static getHotbar(hotbar, selected = 0) {
+        let dom = '';
+        for (let i = 0; i < hotbar.length; i++) {
+            dom += InventoryConstructor.getItem(
+                hotbar[i],
+                i,
+                {
+                    id: `player-hotbar-${i}`,
+                    class: `player-hotbar-item${ i == selected ? ' selected' : '' }`
+                }
+            );
+        }
+
+        return `<div id="player-hotbar" class="">${dom}</div>`;
+    }
+}

@@ -6,7 +6,9 @@ class PatchPanel {
         };
         this.enable    = true;
         this.inputMode = false;
+        this.focus     = []; 
         this.event     = {
+            exit:      27,
             inventory: 69,
             hotbar_1:  49,
             hotbar_2:  50,
@@ -58,52 +60,99 @@ class PatchPanel {
         });
     }
 
+    getFocus() {
+        if (this.focus.length == 0) {
+            return 'main'
+        } else {
+            return this.focus[0];
+        }
+    }
+
+    newFocus(name) {
+        this.focus.unshift(name);
+    }
+
+    removeFocus(name) {
+        let i = this.focus.indexOf(name);
+        if (i != -1) this.focus.splice(i, 1);
+    }
+
     input(event) {
         // console.log(event.keyCode)
         // console.log(event)
         if (!this.enable) return;
-        switch (this.__map[event.keyCode]) {
-            case 'hotbar_1':
-                this.player.selectSlot(0);
-                break;
 
-            case 'hotbar_2':
-                this.player.selectSlot(1);
-                break;
-            
-            case 'hide_hud':
-                event.preventDefault();
-                if ($(this.boundDOM.game).hasClass('hide-hud') || $(this.boundDOM.game).hasClass('hide-hud-half')) {
-                    $(this.boundDOM.game).removeClass('hide-hud hide-hud-half');
-                } else {
-                    if (event.shiftKey) {
-                        $(this.boundDOM.game).addClass('hide-hud-half');
-                    } else {
-                        $(this.boundDOM.game).addClass('hide-hud');
-                    }
+        let focus = this.getFocus();
+
+        switch (focus) {
+            case 'main':
+                switch (this.__map[event.keyCode]) {
+                    case 'hotbar_1':
+                        this.player.selectSlot(0);
+                        break;
+        
+                    case 'hotbar_2':
+                        this.player.selectSlot(1);
+                        break;
+                    
+                    case 'hide_hud':
+                        event.preventDefault();
+                        if ($(this.boundDOM.game).hasClass('hide-hud') || $(this.boundDOM.game).hasClass('hide-hud-half')) {
+                            $(this.boundDOM.game).removeClass('hide-hud hide-hud-half');
+                        } else {
+                            if (event.shiftKey) {
+                                $(this.boundDOM.game).addClass('hide-hud-half');
+                            } else {
+                                $(this.boundDOM.game).addClass('hide-hud');
+                            }
+                        }
+                        break;
+        
+                    case 'help':
+                        event.preventDefault();
+                        this.messager.send('[F1] Hide HUD');
+                        this.messager.send('[Shift + F1] Half hide HUD');
+                        this.messager.send('[F2] Help');
+                        this.messager.send('[F3] Debug');
+                        this.messager.send('[1 ~ 2] Select slot');
+                        this.messager.send('[E] Open inventory');
+                        break;
+        
+                    case 'inventory':
+                        this.newFocus('inventory');
+                        $(this.boundDOM.game + ' #gui-screen').removeClass('hide');
+                        break;
+        
+                    case 'debug':
+                        event.preventDefault();
+                        if (game.debug.master) {
+                            game.debug.master = false;
+                        } else {
+                            game.debug.master = true;
+                        }
+                        break;
+                
+                    default:
+                        break;
                 }
                 break;
 
-            case 'help':
-                event.preventDefault();
-                this.messager.send('[F1] Hide HUD');
-                this.messager.send('[Shift + F1] Half hide HUD');
-                this.messager.send('[F2] Help');
-                this.messager.send('[F3] Debug');
-                this.messager.send('[1 ~ 2] Select slot');
-                break;
-
-            case 'debug':
-                event.preventDefault();
-                if (game.debug.master) {
-                    game.debug.master = false;
-                } else {
-                    game.debug.master = true;
+            case 'inventory':
+                switch (this.__map[event.keyCode]) {
+                    case 'exit':
+                    case 'inventory':
+                        this.removeFocus('inventory');
+                        $(this.boundDOM.game + ' #gui-screen').addClass('hide');
+                        break;
+                
+                    default:
+                        break;
                 }
                 break;
         
             default:
                 break;
         }
+        
     }
 }

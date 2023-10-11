@@ -71,7 +71,13 @@ let db_generator = {
                         data: {
                             loot_table: 'chest_generic'
                         },
-                        count: 5
+                        count: 4
+                    }, {
+                        id: 'chest',
+                        data: {
+                            loot_table: 'chest_generic_weapon'
+                        },
+                        count: 1
                     }, {
                         id: 'monster',
                         count: 6
@@ -99,7 +105,13 @@ let db_generator = {
                         data: {
                             loot_table: 'chest_generic'
                         },
-                        count: 4
+                        count: 3
+                    }, {
+                        id: 'chest',
+                        data: {
+                            loot_table: 'chest_generic_weapon'
+                        },
+                        count: 1
                     }, {
                         id: 'monster',
                         count: 1
@@ -125,7 +137,13 @@ let db_generator = {
                         data: {
                             loot_table: 'chest_generic'
                         },
-                        count: 8
+                        count: 6
+                    }, {
+                        id: 'chest',
+                        data: {
+                            loot_table: 'chest_generic_weapon'
+                        },
+                        count: 2
                     }, {
                         id: 'monster',
                         count: 10
@@ -151,7 +169,13 @@ let db_generator = {
                         data: {
                             loot_table: 'chest_generic'
                         },
-                        count: 10
+                        count: 8
+                    }, {
+                        id: 'chest',
+                        data: {
+                            loot_table: 'chest_generic_weapon'
+                        },
+                        count: 2
                     }, {
                         id: 'monster',
                         count: 14

@@ -1,7 +1,7 @@
 .item-icon {
     --icon-size: 64px;
-    --icon-pos-x: 0;
-    --icon-pos-y: 0;
+    --icon-pos-x: 1;
+    --icon-pos-y: 1;
     --icon-image: url(../img/item/item.png);
     height: var(--icon-size);
     width: var(--icon-size);
@@ -25,3 +25,11 @@
 
 .item-icon[data-item-id='sword'] { --icon-pos-x: 0; --icon-pos-y: 0; }
 .item-icon[data-item-id='dagger'] { --icon-pos-x: -1; --icon-pos-y: 0; }
+.item-icon[data-item-id='knife'] { --icon-pos-x: -2; --icon-pos-y: 0; }
+.item-icon[data-item-id='spear'] { --icon-pos-x: -3; --icon-pos-y: 0; }
+.item-icon[data-item-id='kunai'] { --icon-pos-x: -4; --icon-pos-y: 0; }
+.item-icon[data-item-id='broadsword'] { --icon-pos-x: -5; --icon-pos-y: 0; }
+.item-icon[data-item-id='hammer'] { --icon-pos-x: -6; --icon-pos-y: 0; }
+.item-icon[data-item-id='crowbar'] { --icon-pos-x: -7; --icon-pos-y: 0; }
+.item-icon[data-item-id='rapier'] { --icon-pos-x: -8; --icon-pos-y: 0; }
+.item-icon[data-item-id='teach_weapon'] { --icon-pos-x: -9; --icon-pos-y: 0; }

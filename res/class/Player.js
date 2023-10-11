@@ -12,6 +12,8 @@ class Player {
         this.world        = {};
         this.statistics   = {};
 
+        this.__inGiveItems = false;
+
         this.boundEvent   = {
             goto:               function() {},
             healthDamage:       function() {},
@@ -19,12 +21,17 @@ class Player {
             dead:               function() {},
             updateAttribute:    function() {},
             updateHotbar:       function() {},
+            updateInventory:    function() {},
             updateMap:          function() {}
         };
 
         this.create(world);
     }
 
+    /**
+     * 创建玩家
+     * @param {World} world 玩家所在世界
+     */
     create(world) {
         this.world  = world;
         this.attribute.push(new Attribute('health_max', 6, 'system'));
@@ -32,15 +39,34 @@ class Player {
         this.statistics = new Statistics();
     }
 
+    /**
+     * 绑定事件
+     * @param {String} event 事件名称
+     * @param {Function} action 事件过程
+     * @returns {Function} 事件过程
+     */
     bind(event, action = function() {}) {
         return this.boundEvent[event] = action;
     }
 
+    /**
+     * 新建属性
+     * @param {String} name 属性名称
+     * @param {Number} base 基值
+     * @param {String} from 来源
+     */
     newAttribute(name, base = 0, from = 'system') {
         this.attribute.push(new Attribute(name, base, from));
         this.updateAttribute();
     }
 
+    /**
+     * 设置属性
+     * @param {String} name 属性名称
+     * @param {Number} base 基值
+     * @param {String} from 来源
+     * @returns {Object} 修改后的属性
+     */
     setAttribute(name, base = 0, from = 'system') {
         let a = this.attribute.find(function(e) {
             return e.name == name && e.from == from;
@@ -54,6 +80,10 @@ class Player {
         }
     }
 
+    /**
+     * 更新属性值
+     * @returns {Object} 更新后的属性
+     */
     updateAttribute() {
         this.healthMax = 0;
         this.attribute.forEach(e => {
@@ -84,7 +114,7 @@ class Player {
      * 玩家移动到指定位置
      * @param {Number} y Y坐标
      * @param {Number} x X坐标
-     * @returns 方块数据
+     * @returns {Object} 方块数据
      */
     goto(y, x) {
         if (this.isDead && !game.debug.player_dead_action) return;
@@ -101,6 +131,10 @@ class Player {
 
         let r = this.world.getSelectedRoom().getSelectedStage().goto(y, x);
 
+        // 处理物品使用异常的变量
+        let itemUsingException = undefined;
+        let itemNowRemove = false;
+
         if (r.type == 'monster') {
             let killFail = false,
                 defFail  = false;
@@ -114,8 +148,10 @@ class Player {
                         killFail = true;
                     }
                     this.statistics.setStatistic('custom', 'damage_dealt', Math.min(r.data.health, atk.data.attack));
+                    if (atk.data.disabled) itemNowRemove = true;
                 } else {
                     killFail = true;
+                    itemUsingException = atk;
                 }
 
                 // 防御阶段
@@ -124,8 +160,10 @@ class Player {
                     if (def.state == 'success') {
                         this.statistics.setStatistic('custom', 'damage_defended', def.data.defense);
                         this.damage(def.data.undefendedDamage);
+                        if (atk.data.disabled) itemNowRemove = true;
                     } else {
                         defFail = true;
+                        itemUsingException = def;
                     }
                 }
             } else {
@@ -136,10 +174,22 @@ class Player {
                 this.damage(r?.data?.attack ? r.data.attack : 0);
             }
         } else if (r.type == 'chest') {
+            let openChest = true;
+            // 手持武器
             if (this.hotbar[this.selectedSlot]?.type == 'weapon') {
-                this.hotbar[this.selectedSlot].attack();
-                r.block.damaged = true;
-            } else {
+                // 尝试攻击
+                let atk = this.hotbar[this.selectedSlot].attack();
+                if (atk.state == 'success') {
+                    // 攻击成功，宝箱损坏
+                    r.block.damaged = true;
+                    openChest = false;
+                    if (atk.data.disabled) itemNowRemove = true;
+                } else {
+                    itemUsingException = atk;
+                }
+            }
+
+            if (openChest) {
                 if (r.block?.data?.loot_table != undefined) {
                     let chestLootTable = new LootTable(
                         r.block.data.loot_table,
@@ -156,16 +206,40 @@ class Player {
                 }
             }
         } else {
-            if (this.hotbar[this.selectedSlot]?.type == 'weapon') this.hotbar[this.selectedSlot].attack();
+            if (this.hotbar[this.selectedSlot]?.type == 'weapon') {
+                let atk = this.hotbar[this.selectedSlot].attack();
+                if (atk.state == 'success') {
+                    if (atk.data.disabled) itemNowRemove = true;
+                } else {
+                    itemUsingException = atk;
+                }
+            }
         }
 
         this.boundEvent.goto(r);
+
+        if (itemUsingException != undefined || itemNowRemove) this.itemUsedFail(itemUsingException, itemNowRemove);
 
         this.updateHotbar();
 
         return r;
     }
 
+    /**
+     * 处理物品使用异常
+     * @param {Object} msg 物品使用返回消息
+     */
+    itemUsedFail(msg, nowRemove = false) {
+        if (msg?.failReason == 'item_disabled' || nowRemove) {
+            this.removeSelectedItem();
+        }
+    }
+
+    /**
+     * 伤害玩家
+     * @param {Number} value 伤害值
+     * @returns {Number} 剩余HP
+     */
     damage(value) {
         if (this.isDead || game.debug.player_no_damage) return;
         if (value       >  game.config.security.damage_maximum) value = game.config.security.damage_maximum;
@@ -196,6 +270,9 @@ class Player {
         return this.health;
     }
 
+    /**
+     * 治疗玩家
+     */
     regeneration() {
 
     }
@@ -208,6 +285,8 @@ class Player {
     give(item) {
         if (this.isDead && !game.debug.player_dead_action) return;
         if (item instanceof Item == false) return { state: 'fail', failReason: 'item_invalid' };
+        if (item.id == '') return { state: 'fail', failReason: 'item_void' };
+
         let items = this.inventory.filter(function(e) {
             return e.id == item.id;
         });
@@ -226,6 +305,9 @@ class Player {
                 this.inventory.push(item);
             }
         }
+
+        if (!this.__inGiveItems) this.boundEvent.updateInventory(this.inventory);
+
         return {
             state:    'success',
             data: {
@@ -242,9 +324,15 @@ class Player {
     giveItems(items = []) {
         if (this.isDead && !game.debug.player_dead_action) return;
         let rs = [];
+
+        this.__inGiveItems = true;
         items.forEach(e => {
             rs.push(this.give(e));
         });
+        this.__inGiveItems = false;
+
+        this.boundEvent.updateInventory(this.inventory);
+
         return rs;
     }
 
@@ -293,6 +381,7 @@ class Player {
         }
 
         this.updateHotbar();
+        this.boundEvent.updateInventory(this.inventory);
 
         return {
             state: 'success',
@@ -303,10 +392,18 @@ class Player {
         }
     }
 
+    /**
+     * 获取已选择的物品
+     * @returns {Object} 物品
+     */
     getSelectedItem() {
         return this.hotbar[this.selectedSlot];
     }
 
+    /**
+     * 切换楼层
+     * @param {Number} stage 楼层索引
+     */
     switchStage(stage) {
         if (this.isDead && !game.debug.player_dead_action) return;
         this.clearDiscard();
@@ -315,12 +412,19 @@ class Player {
         this.statistics.setStatistic('custom', 'stage_switch', 1);
     }
 
+    /**
+     * 选择快捷栏栏位
+     * @param {Number} value 栏位索引
+     */
     selectSlot(value) {
         if (this.isDead && !game.debug.player_dead_action) return;
         this.selectedSlot = value;
         this.updateHotbar();
     }
 
+    /**
+     * 更新快捷栏
+     */
     updateHotbar() {
         this.boundEvent.updateHotbar({
             hotbar:       this.hotbar,
@@ -328,6 +432,10 @@ class Player {
         });
     }
     
+    /**
+     * 丢弃物品
+     * @param {Number} index 栏位索引
+     */
     discardItem(index) {
         if (this.isDead && !game.debug.player_dead_action) return;
         if (this.inventory[index] != undefined) {
@@ -336,6 +444,9 @@ class Player {
         }
     }
 
+    /**
+     * 回收最后一个丢弃的物品
+     */
     recoveryItem() {
         if (this.isDead && !game.debug.player_dead_action) return;
         if (this.discarded.length > 1) {
@@ -344,11 +455,25 @@ class Player {
         }
     }
 
+    /**
+     * 清空丢弃物品
+     */
     clearDiscard() {
         if (this.isDead && !game.debug.player_dead_action) return;
         this.discarded = [];
     }
 
+    /**
+     * 摧毁手持物品
+     */
+    removeSelectedItem() {
+        this.hotbar[this.selectedSlot] = undefined;
+        this.selectedSlot = 0;
+    }
+
+    /**
+     * 设置玩家死亡
+     */
     dead() {
         this.isDead = true;
         this.boundEvent.dead({
