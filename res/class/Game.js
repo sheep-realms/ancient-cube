@@ -77,10 +77,10 @@ class Game {
                 id: e.id
             };
             if (e?.data != undefined) b.data = e.data;
-            blocks.push(...(' '.repeat(e.count).split('').fill(b)));
+            blocks.push(...(new Array(e.count).fill(b)));
         });
 
-        blocks.push(...(' '.repeat(blockCount - useBlocks).split('').fill({id: 'air'})));
+        blocks.push(...(new Array(blockCount - useBlocks).fill({id: 'air'})));
 
         // 随机排序
         let blocksRandom = this.randomSort(blocks);
