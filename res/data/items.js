@@ -152,5 +152,24 @@ let db_items = [
     }, {
         id: 'copper_chest',
         type: 'chest'
+    }, {
+        id: 'blood_chest',
+        type: 'chest',
+        data: {
+            chest: {
+                open_cost: {
+                    health: 1
+                }
+            }
+        }
+    }, {
+        id: 'bottle',
+        type: 'water_bottle'
+    }, {
+        id: 'water_bottle',
+        type: 'water_bottle',
+        data: {
+            liquid: 'water'
+        }
     }
 ];

@@ -461,8 +461,20 @@ class Player {
      */
     useInventoryItem(index) {
         if (this.inventory[index] != undefined) {
-            if (this.inventory[index].type == 'chest') {
-                this.giveItems(this.inventory[index].open());
+            switch (this.inventory[index].type) {
+                case 'chest':
+                    this.giveItems(this.inventory[index].open());
+                    break;
+
+                case 'water_bottle':
+                    let r = this.inventory[index].drink();
+                    if (r.state == 'success') {
+                        this.give(r.data.item);
+                    }
+                    break;
+            
+                default:
+                    break;
             }
         }
         this.updateInventory();

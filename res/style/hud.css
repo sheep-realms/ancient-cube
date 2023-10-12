@@ -42,6 +42,11 @@
     background-position: calc(var(--icon-size) * var(--icon-pos-x)) calc(var(--icon-size) * var(--icon-pos-y));
 }
 
+#player-state-hp.flicker {
+    position: relative;
+    z-index: 2010;
+}
+
 #player-state-hp.flicker .heart-bg {
     animation: heart-bg-flicker .25s linear infinite;
 }

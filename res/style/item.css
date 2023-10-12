@@ -21,6 +21,10 @@
     --icon-image: url(../img/item/chest.png);
 }
 
+.item-icon[data-item-type='water_bottle'] {
+    --icon-image: url(../img/item/water_bottle.png);
+}
+
 .item-icon[data-item-type='system'] {
     --icon-image: url(../img/item/item.png);
 }
@@ -46,5 +50,9 @@
 .item-icon[data-item-id='gold_chest'] { --icon-pos-x: 0; --icon-pos-y: 0; }
 .item-icon[data-item-id='silver_chest'] { --icon-pos-x: -1; --icon-pos-y: 0; }
 .item-icon[data-item-id='copper_chest'] { --icon-pos-x: -2; --icon-pos-y: 0; }
+.item-icon[data-item-id='blood_chest'] { --icon-pos-x: -3; --icon-pos-y: 0; }
+
+.item-icon[data-item-id='bottle'] { --icon-pos-x: 0; --icon-pos-y: -1; }
+.item-icon[data-item-id='water_bottle'] { --icon-pos-x: -1; --icon-pos-y: -1; }
 
 .item-icon[data-item-id='inventory'] { --icon-pos-x: -15; --icon-pos-y: -15; }

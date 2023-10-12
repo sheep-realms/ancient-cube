@@ -164,6 +164,7 @@ $(document).ready(() => {
                 break;
 
             case 'chest':
+            case 'water_bottle':
                 p.useInventoryItem(slot);
                 break;
         

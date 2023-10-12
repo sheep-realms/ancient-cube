@@ -8,6 +8,9 @@ class ItemGenerator {
             case 'chest':
                 return new ItemChest(id);
 
+            case 'water_bottle':
+                return new WaterBottle(id);
+
             case 'weapon':
                 return new Weapon(id);
         
@@ -46,7 +49,9 @@ class Item {
         if (obj?.data != undefined) {
             if (obj.data?.attribute != undefined) {
                 this.attribute = obj.data.attribute;
+                delete obj.data.attribute;
             }
+            this.data = {...this.data, ...obj.data};
         }
         return this;
     }
@@ -57,7 +62,7 @@ class Item {
      * @returns {Number} 合并后数量
      */
     join(item) {
-        if (item.type != 'weapon') {
+        if (item.type != 'weapon' && item.type != 'chest') {
             if (
                 this.id   === item.id   &&
                 this.type === item.type &&
@@ -184,10 +189,14 @@ class Weapon extends Item {
 class ItemChest extends Item {
     constructor(id) {
         super(id);
-        this.chest = {
-            loot_table: undefined,
-            inventory: []
-        }
+        this.data = {
+            chest: {
+                loot_table: undefined,
+                inventory: [],
+                open_cost: {}
+            },
+            ...this.data
+        };
     }
 
     /**
@@ -196,23 +205,35 @@ class ItemChest extends Item {
      */
     open() {
         if (this.disabled) return [];
-        if (this.chest.loot_table == undefined) {
-            this.disabled = true;
-            this.setCount(0);
-            return this.chest.inventory;
+
+        if (this.data.chest.open_cost?.health) {
+            if (this.origin.player.health > this.data.chest.open_cost.health) {
+                this.origin.player.damage(this.data.chest.open_cost.health);
+            } else {
+                return [];
+            }
+        }
+
+        let items = [];
+        if (this.data.chest.loot_table == undefined) {
+            items = this.data.chest.inventory;
+            this.data.chest.inventory = [];
         } else {
             let chestLootTable = new LootTable(
-                this.chest.loot_table,
+                this.data.chest.loot_table,
                 {
                     world:  this.origin.world,
                     player: this.origin.player,
                     item:   this
                 }
             );
-            this.chest.loot_table = undefined;
-            this.setCount(0);
-            return chestLootTable.getItem();
+            this.data.chest.loot_table = undefined;
+            items = chestLootTable.getItem();
         }
+
+        this.setCount(0);
+
+        return items;
     }
 
     /**
@@ -221,5 +242,53 @@ class ItemChest extends Item {
      */
     join() {
         return -1;
+    }
+}
+
+class WaterBottle extends Item {
+    constructor(id) {
+        super(id);
+        this.data = {
+            effect: [],
+            liquid: undefined,
+            ...this.data
+        }
+    }
+
+    drink() {
+        if (this.disabled)                 return { state: 'fail', failReason: 'item_disabled' };
+        if (this.data.liquid == undefined) return { state: 'fail', failReason: 'item_disabled' }
+        let efc = this.data.effect;
+        this.liquid = undefined;
+        this.setCount(0);
+
+        return {
+            state: 'success',
+            data: {
+                effect: efc,
+                item: new WaterBottle('bottle')
+            }
+        }
+    }
+
+    /**
+     * 合并物品堆尝试
+     * @param {Item} item 物品对象
+     * @returns {Number} 合并后数量
+     */
+    join(item) {
+        if (item.id == 'bottle') {
+            if (
+                this.id   === item.id   &&
+                this.type === item.type &&
+                Object.entries(this.data).toString() === Object.entries(item.data).toString()
+            ) {
+                this.count += item.count;
+                item.setCount(0);
+            }
+            return this.count;
+        } else {
+            return -1;
+        }
     }
 }
