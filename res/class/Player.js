@@ -142,9 +142,26 @@ class Player {
                 // 攻击阶段
                 let atk = this.hotbar[this.selectedSlot].attack();
                 if (atk.state == 'success') {
+                    // 攻击发动成功
                     if (atk.data.attack >= r.data.health) {
+                        // 击杀成功
                         r.block.damaged = true;
+                        if (r.block?.data?.loot_table != undefined) {
+                            let chestLootTable = new LootTable(
+                                r.block.data.loot_table,
+                                {
+                                    world:  this.world,
+                                    room:   this.world.getSelectedRoom(),
+                                    stage:  this.world.getSelectedRoom().getSelectedStage(),
+                                    player: this,
+                                    item:   this.getSelectedItem()
+                                }
+                            );
+        
+                            this.giveItems(chestLootTable.getItem());
+                        }
                     } else {
+                        // 击杀失败
                         killFail = true;
                     }
                     this.statistics.setStatistic('custom', 'damage_dealt', Math.min(r.data.health, atk.data.attack));

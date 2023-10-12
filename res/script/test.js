@@ -149,12 +149,22 @@ $(document).ready(() => {
         p.selectSlot($(this).data('slot'));
     });
 
+    $('#player-hotbar').on('click', '#btn-open-inventory', function() {
+        patchPanel.newFocus('inventory');
+        $('#gui-screen').removeClass('hide');
+    });
+
     // 点击物品栏
     $('#inventory').on('click', '.inventory-item', function() {
         let slot = $(this).data('slot');
         if (p.inventory[slot].type == 'weapon') {
             p.switchHotbarItem(1, slot);
         }
+    });
+
+    $('#inventory').on('click', '#btn-inventory-close', function() {
+        patchPanel.removeFocus('inventory');
+        $('#gui-screen').addClass('hide');
     });
 
     p.bind('goto', function(e) {
@@ -243,9 +253,13 @@ $(document).ready(() => {
         }
     });
 
+    p.updateHotbar();
+
     p.bind('updateInventory', function(e) {
         $('#inventory').html(InventoryConstructor.getInventory(e));
     });
+
+    p.boundEvent.updateInventory(p.inventory);
 
     p.bind('updateMap', function(e) {
         loadMap(e);

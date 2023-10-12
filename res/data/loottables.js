@@ -56,5 +56,18 @@ let db_loottable = {
                 ]
             }
         ]
+    },
+    monster_generic: {
+        type: 'monster',
+        pools: [
+            {
+                entries: [
+                    {
+                        type: 'item',
+                        name: 'monster_crystal'
+                    }
+                ]
+            }
+        ]
     }
 };

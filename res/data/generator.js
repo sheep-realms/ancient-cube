@@ -21,7 +21,7 @@ let db_generator = {
                         },
                         count: 3
                     }, {
-                        id: 'monster',
+                        id: 'slime',
                         count: 2
                     }, {
                         id: 'stair',
@@ -47,7 +47,7 @@ let db_generator = {
                         },
                         count: 5
                     }, {
-                        id: 'monster',
+                        id: 'slime',
                         count: 4
                     }, {
                         id: 'stair',
@@ -79,7 +79,7 @@ let db_generator = {
                         },
                         count: 1
                     }, {
-                        id: 'monster',
+                        id: 'slime',
                         count: 6
                     }, {
                         id: 'stair',
@@ -113,7 +113,7 @@ let db_generator = {
                         },
                         count: 1
                     }, {
-                        id: 'monster',
+                        id: 'slime',
                         count: 1
                     }, {
                         id: 'stair',
@@ -145,7 +145,7 @@ let db_generator = {
                         },
                         count: 2
                     }, {
-                        id: 'monster',
+                        id: 'slime',
                         count: 10
                     }, {
                         id: 'stair',
@@ -177,7 +177,7 @@ let db_generator = {
                         },
                         count: 2
                     }, {
-                        id: 'monster',
+                        id: 'slime',
                         count: 14
                     }, {
                         id: 'stair',

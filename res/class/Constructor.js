@@ -187,7 +187,7 @@ class InventoryConstructor {
      * @returns {String} DOM
      */
     static getInventory(inventory) {
-        let dom = '';
+        let dom = '<div id="btn-inventory-close">CLOSE</div>';
         for (let i = 0; i < inventory.length; i++) {
             dom += InventoryConstructor.getItem(
                 inventory[i],
@@ -252,6 +252,14 @@ class InventoryConstructor {
             );
         }
 
+        dom += InventoryConstructor.getInventoryButton();
+
         return `<div id="player-hotbar" class="">${dom}</div>`;
+    }
+
+    static getInventoryButton() {
+        return `<div id="btn-open-inventory" class="inventory-item">
+                <div class="item-icon" data-item-type="system" data-item-id="inventory"></div>
+            </div>`;
     }
 }

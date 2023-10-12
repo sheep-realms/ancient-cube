@@ -9,11 +9,12 @@ let db_blocks = [
         id: 'stair',
         type: 'stair'
     }, {
-        id: 'monster',
+        id: 'slime',
         type: 'monster',
         data: {
             attack: 1,
-            health: 1
+            health: 1,
+            loot_table: 'monster_generic'
         }
     }
 ];

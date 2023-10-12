@@ -19,6 +19,7 @@ class Block {
         if (id != 'air') this.create(id);
     }
 
+    // 我在搞什么玩意儿？
     create(id = 'air') {
         this.id   = id;
         this.type = id;

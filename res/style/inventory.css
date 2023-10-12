@@ -21,8 +21,19 @@
     flex-wrap: wrap;
     padding: 8px;
     background-color: rgba(255, 255, 255, 0.5);
-    width: calc(var(--icon-size) * 9 + 8px * 8);
+    width: min(calc(var(--icon-size) * 9 + 8px * 8), 100vw);
     height: calc(var(--icon-size) * 6 + 8px * 5);
     align-content: flex-start;
     gap: 8px;
+    position: relative;
+}
+
+#inventory #btn-inventory-close {
+    background-color: rgba(255, 255, 255, 0.5);
+    position: absolute;
+    bottom: -42px;
+    right: 0px;
+    padding: 8px;
+    min-width: 150px;
+    cursor: pointer;
 }

@@ -10,10 +10,15 @@
     image-rendering: pixelated;
     background-size: calc(var(--icon-size) * 16);
     background-position: calc(var(--icon-size) * var(--icon-pos-x)) calc(var(--icon-size) * var(--icon-pos-y));
+    background-repeat: no-repeat;
 }
 
 .item-icon[data-item-type='weapon'] {
     --icon-image: url(../img/item/weapon.png);
+}
+
+.item-icon[data-item-type='system'] {
+    --icon-image: url(../img/item/item.png);
 }
 
 .item-icon[data-item-id='magnifier'] { --icon-pos-x: 0; --icon-pos-y: 0; }
@@ -33,3 +38,5 @@
 .item-icon[data-item-id='crowbar'] { --icon-pos-x: -7; --icon-pos-y: 0; }
 .item-icon[data-item-id='rapier'] { --icon-pos-x: -8; --icon-pos-y: 0; }
 .item-icon[data-item-id='teach_weapon'] { --icon-pos-x: -9; --icon-pos-y: 0; }
+
+.item-icon[data-item-id='inventory'] { --icon-pos-x: -15; --icon-pos-y: -15; }
