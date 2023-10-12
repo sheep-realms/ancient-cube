@@ -1,3 +1,19 @@
+class ItemGenerator {
+    constructor() {}
+
+    static get(id) {
+        let obj = resource.getItem(id);
+        if (obj == undefined) return;
+        switch (obj.type) {
+            case 'weapon':
+                return new Weapon(id);
+        
+            default:
+                return new Item(id);
+        }
+    }
+}
+
 class Item {
     constructor(id) {
         this.id       = '';

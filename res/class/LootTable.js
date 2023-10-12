@@ -72,7 +72,7 @@ class LootTable {
                     if (this.conditionsTest(item?.conditions)) {
                         switch (item.type) {
                             case 'item':
-                                items.push(new Item(item.name));
+                                items.push(ItemGenerator.get(item.name));
                                 break;
                             
                             case 'loot_table':

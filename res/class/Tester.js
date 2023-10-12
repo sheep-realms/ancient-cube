@@ -4,18 +4,26 @@ class Tester {
         this.player = player;
     }
 
-    mapClear() {
-        let size = this.world.getSelectedRoom().getSelectedStage().size;
+    mapClear(autoSlot = false) {
+        let stage = this.world.getSelectedRoom().getSelectedStage()
+        let size = stage.size;
         for (let i = 0; i < size.height; i++) {
             for (let j = 0; j < size.width; j++) {
+                if (autoSlot) {
+                    if (stage.map[i][j].type == 'monster') {
+                        p.selectSlot(1);
+                    } else {
+                        p.selectSlot(0);
+                    }
+                }
                 this.player.goto(i, j);
             }
         }
     }
 
-    nextMapClear() {
+    nextMapClear(autoSlot = false) {
         this.player.switchStage(this.world.getSelectedRoom().stage.length);
-        this.mapClear();
+        this.mapClear(autoSlot);
     }
 
     giveMeAllWeapon() {
