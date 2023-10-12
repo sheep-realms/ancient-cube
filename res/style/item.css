@@ -17,6 +17,10 @@
     --icon-image: url(../img/item/weapon.png);
 }
 
+.item-icon[data-item-type='chest'] {
+    --icon-image: url(../img/item/chest.png);
+}
+
 .item-icon[data-item-type='system'] {
     --icon-image: url(../img/item/item.png);
 }
@@ -38,5 +42,9 @@
 .item-icon[data-item-id='crowbar'] { --icon-pos-x: -7; --icon-pos-y: 0; }
 .item-icon[data-item-id='rapier'] { --icon-pos-x: -8; --icon-pos-y: 0; }
 .item-icon[data-item-id='teach_weapon'] { --icon-pos-x: -9; --icon-pos-y: 0; }
+
+.item-icon[data-item-id='gold_chest'] { --icon-pos-x: 0; --icon-pos-y: 0; }
+.item-icon[data-item-id='silver_chest'] { --icon-pos-x: -1; --icon-pos-y: 0; }
+.item-icon[data-item-id='copper_chest'] { --icon-pos-x: -2; --icon-pos-y: 0; }
 
 .item-icon[data-item-id='inventory'] { --icon-pos-x: -15; --icon-pos-y: -15; }

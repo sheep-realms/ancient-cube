@@ -121,6 +121,7 @@ let preloadImages = [
     'res/img/gui/heart.png',
     'res/img/gui/keys.png',
     'res/img/icon/search.png',
+    'res/img/item/chest.png',
     'res/img/item/item.png',
     'res/img/item/weapon.png'
 ];
@@ -157,8 +158,17 @@ $(document).ready(() => {
     // 点击物品栏
     $('#inventory').on('click', '.inventory-item', function() {
         let slot = $(this).data('slot');
-        if (p.inventory[slot].type == 'weapon') {
-            p.switchHotbarItem(1, slot);
+        switch (p.inventory[slot].type) {
+            case 'weapon':
+                p.switchHotbarItem(1, slot);
+                break;
+
+            case 'chest':
+                p.useInventoryItem(slot);
+                break;
+        
+            default:
+                break;
         }
     });
 

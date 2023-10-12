@@ -143,5 +143,14 @@ let db_items = [
                 health: 35
             }
         }
+    }, {
+        id: 'gold_chest',
+        type: 'chest'
+    }, {
+        id: 'silver_chest',
+        type: 'chest'
+    }, {
+        id: 'copper_chest',
+        type: 'chest'
     }
 ];

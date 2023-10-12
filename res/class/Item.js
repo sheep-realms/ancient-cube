@@ -5,6 +5,9 @@ class ItemGenerator {
         let obj = resource.getItem(id);
         if (obj == undefined) return;
         switch (obj.type) {
+            case 'chest':
+                return new ItemChest(id);
+
             case 'weapon':
                 return new Weapon(id);
         
@@ -22,10 +25,19 @@ class Item {
         this.damage   = 0;
         this.disabled = false;
         this.data     = {};
+        this.origin   = {
+            player:     undefined,
+            world:      undefined
+        };
 
         this.create(id);
     }
 
+    /**
+     * 创建物品
+     * @param {String} id 物品ID
+     * @returns {Item} 物品
+     */
     create(id) {
         let obj   = resource.getItem(id);
         if (obj == undefined) return;
@@ -52,11 +64,35 @@ class Item {
                 Object.entries(this.data).toString() === Object.entries(item.data).toString()
             ) {
                 this.count += item.count;
+                item.setCount(0);
             }
             return this.count;
         } else {
             return -1;
         }
+    }
+
+    /**
+     * 绑定关系
+     * @param {Player} player 玩家
+     * @param {World} world 世界
+     */
+    bind(player, world) {
+        this.origin.player = player;
+        this.origin.world  = world;
+    }
+
+    /**
+     * 设置数量
+     * @param {Number} value 数量
+     * @returns {Number} 更新后数量
+     */
+    setCount(value) {
+        if (this.type == 'weapon' && value > 1) return this.count;
+        if (value < 0) value = 0;
+        this.count = value;
+        if (this.count <= 0) this.disabled = true;
+        return this.count;
     }
 }
 
@@ -77,6 +113,10 @@ class Weapon extends Item {
         };
     }
 
+    /**
+     * 攻击
+     * @returns {Object} 消息
+     */
     attack() {
         if (this.disabled)             return { state: 'fail', failReason: 'item_disabled' };
         if (this.attribute.attack < 0) return { state: 'fail', failReason: 'action_invalid' };
@@ -101,6 +141,10 @@ class Weapon extends Item {
         };
     }
 
+    /**
+     * 防御
+     * @returns {Object} 消息
+     */
     defense(damageValue) {
         if (this.disabled)              return { state: 'fail', failReason: 'item_disabled' };
         if (this.attribute.defense < 0) return { state: 'fail', failReason: 'action_invalid' };
@@ -128,6 +172,53 @@ class Weapon extends Item {
         }
     }
 
+    /**
+     * 不可用：此类型的物品不可堆叠
+     * @returns {Number} -1
+     */
+    join() {
+        return -1;
+    }
+}
+
+class ItemChest extends Item {
+    constructor(id) {
+        super(id);
+        this.chest = {
+            loot_table: undefined,
+            inventory: []
+        }
+    }
+
+    /**
+     * 开启物品箱
+     * @returns {Array<Item>} 物品列表
+     */
+    open() {
+        if (this.disabled) return [];
+        if (this.chest.loot_table == undefined) {
+            this.disabled = true;
+            this.setCount(0);
+            return this.chest.inventory;
+        } else {
+            let chestLootTable = new LootTable(
+                this.chest.loot_table,
+                {
+                    world:  this.origin.world,
+                    player: this.origin.player,
+                    item:   this
+                }
+            );
+            this.chest.loot_table = undefined;
+            this.setCount(0);
+            return chestLootTable.getItem();
+        }
+    }
+
+    /**
+     * 不可用：此类型的物品不可堆叠
+     * @returns {Number} -1
+     */
     join() {
         return -1;
     }

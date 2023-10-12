@@ -27,7 +27,8 @@ class Tester {
     }
 
     giveMeAllWeapon() {
-        this.player.giveItems([
+        let chest = new ItemChest('gold_chest');
+        chest.chest.inventory = [
             new Weapon('sword'),
             new Weapon('dagger'),
             new Weapon('knife'),
@@ -38,6 +39,17 @@ class Tester {
             new Weapon('crowbar'),
             new Weapon('rapier'),
             new Weapon('teach_weapon')
-        ]);
+        ]
+        this.player.give(chest);
+    }
+
+    russianDolls() {
+        let gold_chest = new ItemChest('gold_chest');
+        let silver_chest = new ItemChest('silver_chest');
+        let copper_chest = new ItemChest('copper_chest');
+        copper_chest.chest.inventory = [new Item('emerald')];
+        silver_chest.chest.inventory = [copper_chest];
+        gold_chest.chest.inventory = [silver_chest];
+        this.player.give(gold_chest);
     }
 }

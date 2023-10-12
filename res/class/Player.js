@@ -237,6 +237,7 @@ class Player {
 
         if (itemUsingException != undefined || itemNowRemove) this.itemUsedFail(itemUsingException, itemNowRemove);
 
+        this.stepUpdateInventory();
         this.updateHotbar();
 
         return r;
@@ -250,6 +251,14 @@ class Player {
         if (msg?.failReason == 'item_disabled' || nowRemove) {
             this.removeSelectedItem();
         }
+    }
+
+    /**
+     * 每回合更新物品栏
+     */
+    stepUpdateInventory() {
+        // 待施工
+        this.updateInventory();
     }
 
     /**
@@ -304,12 +313,17 @@ class Player {
         if (item instanceof Item == false) return { state: 'fail', failReason: 'item_invalid' };
         if (item.id == '') return { state: 'fail', failReason: 'item_void' };
 
+        // 查找同类物品
         let items = this.inventory.filter(function(e) {
             return e.id == item.id;
         });
+
         if (items.length <= 0) {
+            // 未找到同类物品
             this.inventory.push(item);
+            item.bind(this, this.world);
         } else {
+            // 找到同类物品，尝试合并
             let joined = false;
             items.forEach(e => {
                 let r = e.join(item);
@@ -318,12 +332,14 @@ class Player {
                     return;
                 }
             });
+            // 合并失败
             if (!joined) {
                 this.inventory.push(item);
+                item.bind(this, this.world);
             }
         }
 
-        if (!this.__inGiveItems) this.boundEvent.updateInventory(this.inventory);
+        if (!this.__inGiveItems) this.updateInventory();
 
         return {
             state:    'success',
@@ -348,7 +364,7 @@ class Player {
         });
         this.__inGiveItems = false;
 
-        this.boundEvent.updateInventory(this.inventory);
+        this.updateInventory();
 
         return rs;
     }
@@ -398,7 +414,7 @@ class Player {
         }
 
         this.updateHotbar();
-        this.boundEvent.updateInventory(this.inventory);
+        this.updateInventory();
 
         return {
             state: 'success',
@@ -440,6 +456,19 @@ class Player {
     }
 
     /**
+     * 使用物品栏物品
+     * @param {Number} index 栏位索引
+     */
+    useInventoryItem(index) {
+        if (this.inventory[index] != undefined) {
+            if (this.inventory[index].type == 'chest') {
+                this.giveItems(this.inventory[index].open());
+            }
+        }
+        this.updateInventory();
+    }
+
+    /**
      * 更新快捷栏
      */
     updateHotbar() {
@@ -447,6 +476,16 @@ class Player {
             hotbar:       this.hotbar,
             selectedSlot: this.selectedSlot
         });
+    }
+
+    /**
+     * 更新物品栏
+     */
+    updateInventory() {
+        for (let i = this.inventory.length - 1; i >= 0; i--) {
+            if (this.inventory[i].count <= 0) this.removeInventoryItem(i);
+        }
+        this.boundEvent.updateInventory(this.inventory);
     }
     
     /**
@@ -486,6 +525,16 @@ class Player {
     removeSelectedItem() {
         this.hotbar[this.selectedSlot] = undefined;
         this.selectedSlot = 0;
+    }
+
+    /**
+     * 摧毁物品栏物品
+     * @param {Number} index 栏位索引
+     */
+    removeInventoryItem(index) {
+        if (this.inventory[index] != undefined) {
+            this.inventory.splice(index, 1)[0];
+        }
     }
 
     /**

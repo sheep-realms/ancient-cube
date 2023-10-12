@@ -162,8 +162,10 @@ class InventoryConstructor {
     constructor() {}
 
     /**
-     * 构造单个物品栏
+     * 构造物品格
      * @param {Item} item 物品
+     * @param {Number} slot 栏位索引
+     * @param {Object} data 数据
      * @returns {String} DOM
      */
     static getItem(item, slot, data = {}) {
@@ -175,6 +177,12 @@ class InventoryConstructor {
             </div>`;
     }
 
+    /**
+     * 构造空物品格
+     * @param {Number} slot 栏位索引
+     * @param {Object} data 数据
+     * @returns 
+     */
     static getAir(slot, data = {}) {
         return `<div ${data?.id ? `id="${data.id}"` : ''} class="inventory-item${data?.class ? ` ${data.class}` : ''}" data-slot="${slot}">
                 <div class="item-icon" data-item-type="air" data-item-id="air"></div>
@@ -257,6 +265,10 @@ class InventoryConstructor {
         return `<div id="player-hotbar" class="">${dom}</div>`;
     }
 
+    /**
+     * 构造打开物品栏按钮
+     * @returns {String} DOM
+     */
     static getInventoryButton() {
         return `<div id="btn-open-inventory" class="inventory-item">
                 <div class="item-icon" data-item-type="system" data-item-id="inventory"></div>
