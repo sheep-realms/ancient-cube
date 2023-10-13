@@ -5,9 +5,45 @@ const lang_zh_cn = {
             search: "探索"
         }
     },
-    commands: {
+    command: {
+        common: {
+            fail: {
+                exceed_maximum_value: "逻辑错误：'{n}' 太大了，最大只能为 {max}",
+                exceed_minimum_value: "逻辑错误：'{n}' 太小了，最小只能为 {min}",
+                invalid_json: "语法错误：无效的 JSON",
+                invalid_number: "语法错误：无效的数字",
+                invalid_block: "不存在名为 '{value}' 的方块",
+                invalid_item: "不存在名为 '{value}' 的物品",
+                invalid_loottable: "不存在名为 '{value}' 的战利品表",
+                missing_parameter: "语法错误：缺少必要参数"
+            }
+        },
+        damage: {
+            success: "已对玩家造成 {n} 点伤害",
+            fail: {
+                invalid_request: "无法对玩家造成伤害"
+            }
+        },
         give: {
-            success: "已给予玩家 {name} * {n}"
+            success: "已给予玩家 {name} * {n}",
+            fail: {
+                invalid_request: "无法给予玩家物品"
+            }
+        },
+        kill: {
+            success: "已杀死玩家",
+            fail: {
+                invalid_request: "无法杀死玩家"
+            }
+        },
+        loottable: {
+            success: {
+                ok: "已生成战利品表，已放入玩家背包",
+                no_item: "已生成战利品表，但没有获得任何物品"
+            },
+            fail: {
+                invalid_request: "无法给予玩家物品"
+            }
         }
     },
     block: {

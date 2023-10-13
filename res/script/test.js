@@ -5,8 +5,8 @@ let game = new Game();
 game.debug = new Debuger();
 
 let resource = new Resource();
-resource.data.blocks = db_blocks;
-resource.data.items = db_items;
+resource.data.block = db_blocks;
+resource.data.item = db_items;
 resource.data.loottable = db_loottable;
 resource.data.generator = db_generator;
 
@@ -47,6 +47,15 @@ function $t(key, variable={}) {
     return translator.output(key, variable);
 }
 translator.load(lang_zh_cn);
+
+let commander = new Commander();
+commander.link = {
+    messager: messager,
+    player:   p,
+    resource: resource,
+    world:    w
+};
+commander.deployment();
 
 let tester = new Tester(w, p);
 

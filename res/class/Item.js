@@ -28,6 +28,9 @@ class Item {
         this.damage   = 0;
         this.disabled = false;
         this.data     = {};
+        this.features = {
+            stack: true
+        };
         this.origin   = {
             player:     undefined,
             world:      undefined
@@ -134,6 +137,9 @@ class Weapon extends Item {
             damage_type:    'sharp',
             ...this.attribute
         };
+        this.features = {
+            stack: false
+        };
     }
 
     /**
@@ -215,6 +221,9 @@ class ItemChest extends Item {
             },
             ...this.data
         };
+        this.features = {
+            stack: false
+        };
     }
 
     /**
@@ -281,6 +290,11 @@ class WaterBottle extends Item {
             liquid: undefined,
             ...this.data
         }
+        this.features = {
+            stack: false
+        };
+
+        if (this.id == 'bottle') this.features.stack = true;
     }
 
     drink() {

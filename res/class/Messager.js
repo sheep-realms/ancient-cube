@@ -16,4 +16,11 @@ class Messager {
             }, 1000);
         }, 9000);
     }
+
+    sendError(message = '') {
+        this.send(
+            message,
+            'color: red;'
+        );
+    }
 }

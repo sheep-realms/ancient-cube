@@ -1,21 +1,21 @@
 class Resource {
     constructor() {
         this.data = {
-            blocks: [],
-            items: [],
+            block: [],
+            item: [],
             loottable: {},
             generator: {}
         };
     }
 
     getBlock(id) {
-        return this.data.blocks.find((e) => {
+        return this.data.block.find((e) => {
             return e.id == id;
         });
     }
 
     getItem(id) {
-        return this.data.items.find((e) => {
+        return this.data.item.find((e) => {
             return e.id == id;
         });
     }

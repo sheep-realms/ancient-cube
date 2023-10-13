@@ -51,7 +51,7 @@ class LootTable {
         this.data.pools.forEach(e => {
             let b = this.conditionsTest(e?.conditions);
 
-            if (b) {
+            if (b && e.entries.length > 0) {
                 let r = e?.rolls != undefined ? e.rolls : 1
                 if (typeof r == 'object') {
                     r = new NumberProviders(r).getValue();

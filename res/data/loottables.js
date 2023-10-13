@@ -69,5 +69,13 @@ let db_loottable = {
                 ]
             }
         ]
+    },
+    void: {
+        type: 'chest',
+        pools: [
+            {
+                entries: []
+            }
+        ]
     }
 };
