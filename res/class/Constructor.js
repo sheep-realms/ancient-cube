@@ -173,7 +173,7 @@ class InventoryConstructor {
         return `<div ${data?.id ? `id="${data.id}"` : ''} class="inventory-item${data?.class ? ` ${data.class}` : ''}" data-slot="${slot}">
                 <div class="item-icon" data-item-type="${item.type}" data-item-id="${item.id}"></div>
                 ${InventoryConstructor.getDamageBar(item)}
-                ${ item.count > 1 ? `<div class="item-count">${item.count}</div>` : '' }
+                ${ item.count > 1 ? `<div class="item-count">${item.count < 10000 ? item.count : '9999+' }</div>` : '' }
             </div>`;
     }
 

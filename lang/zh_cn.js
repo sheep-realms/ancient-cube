@@ -38,7 +38,7 @@ const lang_zh_cn = {
         },
         loottable: {
             success: {
-                ok: "已生成战利品表，已放入玩家背包",
+                ok: "已生成战利品表并给予玩家",
                 no_item: "已生成战利品表，但没有获得任何物品"
             },
             fail: {
