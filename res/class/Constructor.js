@@ -275,3 +275,21 @@ class InventoryConstructor {
             </div>`;
     }
 }
+
+/**
+ * 物品悬浮框构造器
+ * @class
+ */
+class ItemPopup {
+    constructor() {}
+
+    static getPopup(item) {
+        return `<div class="item-popup">
+            ${ ItemPopup.getPopupTitle(item) }
+        </div>`;
+    }
+
+    static getPopupTitle(item) {
+        return `<div class="item-popup-title">${ $t( 'item.' + item.id ) }</div>`;
+    }
+}

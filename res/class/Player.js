@@ -299,8 +299,22 @@ class Player {
     /**
      * 治疗玩家
      */
-    regeneration() {
+    regeneration(value) {
+        if (this.isDead) return;
+        if (value       <= 0) return;
+        let lastHealth  = this.health;
+        
+        this.health += Math.min(this.healthMax - this.health, value);
+        this.boundEvent.healthRegeneration({
+            health:      this.health,
+            healthMax:   this.healthMax,
+            lastHealth:  lastHealth,
+            damage:      Math.min(this.healthMax - this.health, value)
+        });
 
+        // this.statistics.setStatistic('custom', 'damage_taken', Math.min(this.health, value));
+
+        return this.health;
     }
 
     /**
@@ -411,7 +425,7 @@ class Player {
             }
         }
 
-        p.updateInventory();
+        this.updateInventory();
 
         if (count > 0) {
             log.error('Logic Error: Unknow Exception', 'class/Player.js > Player > payCostItem()');
@@ -564,6 +578,7 @@ class Player {
         if (this.inventory[index] != undefined) {
             let item = this.inventory.splice(index, 1)[0];
             this.discarded.unshift(item);
+            this.updateInventory();
         }
     }
 
@@ -575,6 +590,7 @@ class Player {
         if (this.discarded.length > 1) {
             let item = this.discarded.shift();
             this.inventory.push(item);
+            this.updateInventory();
         }
     }
 
@@ -584,6 +600,7 @@ class Player {
     clearDiscard() {
         if (this.isDead && !game.debug.player_dead_action) return;
         this.discarded = [];
+        this.updateInventory();
     }
 
     /**

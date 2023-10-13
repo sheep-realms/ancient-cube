@@ -144,7 +144,7 @@ let db_items = [
             }
         }
     }, {
-        id: 'gold_chest',
+        id: 'golden_chest',
         type: 'chest'
     }, {
         id: 'silver_chest',

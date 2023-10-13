@@ -27,7 +27,7 @@ class Tester {
     }
 
     giveMeAllWeapon() {
-        let chest = new ItemChest('gold_chest');
+        let chest = new ItemChest('golden_chest');
         chest.data.chest.inventory = [
             new Weapon('sword'),
             new Weapon('dagger'),
@@ -44,13 +44,13 @@ class Tester {
     }
 
     russianDolls() {
-        let gold_chest = new ItemChest('gold_chest');
+        let golden_chest = new ItemChest('golden_chest');
         let silver_chest = new ItemChest('silver_chest');
         let copper_chest = new ItemChest('copper_chest');
         copper_chest.data.chest.inventory = [new Item('emerald')];
         silver_chest.data.chest.inventory = [copper_chest];
-        gold_chest.data.chest.inventory = [silver_chest];
-        this.player.give(gold_chest);
+        golden_chest.data.chest.inventory = [silver_chest];
+        this.player.give(golden_chest);
     }
 
     getBloodChest() {
@@ -60,7 +60,7 @@ class Tester {
     }
 
     getParadoxChest() {
-        let chest = new ItemChest('gold_chest');
+        let chest = new ItemChest('golden_chest');
         chest.data.chest.inventory = [chest];
         this.player.give(chest);
     }
