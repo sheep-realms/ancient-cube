@@ -163,6 +163,19 @@ let db_items = [
             }
         }
     }, {
+        id: 'emerald_chest',
+        type: 'chest',
+        data: {
+            chest: {
+                open_cost: {
+                    item: {
+                        id: 'emerald',
+                        count: 1
+                    }
+                }
+            }
+        }
+    }, {
         id: 'bottle',
         type: 'water_bottle'
     }, {

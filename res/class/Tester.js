@@ -58,4 +58,17 @@ class Tester {
         chest.data.chest.inventory = [new Item('monster_crystal')];
         this.player.give(chest);
     }
+
+    getParadoxChest() {
+        let chest = new ItemChest('gold_chest');
+        chest.data.chest.inventory = [chest];
+        this.player.give(chest);
+    }
+
+    getParadoxChest2() {
+        let chest = new ItemChest('emerald_chest');
+        chest.data.chest.inventory = [new Item('emerald')];
+        chest.data.chest.open_cost.item.id = 'emerald_chest';
+        this.player.give(chest);
+    }
 }

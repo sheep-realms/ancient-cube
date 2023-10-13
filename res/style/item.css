@@ -51,6 +51,7 @@
 .item-icon[data-item-id='silver_chest'] { --icon-pos-x: -1; --icon-pos-y: 0; }
 .item-icon[data-item-id='copper_chest'] { --icon-pos-x: -2; --icon-pos-y: 0; }
 .item-icon[data-item-id='blood_chest'] { --icon-pos-x: -3; --icon-pos-y: 0; }
+.item-icon[data-item-id='emerald_chest'] { --icon-pos-x: -4; --icon-pos-y: 0; }
 
 .item-icon[data-item-id='bottle'] { --icon-pos-x: 0; --icon-pos-y: -1; }
 .item-icon[data-item-id='water_bottle'] { --icon-pos-x: -1; --icon-pos-y: -1; }

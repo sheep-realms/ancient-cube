@@ -99,6 +99,24 @@ class Item {
         if (this.count <= 0) this.disabled = true;
         return this.count;
     }
+
+    /**
+     * 减去数量
+     * @param {Number} value 数量
+     * @returns {Number} 更新后数量
+     */
+    removeCount(value) {
+        let residue = 0;
+        if (this.count < value) {
+            residue = value - this.count;
+            value = this.count;
+        }
+        this.count -= value;
+        return {
+            count: this.count,
+            residue: 0
+        }
+    }
 }
 
 class Weapon extends Item {
@@ -210,6 +228,16 @@ class ItemChest extends Item {
             if (this.origin.player.health > this.data.chest.open_cost.health) {
                 this.origin.player.damage(this.data.chest.open_cost.health);
             } else {
+                return [];
+            }
+        }
+
+        if (this.data.chest.open_cost?.item) {
+            let msg = this.origin.player.payCostItem(
+                this.data.chest.open_cost.item.id,
+                this.data.chest.open_cost.item.count
+            );
+            if (msg.state != 'success') {
                 return [];
             }
         }

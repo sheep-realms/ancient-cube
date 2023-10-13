@@ -370,6 +370,61 @@ class Player {
     }
 
     /**
+     * 通过物品ID过滤物品栏物品
+     * @param {String} itemId 物品ID
+     * @returns {Object} 包含计数和物品列表的消息
+     */
+    filterInventoryItemsById(itemId) {
+        let items = this.inventory.filter((e) => {
+            return e.id === itemId;
+        });
+
+        let count = 0;
+        items.forEach(e => {
+            count += e.count;
+        });
+
+        return {
+            count: count,
+            items: items
+        };
+    }
+
+    /**
+     * 支付物品
+     * @param {String} itemId 物品ID
+     * @param {Number} count 物品数量
+     * @returns {Object} 消息
+     */
+    payCostItem(itemId, count = 0) {
+        let obj = this.filterInventoryItemsById(itemId);
+        if (count <= 0 || typeof count != 'number') return { state: 'fail', failReason: 'invalid_request' };
+        if (obj.count < count)                      return { state: 'fail', failReason: 'insufficient_funds' };
+
+        for (let i = 0; i < obj.items.length; i++) {
+            let msg = obj.items[i].removeCount(count);
+            if (msg.residue > 0) {
+                count = msg.residue;
+            } else {
+                count = 0
+                break;
+            }
+        }
+
+        p.updateInventory();
+
+        if (count > 0) {
+            log.error('Logic Error: Unknow Exception', 'class/Player.js > Player > payCostItem()');
+            return { state: 'fail', failReason: 'exception' };
+        }
+
+        return {
+            state: 'success',
+            data: {}
+        };
+    }
+
+    /**
      * 替换物品
      * @param {Number} index 物品栏索引
      * @param {Item} item 物品
