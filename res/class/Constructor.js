@@ -313,3 +313,97 @@ class ItemPopup {
         return `<div class="item-popup-title">${ $t( 'item.' + item.id ) }</div>`;
     }
 }
+
+/**
+ * 玩家状态条构造器
+ * @class
+ */
+class HudState {
+    constructor() {}
+
+    static getSpirit() {
+        return {
+            heart:         ['none', '', 'heart-half', '',            '',                         ''                             ],
+            heartDamage:   ['',     '', '',           'none damage', 'none damage-half',         'heart-half damage-right-half' ],
+            heartRollback: ['',     '', '',           'rollback',    'heart-half rollback-half', 'rollback-right-half'          ]
+        };
+    }
+
+    static getHeartContainer(addClass = undefined) {
+        return `<span class="heart-bg${ addClass ? ' ' + addClass : '' }"><span class="heart"></span></span>`;
+    }
+
+    static getHeart(value, addClass = undefined) {
+        return HudState.getHeartContainer(
+            `${HudState.getSpirit().heart[value]}${ addClass ? ' ' + addClass : '' }`
+        );
+    }
+
+    static getHeartDamage(value) {
+        return HudState.getHeart(
+            value,
+            HudState.getSpirit().heartDamage[value]
+        );
+    }
+
+    static getHeartRollback(value) {
+        return HudState.getHeart(
+            value,
+            HudState.getSpirit().heartRollback[value]
+        );
+    }
+
+    /**
+     * 获取生命值图标动画序列
+     * @param {Number} before 生命值变更前
+     * @param {Number} after 生命值变更后
+     * @param {Number} max 最大生命值
+     * @returns 
+     */
+    static getHealthList(before, after, max) {
+        let high = before,
+            low  = after;
+        if (after > before) {
+            high = after;
+            low  = before;
+        }
+
+        let highBin = Number('0b' + '1'.repeat(high)),
+            lowBin  = Number('0b' + '1'.repeat(low));
+
+        if (Number.isNaN(highBin)) highBin = 0;
+        if (Number.isNaN(lowBin))  lowBin  = 0;
+
+        let output  = String(Number(highBin.toString(2)) + Number(lowBin.toString(2))).split('').reverse(),
+            list    = [];
+
+        const index = {
+            "00": 0,
+            "10": 4,
+            "11": 3,
+            "20": 2,
+            "22": 1,
+            "21": 5,
+        };
+        
+        for (let i = 1; i < max; i += 2) {
+            let now = `${ output[i - 1] != undefined ? output[i - 1] : '0' }${ output[i] != undefined ? output[i] : '0' }`;
+            list.push(index[now]);
+        }
+
+        return list;
+    }
+
+    static getHealthBar(before, after, max) {
+        const list = HudState.getHealthList(before, after, max);
+        let dom = '';
+        let fn = HudState.getHeartDamage;
+        if (before < after) fn = HudState.getHeartRollback;
+        
+        list.forEach(e => {
+            dom += fn(e);
+        });
+
+        return dom;
+    }
+}

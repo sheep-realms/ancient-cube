@@ -188,6 +188,13 @@ let db_items = [
         id: 'instant_health_potion_t2',
         type: 'water_bottle',
         data: {
+            effect: [
+                {
+                    id: 'instant_health',
+                    level: 4,
+                    round: 1
+                }
+            ],
             liquid: 'water'
         }
     }

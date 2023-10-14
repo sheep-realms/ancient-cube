@@ -105,13 +105,19 @@ let db_generator = {
                         data: {
                             loot_table: 'chest_generic'
                         },
-                        count: 3
+                        count: 1
                     }, {
                         id: 'chest',
                         data: {
                             loot_table: 'chest_generic_weapon'
                         },
                         count: 1
+                    }, {
+                        id: 'chest',
+                        data: {
+                            loot_table: 'chest_generic_potion'
+                        },
+                        count: 2
                     }, {
                         id: 'tentacle',
                         count: 1
@@ -169,13 +175,19 @@ let db_generator = {
                         data: {
                             loot_table: 'chest_generic'
                         },
-                        count: 8
+                        count: 7
                     }, {
                         id: 'chest',
                         data: {
                             loot_table: 'chest_generic_weapon'
                         },
                         count: 2
+                    }, {
+                        id: 'chest',
+                        data: {
+                            loot_table: 'chest_generic_potion'
+                        },
+                        count: 1
                     }, {
                         id: 'slime',
                         count: 10

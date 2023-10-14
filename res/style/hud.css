@@ -37,6 +37,7 @@
     height: var(--icon-size);
     display: inline-block;
     background-image: url(../img/gui/heart.png);
+    background-repeat: no-repeat;
     image-rendering: pixelated;
     background-size: calc(var(--icon-size) * 16);
     background-position: calc(var(--icon-size) * var(--icon-pos-x)) calc(var(--icon-size) * var(--icon-pos-y));
@@ -97,6 +98,39 @@
     49.99% {--icon-pos-x: -4;}
     50% {--icon-pos-x: -1;}
     100% {--icon-pos-x: -1;}
+}
+
+#player-state-hp.flicker .heart-bg.rollback .heart {
+    animation: heart-flicker-rollback .25s linear infinite;
+}
+
+#player-state-hp.flicker .heart-bg.rollback-half .heart {
+    animation: heart-flicker-rollback-half .25s linear infinite;
+}
+
+#player-state-hp.flicker .heart-bg.rollback-right-half .heart {
+    animation: heart-flicker-rollback-right-half .25s linear infinite;
+}
+
+@keyframes heart-flicker-rollback {
+    0% {--icon-pos-x: -2;}
+    49.99% {--icon-pos-x: -2;}
+    50% {--icon-pos-x: 0;}
+    100% {--icon-pos-x: 0;}
+}
+
+@keyframes heart-flicker-rollback-half {
+    0% {--icon-pos-x: -3;}
+    49.99% {--icon-pos-x: -3;}
+    50% {--icon-pos-x: -1;}
+    100% {--icon-pos-x: -1;}
+}
+
+@keyframes heart-flicker-rollback-right-half {
+    0% {--icon-pos-x: -4;}
+    49.99% {--icon-pos-x: -4;}
+    50% {--icon-pos-x: 0;}
+    100% {--icon-pos-x: 0;}
 }
 
 

@@ -314,6 +314,7 @@ class WaterBottle extends Item {
         if (this.data.liquid == undefined) return { state: 'fail', failReason: 'item_disabled' }
         let efc = this.data.effect;
         this.liquid = undefined;
+        if (this.data.effect.length > 0) this.origin.player.effect(this.data.effect);
         this.setCount(0);
 
         return {

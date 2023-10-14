@@ -328,8 +328,9 @@ class Player {
      * 治疗玩家
      */
     regeneration(value) {
-        if (this.isDead) return;
-        if (value       <= 0) return;
+        if (this.isDead || game.debug.player_no_damage) return { state: 'fail', failReason: 'invalid_request' };
+        if (value       <= 0)                           return { state: 'fail', failReason: 'invalid_number' };
+        if (this.health >= this.healthMax)              return { state: 'fail', failReason: 'health_maximum' };
         let lastHealth  = this.health;
         
         this.health += Math.min(this.healthMax - this.health, value);
@@ -337,12 +338,30 @@ class Player {
             health:      this.health,
             healthMax:   this.healthMax,
             lastHealth:  lastHealth,
-            damage:      Math.min(this.healthMax - this.health, value)
+            rollback:    Math.min(this.healthMax - lastHealth, value)
         });
 
         // this.statistics.setStatistic('custom', 'damage_taken', Math.min(this.health, value));
 
-        return this.health;
+        return {
+            state:        'success',
+            data: {
+                rollback: Math.min(this.healthMax - lastHealth, value),
+                health:   this.health
+            }
+        };
+    }
+
+    effect(value) {
+        if (!Array.isArray(value)) {
+            value = [value];
+        }
+
+        value.forEach(e => {
+            if (e.id == 'instant_health') {
+                this.regeneration(e.level);
+            }
+        });
     }
 
     /**

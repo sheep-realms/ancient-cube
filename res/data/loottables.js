@@ -57,6 +57,22 @@ let db_loottable = {
             }
         ]
     },
+    chest_generic_potion: {
+        type: 'chest',
+        pools: [
+            {
+                entries: [
+                    {
+                        type: 'item',
+                        name: 'emerald'
+                    }, {
+                        type: 'item',
+                        name: 'instant_health_potion_t2'
+                    }
+                ]
+            }
+        ]
+    },
     monster_generic: {
         type: 'monster',
         pools: [

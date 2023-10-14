@@ -44,6 +44,13 @@ const lang_zh_cn = {
             fail: {
                 invalid_request: "无法给予玩家物品"
             }
+        },
+        regeneration: {
+            success: "已使玩家恢复 {n} 点生命",
+            fail: {
+                health_maximum: "玩家生命已达最大值",
+                invalid_request: "无法使玩家恢复生命"
+            }
         }
     },
     dead: {

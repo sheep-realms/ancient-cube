@@ -215,38 +215,15 @@ $(document).ready(() => {
     });
 
     p.bind('healthDamage', function(e) {
-        let icons = getHealthDamageIcon(e);
         let $sel = $('#player-state-hp>.heart-bg');
-        for (let i = 0; i < icons.length; i++) {
-            switch (icons[i]) {
-                case 'heart':
-                    $sel.eq(i).attr('class', 'heart-bg')
-                    break;
 
-                case 'damage-right-half':
-                    $sel.eq(i).attr('class', 'heart-bg damage-right-half heart-half')
-                    break;
-
-                case 'heart-half':
-                    $sel.eq(i).attr('class', 'heart-bg heart-half')
-                    break;
-
-                case 'damage':
-                    $sel.eq(i).attr('class', 'heart-bg damage none')
-                    break;
-
-                case 'damage-half':
-                    $sel.eq(i).attr('class', 'heart-bg damage-half none')
-                    break;
-
-                case 'none':
-                    $sel.eq(i).attr('class', 'heart-bg none')
-                    break;
-            
-                default:
-                    break;
-            }
-        }
+        $('#player-state-hp').html(
+            HudState.getHealthBar(
+                e.lastHealth,
+                e.health,
+                e.healthMax
+            )
+        );
 
         $('#player-state-hp').addClass('flicker');
         clearTimeout(timer.healthDamage);
@@ -269,6 +246,25 @@ $(document).ready(() => {
                 $('#screen-mask').removeClass('heartbeat heartbeat-deathdefend');
             }, 8000);
         }
+    });
+
+    p.bind('healthRegeneration', function(e) {
+        let $sel = $('#player-state-hp>.heart-bg');
+
+        $('#player-state-hp').html(
+            HudState.getHealthBar(
+                e.lastHealth,
+                e.health,
+                e.healthMax
+            )
+        );
+
+        $('#player-state-hp').addClass('flicker');
+        clearTimeout(timer.healthDamage);
+        timer.healthDamage = setTimeout(function () {
+            $('#player-state-hp').removeClass('flicker');
+            $sel.removeClass('rollback-right-half rollback rollback-half');
+        }, 130);
     });
 
     p.bind('dead', function(e) {

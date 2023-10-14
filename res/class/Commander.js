@@ -56,6 +56,17 @@ class Commander {
                     }
                 ]
             }, {
+                name: 'regeneration',
+                parameters: [
+                    {
+                        type: 'number',
+                        required: true,
+                        value: {
+                            min: 1
+                        }
+                    }
+                ]
+            }, {
                 name: 'say',
                 parameters: [
                     {
@@ -361,6 +372,15 @@ class Commander {
             }
         } else {
             return this.__messageConstructor('loottable', r);
+        }
+    }
+
+    regeneration(value) {
+        let r = this.link.player.regeneration(value);
+        if (r.state == 'success') {
+            return this.__messageConstructor('regeneration', r, { n: r.data.rollback });
+        } else {
+            return this.__messageConstructor('regeneration', r);
         }
     }
 
