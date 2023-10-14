@@ -184,5 +184,11 @@ let db_items = [
         data: {
             liquid: 'water'
         }
+    }, {
+        id: 'instant_health_potion_t2',
+        type: 'water_bottle',
+        data: {
+            liquid: 'water'
+        }
     }
 ];

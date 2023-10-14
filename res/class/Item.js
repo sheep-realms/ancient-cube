@@ -231,7 +231,7 @@ class ItemChest extends Item {
      * @returns {Array<Item>} 物品列表
      */
     open() {
-        if (this.disabled) return [];
+        if (this.disabled) return { state: 'fail', failReason: 'item_disabled' };
 
         if (this.data.chest.open_cost?.health) {
             if (this.origin.player.health > this.data.chest.open_cost.health) {
@@ -244,7 +244,7 @@ class ItemChest extends Item {
                     }
                 );
             } else {
-                return [];
+                return { state: 'fail', failReason: 'health_low' };
             }
         }
 
@@ -254,7 +254,7 @@ class ItemChest extends Item {
                 this.data.chest.open_cost.item.count
             );
             if (msg.state != 'success') {
-                return [];
+                return { state: 'fail', failReason: 'insufficient_funds' };
             }
         }
 
@@ -277,7 +277,12 @@ class ItemChest extends Item {
 
         this.setCount(0);
 
-        return items;
+        return {
+            state: 'success',
+            data: {
+                items: items
+            }
+        };
     }
 
     /**

@@ -113,7 +113,7 @@ let db_generator = {
                         },
                         count: 1
                     }, {
-                        id: 'slime',
+                        id: 'tentacle',
                         count: 1
                     }, {
                         id: 'stair',
@@ -178,7 +178,10 @@ let db_generator = {
                         count: 2
                     }, {
                         id: 'slime',
-                        count: 14
+                        count: 10
+                    }, {
+                        id: 'tentacle',
+                        count: 4
                     }, {
                         id: 'stair',
                         count: 2

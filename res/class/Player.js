@@ -497,7 +497,7 @@ class Player {
      * @returns {Object} 状态和数据
      */
     switchHotbarItem(solt, index) {
-        if (this.isDead && !game.debug.player_dead_action) return;
+        if (this.isDead && !game.debug.player_dead_action) return { state: 'fail', failReason: 'invalid_request' };
         let item, hotbarItem;
         if (this.inventory[index] == undefined && this.hotbar[solt] == undefined) {
             return { state: 'fail', failReason: 'null' };
@@ -562,14 +562,19 @@ class Player {
      * @param {Number} index 栏位索引
      */
     useInventoryItem(index) {
+        if (this.isDead && !game.debug.player_dead_action) return { state: 'fail', failReason: 'invalid_request' };
+        let r;
         if (this.inventory[index] != undefined) {
             switch (this.inventory[index].type) {
                 case 'chest':
-                    this.giveItems(this.inventory[index].open());
+                    r = this.inventory[index].open();
+                    if (r.state == 'success') {
+                        this.giveItems(r.data.items);
+                    }
                     break;
 
                 case 'water_bottle':
-                    let r = this.inventory[index].drink();
+                    r = this.inventory[index].drink();
                     if (r.state == 'success') {
                         this.give(r.data.item);
                     }
@@ -579,7 +584,10 @@ class Player {
                     break;
             }
         }
-        this.updateInventory();
+
+        if (r.state == 'success') this.updateInventory();
+
+        return r;
     }
 
     /**

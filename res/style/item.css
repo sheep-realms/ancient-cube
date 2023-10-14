@@ -55,5 +55,6 @@
 
 .item-icon[data-item-id='bottle'] { --icon-pos-x: 0; --icon-pos-y: -1; }
 .item-icon[data-item-id='water_bottle'] { --icon-pos-x: -1; --icon-pos-y: -1; }
+.item-icon[data-item-id='instant_health_potion_t2'] { --icon-pos-x: -2; --icon-pos-y: -1; }
 
 .item-icon[data-item-id='inventory'] { --icon-pos-x: -15; --icon-pos-y: -15; }

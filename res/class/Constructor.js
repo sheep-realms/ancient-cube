@@ -44,7 +44,8 @@ class BlockConstructor {
                             y: block.pos.y
                         },
                         class: 'searched'
-                    }
+                    },
+                    block
                 );
             } else {
                 switch (block.type) {
@@ -58,7 +59,8 @@ class BlockConstructor {
                                     y: block.pos.y
                                 },
                                 class: 'searched ' + block.type
-                            }
+                            },
+                            block
                         );
 
                     case 'stair':
@@ -70,7 +72,8 @@ class BlockConstructor {
                                     y: block.pos.y
                                 },
                                 class: 'searched ' + block.type
-                            }
+                            },
+                            block
                         );
 
                 
@@ -83,7 +86,8 @@ class BlockConstructor {
                                     y: block.pos.y
                                 },
                                 class: 'searched ' + block.type
-                            }
+                            },
+                            block
                         );
                 }
             }
@@ -97,7 +101,8 @@ class BlockConstructor {
                             y: block.pos.y
                         },
                         class: 'wall'
-                    }
+                    },
+                    block
                 );
             } else {
                 return this.getBlockContainer(
@@ -107,13 +112,14 @@ class BlockConstructor {
                             x: block.pos.x,
                             y: block.pos.y
                         }
-                    }
+                    },
+                    block
                 );
             }
         }
     }
 
-    static getBlockContainer(content = '', data = {}) {
+    static getBlockContainer(content = '', data = {}, block) {
         data = {
             ...{
                 pos: {
@@ -124,7 +130,7 @@ class BlockConstructor {
             },
             ...data
         };
-        return `<div id="map-${data.pos.y}-${data.pos.x}" class="map-block ${data.class}" data-pos-y="${data.pos.y}" data-pos-x="${data.pos.x}">${content}<div class="cover"><div class="attack"></div></div></div>`;
+        return `<div id="map-${data.pos.y}-${data.pos.x}" class="map-block ${data.class}" data-id="${block.id}" data-pos-y="${data.pos.y}" data-pos-x="${data.pos.x}">${content}<div class="cover"><div class="attack"></div></div></div>`;
     }
 }
 

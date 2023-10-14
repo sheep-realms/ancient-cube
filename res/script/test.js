@@ -76,7 +76,8 @@ let tester = new Tester(w, p);
 
 let timer = {
     healthDamage: 0,
-    heartbeat: 0
+    heartbeat: 0,
+    inventoryUseFail: 0
 };
 
 function getHealthIcon(value, max) {
@@ -168,18 +169,30 @@ $(document).ready(() => {
     // 点击物品栏
     $('#inventory').on('click', '.inventory-item', function() {
         let slot = $(this).data('slot');
+        let r;
         switch (p.inventory[slot].type) {
             case 'weapon':
-                p.switchHotbarItem(1, slot);
+                r = p.switchHotbarItem(1, slot);
                 break;
 
             case 'chest':
             case 'water_bottle':
-                p.useInventoryItem(slot);
+                r = p.useInventoryItem(slot);
                 break;
         
             default:
                 break;
+        }
+
+        if (r == undefined) return;
+        if (r.state != 'success') {
+            $('.inventory-item').removeClass('use-fail');
+            $(this).addClass('use-fail');
+            let $that = $(this);
+            clearTimeout(timer.inventoryUseFail);
+            timer.inventoryUseFail = setTimeout(function() {
+                $that.removeClass('use-fail');
+            }, 520);
         }
     });
 

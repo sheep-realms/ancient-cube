@@ -17,5 +17,14 @@ let db_blocks = [
             loot_table: 'monster_generic',
             damage_type: 'monster_attack'
         }
+    }, {
+        id: 'tentacle',
+        type: 'monster',
+        data: {
+            attack: 2,
+            health: 1,
+            loot_table: 'monster_generic',
+            damage_type: 'monster_attack'
+        }
     }
 ];

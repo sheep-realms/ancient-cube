@@ -59,7 +59,8 @@ const lang_zh_cn = {
         air: "空气",
         chest: "宝箱",
         slime: "史莱姆",
-        stair: "楼梯"
+        stair: "楼梯",
+        tentacle: "触手"
     },
     item: {
         blood_chest: "吸血宝箱",
@@ -72,6 +73,7 @@ const lang_zh_cn = {
         emerald_chest: "绿宝石宝箱",
         golden_chest: "金宝箱",
         hammer: "锤子",
+        instant_health_potion_t2: "治疗药水",
         knife: "小刀",
         kunai: "苦无",
         magnifier: "放大镜",
