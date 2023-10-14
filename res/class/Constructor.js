@@ -173,7 +173,7 @@ class InventoryConstructor {
         return `<div ${data?.id ? `id="${data.id}"` : ''} class="inventory-item${data?.class ? ` ${data.class}` : ''}" data-slot="${slot}">
                 <div class="item-icon" data-item-type="${item.type}" data-item-id="${item.id}"></div>
                 ${InventoryConstructor.getDamageBar(item)}
-                ${ item.count > 1 ? `<div class="item-count">${item.count < 10000 ? item.count : '9999+' }</div>` : '' }
+                ${InventoryConstructor.getCount(item)}
             </div>`;
     }
 
@@ -239,6 +239,20 @@ class InventoryConstructor {
         return `<div class="item-damage-bar${ item.damage > 0 ? '' : ' hide' }">
                 <div class="item-damage-value ${type}" style="--value: ${ value * 100 }%;"></div>
             </div>`;
+    }
+
+    /**
+     * 构造物品数量
+     * @param {Item} item 物品
+     * @returns {String} DOM
+     */
+    static getCount(item) {
+        let str = item.count;
+        if (item.count <= 1)        return ``;
+        if (item.count > 9999)      str = '9999+';
+        if (item.count == Infinity) str = '∞';
+
+        return `<div class="item-count">${str}</div>`;
     }
 
     /**

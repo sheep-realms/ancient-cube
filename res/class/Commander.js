@@ -21,6 +21,10 @@ class Commander {
                         value: {
                             min: 1
                         }
+                    }, {
+                        type: 'string'
+                    }, {
+                        type: 'json'
                     }
                 ]
             }, {
@@ -294,8 +298,8 @@ class Commander {
         return rt;
     }
 
-    damage(value) {
-        let r = this.link.player.damage(value);
+    damage(value, type = 'unknow', form = {}) {
+        let r = this.link.player.damage(value, type, form);
         if (r.state == 'success') {
             return this.__messageConstructor('damage', r, { n: r.data.damage });
         } else {
@@ -330,7 +334,7 @@ class Commander {
     kill() {
         return this.__messageConstructor(
             'kill',
-            this.link.player.damage(Infinity)
+            this.link.player.damage(Infinity, 'system')
         );
     }
 

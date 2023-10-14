@@ -46,6 +46,15 @@ const lang_zh_cn = {
             }
         }
     },
+    dead: {
+        chest_open_cost: "你在开启 {name} 时透支了所有生命",
+        chest_open_cost_unknow: "你在开启宝箱时透支了所有生命",
+        monster_attack: "你被 {name} 杀死了",
+        monster_attack_at_chest_open_cost: "你因为开启宝箱支付了过多生命而被 {name} 终结了",
+        monster_attack_unknow: "你被怪物杀死了",
+        system: "你被来自系统的力量杀死了",
+        unknow: "你被一股未知的神秘力量杀死了"
+    },
     block: {
         air: "空气",
         chest: "宝箱",

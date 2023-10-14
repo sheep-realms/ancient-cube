@@ -21,6 +21,7 @@ p.switchHotbarItem(1, 1);
 p.switchHotbarItem(0, 0);
 
 let messager = new Messager('#message');
+p.messager = messager;
 
 log.bind('errorMessageOutput', function(e) {
     messager.send(e.message, 'color: red;');

@@ -10,7 +10,9 @@ class Player {
         this.selectedSlot = 0;
         this.discarded    = [];
         this.world        = {};
+        this.messager     = {};
         this.statistics   = {};
+        this.lastDamage   = {};
 
         this.__inGiveItems = false;
 
@@ -176,7 +178,14 @@ class Player {
                     let def = this.hotbar[this.selectedSlot].defense(r.data.attack);
                     if (def.state == 'success') {
                         this.statistics.setStatistic('custom', 'damage_defended', def.data.defense);
-                        this.damage(def.data.undefendedDamage);
+                        this.damage(
+                            def.data.undefendedDamage,
+                            r.data.damage_type,
+                            {
+                                type: 'monster',
+                                name: r.id
+                            }
+                        );
                         if (atk.data.disabled) itemNowRemove = true;
                     } else {
                         defFail = true;
@@ -188,7 +197,14 @@ class Player {
             }
             
             if (defFail) {
-                this.damage(r?.data?.attack ? r.data.attack : 0);
+                this.damage(
+                    r?.data?.attack ? r.data.attack : 0,
+                    r.data.damage_type,
+                    {
+                        type: 'monster',
+                        name: r.block.id
+                    }
+                );
             }
         } else if (r.type == 'chest') {
             let openChest = true;
@@ -266,7 +282,7 @@ class Player {
      * @param {Number} value 伤害值
      * @returns {Number} 剩余HP
      */
-    damage(value) {
+    damage(value, type = 'unknow', form = {}) {
         if (this.isDead || game.debug.player_no_damage)         return { state: 'fail', failReason: 'invalid_request' };
         if (value       >  game.config.security.damage_maximum) value = game.config.security.damage_maximum;
         if (value       <= 0)                                   return { state: 'fail', failReason: 'invalid_number' };
@@ -287,7 +303,13 @@ class Player {
 
         this.statistics.setStatistic('custom', 'damage_taken', Math.min(lastHealth, value));
 
-        if (this.health <= 0) this.dead();
+        if (this.health <= 0) this.dead(type, form, this.lastDamage);
+
+        this.lastDamage = {
+            damage: value,
+            type:   type,
+            form:   form
+        };
         
         if (this.healthMax <= 0) {
             log.error('Player Health Exception: Player.healthMax <= 0', 'class/Player.js > Player > damage()');
@@ -635,10 +657,45 @@ class Player {
     /**
      * 设置玩家死亡
      */
-    dead() {
+    dead(type = 'unknow', form = {}, lastDamage = {}) {
         this.isDead = true;
         this.boundEvent.dead({
             lastPos: this.lastPos
         });
+
+        switch (type) {
+            case 'chest_open_cost':
+                if (this.deadFormCheck(form) == 'item') {
+                    this.deadMessage('chest_open_cost', { name: $t( 'item.' + form.name ) });
+                } else {
+                    this.deadMessage('chest_open_cost_unknow');
+                }
+                break;
+
+            case 'monster_attack':
+                if (this.deadFormCheck(form) == 'monster') {
+                    if (lastDamage?.type == 'chest_open_cost') {
+                        this.deadMessage('monster_attack_at_chest_open_cost', { name: $t( 'block.' + form.name ) });
+                    } else {
+                        this.deadMessage('monster_attack', { name: $t( 'block.' + form.name ) });
+                    }
+                } else {
+                    this.deadMessage('monster_attack_unknow');
+                }
+                break;
+        
+            default:
+                this.deadMessage(type);
+                break;
+        }
+    }
+
+    deadFormCheck(form = {}) {
+        if (form?.type == undefined || form?.name == undefined) return 'unknow';
+        return form.type;
+    }
+
+    deadMessage(key, variable = {}) {
+        this.messager.send($t( 'dead.' + key, variable ));
     }
 }

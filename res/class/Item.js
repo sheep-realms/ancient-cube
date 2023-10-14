@@ -235,7 +235,14 @@ class ItemChest extends Item {
 
         if (this.data.chest.open_cost?.health) {
             if (this.origin.player.health > this.data.chest.open_cost.health) {
-                this.origin.player.damage(this.data.chest.open_cost.health);
+                this.origin.player.damage(
+                    this.data.chest.open_cost.health,
+                    'chest_open_cost',
+                    {
+                        type: 'item',
+                        name: this.id
+                    }
+                );
             } else {
                 return [];
             }

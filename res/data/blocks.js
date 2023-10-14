@@ -14,7 +14,8 @@ let db_blocks = [
         data: {
             attack: 1,
             health: 1,
-            loot_table: 'monster_generic'
+            loot_table: 'monster_generic',
+            damage_type: 'monster_attack'
         }
     }
 ];
