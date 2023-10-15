@@ -336,7 +336,7 @@ class Commander {
         }
 
         if (r.state == 'success') {
-            return this.__messageConstructor('give', r, { name: $t('item.' + id), n: count });
+            return this.__messageConstructor('give', r, { name: $t('item.' + id + '.name'), n: count });
         } else {
             return this.__messageConstructor('give', r);
         }

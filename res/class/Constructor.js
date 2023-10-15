@@ -306,11 +306,35 @@ class ItemPopup {
     static getPopup(item) {
         return `<div class="item-popup">
             ${ ItemPopup.getPopupTitle(item) }
+            ${ ItemPopup.getPopupContent(item) }
         </div>`;
     }
 
     static getPopupTitle(item) {
-        return `<div class="item-popup-title">${ $t( 'item.' + item.id ) }</div>`;
+        return `<div class="item-popup-title">${ $t( `item.${item.id}.name` ) }</div>`;
+    }
+
+    static getPopupContent(item) {
+        return `<div class="item-popup-content">
+                ${ ItemPopup.getDescription(item) }
+                ${ item.type == 'weapon' ? ItemPopup.getLine() + ItemPopup.getWeaponData(item) : '' }
+            </div>`;
+    }
+
+    static getLine() {
+        return `<div class="item-popup-line"></div>`
+    }
+
+    static getDescription(item) {
+        return `<div class="item-popup-description">${ $t( `item.${item.id}.description` ) }</div>`;
+    }
+
+    static getWeaponData(item) {
+        let str = '';
+        str += `<div>攻击：${item.attribute.attack}</div>`;
+        str += `<div>防御：${item.attribute.defense}</div>`;
+        str += `<div>耐久：${item.attribute.health - item.damage} / ${item.attribute.health}</div>`;
+        return str;
     }
 }
 

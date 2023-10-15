@@ -201,6 +201,24 @@ $(document).ready(() => {
         $('#gui-screen').addClass('hide');
     });
 
+    // 鼠标悬进入物品格
+    $('#inventory').on('mouseenter', '.inventory-item', function() {
+        let slot = $(this).data('slot');
+        let item = p.inventory[slot];
+        let offset = $(this).offset(),
+            height = $(this).height(),
+            width  = $(this).width();
+
+        $('#item-popup-layer').html(ItemPopup.getPopup(item));
+
+        $('.item-popup').css('left', `${offset.left + width + 8}px`);
+        $('.item-popup').css('top', `${offset.top}px`);
+    });
+
+    $('#inventory').on('mouseleave', '.inventory-item', function() {
+        $('#item-popup-layer').html('');
+    });
+
     p.bind('goto', function(e) {
         $(`#map-${e.pos[0]}-${e.pos[1]}`).replaceWith(BlockConstructor.getBlock(e.block));
     });

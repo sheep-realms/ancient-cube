@@ -328,9 +328,9 @@ class Player {
      * 治疗玩家
      */
     regeneration(value) {
-        if (this.isDead || game.debug.player_no_damage) return { state: 'fail', failReason: 'invalid_request' };
-        if (value       <= 0)                           return { state: 'fail', failReason: 'invalid_number' };
-        if (this.health >= this.healthMax)              return { state: 'fail', failReason: 'health_maximum' };
+        if (this.isDead && !game.debug.player_dead_action) return { state: 'fail', failReason: 'invalid_request' };
+        if (value       <= 0)                              return { state: 'fail', failReason: 'invalid_number' };
+        if (this.health >= this.healthMax)                 return { state: 'fail', failReason: 'health_maximum' };
         let lastHealth  = this.health;
         
         this.health += Math.min(this.healthMax - this.health, value);
@@ -340,6 +340,8 @@ class Player {
             lastHealth:  lastHealth,
             rollback:    Math.min(this.healthMax - lastHealth, value)
         });
+
+        this.lastDamage = {};
 
         // this.statistics.setStatistic('custom', 'damage_taken', Math.min(this.health, value));
 
@@ -693,7 +695,7 @@ class Player {
         switch (type) {
             case 'chest_open_cost':
                 if (this.deadFormCheck(form) == 'item') {
-                    this.deadMessage('chest_open_cost', { name: $t( 'item.' + form.name ) });
+                    this.deadMessage('chest_open_cost', { name: $t( 'item.' + form.name + '.name' ) });
                 } else {
                     this.deadMessage('chest_open_cost_unknow');
                 }

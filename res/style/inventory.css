@@ -37,3 +37,41 @@
     min-width: 150px;
     cursor: pointer;
 }
+
+
+#item-popup-layer {
+    position: fixed;
+    pointer-events: none;
+    z-index: 2100;
+}
+
+.item-popup {
+    position: fixed;
+    left: 0;
+    top: 0;
+    max-width: 320px;
+    padding: 4px;
+    background-color: #000;
+    color: #FFF;
+    border: 1px #888 solid;
+    font-size: 16px;
+}
+
+.item-popup-title {
+    background-color: #444;
+    padding: 2px 4px;
+    font-size: 18px;
+}
+
+.item-popup-content {
+    padding: 4px;
+}
+
+.item-popup-description {
+    color: #AAA;
+}
+
+.item-popup-line {
+    border-bottom: 1px #888 solid;
+    margin: 4px 0;
+}

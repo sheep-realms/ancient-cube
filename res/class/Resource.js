@@ -9,15 +9,15 @@ class Resource {
     }
 
     getBlock(id) {
-        return this.data.block.find((e) => {
+        return JSON.parse(JSON.stringify(this.data.block.find((e) => {
             return e.id == id;
-        });
+        })));
     }
 
     getItem(id) {
-        return this.data.item.find((e) => {
+        return JSON.parse(JSON.stringify(this.data.item.find((e) => {
             return e.id == id;
-        });
+        })));
     }
 
     getLootTable(id) {
