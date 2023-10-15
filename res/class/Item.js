@@ -25,6 +25,7 @@ class Item {
         this.id       = '';
         this.type     = '';
         this.count    = 1;
+        this.custom   = {};
         this.damage   = 0;
         this.disabled = false;
         this.data     = {};

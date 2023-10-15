@@ -2,6 +2,9 @@ const lang_zh_cn = {
     gui: {
         action: {
             attack: "攻击",
+            drink: "饮用",
+            equip: "装备",
+            open: "开启",
             search: "探索"
         }
     },

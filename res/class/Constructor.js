@@ -311,13 +311,20 @@ class ItemPopup {
     }
 
     static getPopupTitle(item) {
-        return `<div class="item-popup-title">${ $t( `item.${item.id}.name` ) }</div>`;
+        let str = $t( `item.${item.id}.name` );
+        let cls = '';
+        if (item?.custom?.name != undefined) {
+            str = item.custom.name;
+            cls = ' custom'
+        }
+        return `<div class="item-popup-title${cls}">${str}</div>`;
     }
 
     static getPopupContent(item) {
         return `<div class="item-popup-content">
                 ${ ItemPopup.getDescription(item) }
                 ${ item.type == 'weapon' ? ItemPopup.getLine() + ItemPopup.getWeaponData(item) : '' }
+                ${ ItemPopup.getHotkeys(item) }
             </div>`;
     }
 
@@ -326,7 +333,13 @@ class ItemPopup {
     }
 
     static getDescription(item) {
-        return `<div class="item-popup-description">${ $t( `item.${item.id}.description` ) }</div>`;
+        let str = $t( `item.${item.id}.description` );
+        let cls = '';
+        if (item?.custom?.description != undefined) {
+            str = item.custom.description;
+            cls = ' custom'
+        }
+        return `<div class="item-popup-description${cls}">${str}</div>`;
     }
 
     static getWeaponData(item) {
@@ -335,6 +348,32 @@ class ItemPopup {
         str += `<div>防御：${item.attribute.defense}</div>`;
         str += `<div>耐久：${item.attribute.health - item.damage} / ${item.attribute.health}</div>`;
         return str;
+    }
+
+    static getHotkeys(item) {
+        let str = '',
+            key = '';
+        switch (item.type) {
+            case 'chest':
+                key = 'gui.action.open';
+                break;
+
+            case 'water_bottle':
+                if (item.data.liquid == undefined) return '';
+                key = 'gui.action.drink';
+                break;
+
+            case 'weapon':
+                key = 'gui.action.equip'
+                break;
+        
+            default:
+                return '';
+        }
+
+        str = pixelHotkeys.getKeyDOM('msl', $t(key));
+
+        return `<div class="item-popup-hotkeys">${str}</div>`;
     }
 }
 

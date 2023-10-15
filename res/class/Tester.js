@@ -71,6 +71,10 @@ class Tester {
     getParadoxChest() {
         let chest = new ItemChest('golden_chest');
         chest.data.chest.inventory = [chest];
+        chest.custom = {
+            name: '悖论之箱',
+            description: '这个箱子的内容物是它自己，也就是说你可以从箱子里源源不断地拿出箱子。但问题是，开启箱子的那一刻，箱子本身会被销毁，被拿出来的箱子也是被销毁的箱子，因此你无法获得任何东西。箱子越多，箱子越少。'
+        };
         this.player.give(chest);
     }
 
@@ -78,6 +82,10 @@ class Tester {
         let chest = new ItemChest('emerald_chest');
         chest.data.chest.inventory = [new Item('emerald')];
         chest.data.chest.open_cost.item.id = 'emerald_chest';
+        chest.custom = {
+            name: '悖论之箱 · II',
+            description: '开启这个箱子需要消耗一个绿宝石宝箱，但它自己就是绿宝石宝箱。那么问题来了，如果开启箱子，这个箱子会被作为开启代价销毁，还是成功开启后销毁？如何做到损失最小化？'
+        };
         this.player.give(chest);
     }
 }

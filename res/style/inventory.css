@@ -71,7 +71,29 @@
     color: #AAA;
 }
 
+.item-popup-title.custom,
+.item-popup-description.custom {
+    font-style: italic;
+}
+
 .item-popup-line {
     border-bottom: 1px #888 solid;
     margin: 4px 0;
+}
+
+.item-popup-hotkeys {
+    border-top: 1px #888 solid;
+    padding-top: 4px;
+    margin-top: 4px;
+}
+
+.item-popup-hotkeys .pixel-hotkeys-key {
+    --pixel-hotkeys-size: 16px;
+    --pixel-hotkeys-height: 16px;
+    --pixel-hotkeys-width: 16px;
+    margin: 0;
+}
+
+.item-popup-hotkeys .pixel-hotkeys-key-label {
+    color: #AAA;
 }
