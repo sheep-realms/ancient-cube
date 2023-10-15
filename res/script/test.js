@@ -58,7 +58,7 @@ commander.link = {
 };
 commander.deployment();
 
-let tester = new Tester(w, p);
+let tester = new Tester(w, p, resource);
 
 // let ts_map = [
 //     ['air', 'air', 'air', 'chest', 'monster'],
@@ -305,6 +305,7 @@ $(document).ready(() => {
 
     p.bind('updateInventory', function(e) {
         $('#inventory').html(InventoryConstructor.getInventory(e));
+        $('#item-popup-layer').html('');
     });
 
     p.boundEvent.updateInventory(p.inventory);

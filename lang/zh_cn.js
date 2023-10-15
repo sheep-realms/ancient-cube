@@ -100,7 +100,7 @@ const lang_zh_cn = {
         },
         emerald_chest: {
             name: "绿宝石宝箱",
-            description: "需要支付绿宝石作为开启宝箱的代价。"
+            description: "支付绿宝石作为开启宝箱的代价。"
         },
         golden_chest: {
             name: "金宝箱",

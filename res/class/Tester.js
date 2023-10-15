@@ -1,7 +1,8 @@
 class Tester {
-    constructor(world, player) {
+    constructor(world, player, resource) {
         this.world = world;
         this.player = player;
+        this.resource = resource;
     }
 
     mapClear(autoSlot = false) {
@@ -41,6 +42,14 @@ class Tester {
             new Weapon('teach_weapon')
         ]
         this.player.give(chest);
+    }
+
+    giveMeAllItem() {
+        let items = [];
+        this.resource.data.item.forEach(e => {
+            items.push(ItemGenerator.get(e.id))
+        });
+        this.player.giveItems(items);
     }
 
     russianDolls() {
