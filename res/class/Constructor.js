@@ -323,7 +323,8 @@ class ItemPopup {
     static getPopupContent(item) {
         return `<div class="item-popup-content">
                 ${ ItemPopup.getDescription(item) }
-                ${ item.type == 'weapon' ? ItemPopup.getLine() + ItemPopup.getWeaponData(item) : '' }
+                ${ item.type == 'weapon' ? ItemPopup.getWeaponData(item) : '' }
+                ${ item.type == 'water_bottle' ? ItemPopup.getEffectData(item) : '' }
                 ${ ItemPopup.getHotkeys(item) }
             </div>`;
     }
@@ -343,10 +344,19 @@ class ItemPopup {
     }
 
     static getWeaponData(item) {
-        let str = '';
+        let str = ItemPopup.getLine();
         str += `<div>攻击：${item.attribute.attack}</div>`;
         str += `<div>防御：${item.attribute.defense}</div>`;
         str += `<div>耐久：${item.attribute.health - item.damage} / ${item.attribute.health}</div>`;
+        return str;
+    }
+
+    static getEffectData(item) {
+        if (item.data.effect.length == 0) return '';
+        let str = ItemPopup.getLine();
+        item.data.effect.forEach(e => {
+            str += `<div>${ $t( `effect.${e.id}.name` ) } ${ $t( `effect.level.${e.level}` ) }</div>`;
+        });
         return str;
     }
 

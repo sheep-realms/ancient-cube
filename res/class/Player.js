@@ -360,8 +360,24 @@ class Player {
         }
 
         value.forEach(e => {
-            if (e.id == 'instant_health') {
-                this.regeneration(e.level);
+            switch (e.id) {
+                case 'instant_damage':
+                    this.damage(
+                        e.level,
+                        'magic',
+                        {
+                            type: 'effect',
+                            name: e.id
+                        }
+                    );
+                    break;
+
+                case 'instant_health':
+                    this.regeneration(e.level);
+                    break;
+            
+                default:
+                    break;
             }
         });
     }
@@ -698,6 +714,14 @@ class Player {
                     this.deadMessage('chest_open_cost', { name: $t( 'item.' + form.name + '.name' ) });
                 } else {
                     this.deadMessage('chest_open_cost_unknow');
+                }
+                break;
+
+            case 'magic':
+                if (this.deadFormCheck(form) == 'effect') {
+                    this.deadMessage('magic_effect', { name: $t( 'effect.' + form.name + '.name' ) });
+                } else {
+                    this.deadMessage('magic_unknow');
                 }
                 break;
 

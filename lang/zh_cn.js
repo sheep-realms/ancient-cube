@@ -59,6 +59,8 @@ const lang_zh_cn = {
     dead: {
         chest_open_cost: "你在开启 {name} 时透支了所有生命",
         chest_open_cost_unknow: "你在开启宝箱时透支了所有生命",
+        magic_effect: "你被一种名为 {name} 的魔法杀死了",
+        magic_unknow: "你被魔法杀死了",
         monster_attack: "你被 {name} 杀死了",
         monster_attack_at_chest_open_cost: "你因为开启宝箱支付了过多生命而被 {name} 终结了",
         monster_attack_unknow: "你被怪物杀死了",
@@ -71,6 +73,27 @@ const lang_zh_cn = {
         slime: "史莱姆",
         stair: "楼梯",
         tentacle: "触手"
+    },
+    effect: {
+        level: {
+            "0": "",
+            "1": "I",
+            "2": "II",
+            "3": "III",
+            "4": "IV",
+            "5": "V",
+            "6": "VI",
+            "7": "VII",
+            "8": "VIII",
+            "9": "IX",
+            "10": "X"
+        },
+        instant_damage: {
+            name: "瞬间伤害"
+        },
+        instant_health: {
+            name: "瞬间治疗"
+        }
     },
     item: {
         blood_chest: {
@@ -112,6 +135,10 @@ const lang_zh_cn = {
         hammer: {
             name: "锤子",
             description: "结实可靠的动能武器。"
+        },
+        instant_damage_potion_t2: {
+            name: "伤害药水",
+            description: "看起来很危险，不是饮料。"
         },
         instant_health_potion_t2: {
             name: "治疗药水",

@@ -197,5 +197,18 @@ let db_items = [
             ],
             liquid: 'water'
         }
+    }, {
+        id: 'instant_damage_potion_t2',
+        type: 'water_bottle',
+        data: {
+            effect: [
+                {
+                    id: 'instant_damage',
+                    level: 4,
+                    round: 1
+                }
+            ],
+            liquid: 'water'
+        }
     }
 ];
