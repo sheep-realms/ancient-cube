@@ -6,6 +6,7 @@ game.debug = new Debuger();
 
 let resource = new Resource();
 resource.data.block = db_blocks;
+resource.data.effect = db_effect;
 resource.data.item = db_items;
 resource.data.loottable = db_loottable;
 resource.data.generator = db_generator;
@@ -24,11 +25,11 @@ let messager = new Messager('#message');
 p.messager = messager;
 
 log.bind('errorMessageOutput', function(e) {
-    messager.send(e.message, 'color: red;');
+    messager.sendError(e.message, 'color: red;');
 });
 
 game.debug.bind('debugMessageOutput', function(e) {
-    messager.send(`[DEBUG] ${e.name} = ${e.value}`, 'color: lightgray; font-style: italic;');
+    messager.send(`[DEBUG] ${e.name} = ${e.value}`, '--ac-color: var(--ac-color-gray); --ac-color-bg: var(--ac-color-gray-bg); font-style: italic;');
 });
 
 let patchPanel = new PatchPanel();

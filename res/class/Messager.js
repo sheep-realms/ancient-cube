@@ -20,7 +20,7 @@ class Messager {
     sendError(message = '') {
         this.send(
             message,
-            'color: red;'
+            '--ac-color: var(--ac-color-red); --ac-color-bg: var(--ac-color-red-bg);'
         );
     }
 }

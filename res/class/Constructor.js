@@ -345,9 +345,9 @@ class ItemPopup {
 
     static getWeaponData(item) {
         let str = ItemPopup.getLine();
-        str += `<div>攻击：${item.attribute.attack}</div>`;
-        str += `<div>防御：${item.attribute.defense}</div>`;
-        str += `<div>耐久：${item.attribute.health - item.damage} / ${item.attribute.health}</div>`;
+        str += `<div>${ $t( 'item_popup.attribute.attack', { n: item.attribute.attack } ) }</div>`;
+        str += `<div>${ $t( 'item_popup.attribute.defense', { n: item.attribute.defense } ) }</div>`;
+        str += `<div>${ $t( 'item_popup.attribute.health', { n: item.attribute.health - item.damage, max: item.attribute.health } ) }</div>`;
         return str;
     }
 
@@ -355,7 +355,7 @@ class ItemPopup {
         if (item.data.effect.length == 0) return '';
         let str = ItemPopup.getLine();
         item.data.effect.forEach(e => {
-            str += `<div>${ $t( `effect.${e.id}.name` ) } ${ $t( `effect.level.${e.level}` ) }</div>`;
+            str += `<div${ resource.getEffect(e.id)?.is_debuff ? ` style="color: var(--ac-color-red);"` : '' }>${ $t( `effect.${e.id}.name` ) } ${ $t( `effect.level.${e.level}` ) }</div>`;
         });
         return str;
     }

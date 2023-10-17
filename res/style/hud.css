@@ -214,10 +214,10 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    color: #FFF;
+    color: var(--ac-color-white);
     display: block;
     padding: 0.1em 0.25em;
-    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.75);
+    text-shadow: 2px 2px 0 var(--ac-color-white-bg);
     font-weight: bold;
 }
 

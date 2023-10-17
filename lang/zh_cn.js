@@ -196,5 +196,12 @@ const lang_zh_cn = {
             name: "水瓶",
             description: "普通的一瓶水。"
         }
+    },
+    item_popup: {
+        attribute: {
+            attack: "攻击：{n}",
+            defense: "防御：{n}",
+            health: "耐久：{n} / {max}"
+        }
     }
 }

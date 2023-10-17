@@ -4,6 +4,39 @@
 }
 
 :root {
+    --ac-color-black: #000000;
+    --ac-color-black-bg: #000000;
+    --ac-color-dark-blue: #0000AA;
+    --ac-color-dark-blue-bg: #00002A;
+    --ac-color-dark-green: #00AA00;
+    --ac-color-dark-green-bg: #002A00;
+    --ac-color-dark-aqua: #00AAAA;
+    --ac-color-dark-aqua-bg: #002A2A;
+    --ac-color-dark-red: #AA0000;
+    --ac-color-dark-red-bg: #2A0000;
+    --ac-color-dark-purple: #AA00AA;
+    --ac-color-dark-purple-bg: #2A002A;
+    --ac-color-gold: #FFAA00;
+    --ac-color-gold-bg: #2A2A00;
+    --ac-color-gray: #AAAAAA;
+    --ac-color-gray-bg: #2A2A2A;
+    --ac-color-dark-gray: #555555;
+    --ac-color-dark-gray-bg: #151515;
+    --ac-color-blue: #5555FF;
+    --ac-color-blue-bg: #15153F;
+    --ac-color-green: #55FF55;
+    --ac-color-green-bg: #153F15;
+    --ac-color-aqua: #55FFFF;
+    --ac-color-aqua-bg: #153F3F;
+    --ac-color-red: #FF5555;
+    --ac-color-red-bg: #3F1515;
+    --ac-color-light-purple: #FF55FF;
+    --ac-color-light-purple-bg: #3F153F;
+    --ac-color-yellow: #FFFF55;
+    --ac-color-yellow-bg: #3F3F15;
+    --ac-color-white: #FFFFFF;
+    --ac-color-white-bg: #3F3F3F;
+
     --maze-config-view-block-size-minimum: 55px;
     --maze-config-view-screen-safety-height: 90vh;
     --maze-config-view-screen-safety-width: 90vw;

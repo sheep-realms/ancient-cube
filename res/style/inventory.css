@@ -52,7 +52,7 @@
     max-width: 320px;
     padding: 4px;
     background-color: #000;
-    color: #FFF;
+    color: var(--ac-color-white);
     border: 1px #888 solid;
     font-size: 16px;
 }
@@ -68,7 +68,7 @@
 }
 
 .item-popup-description {
-    color: #AAA;
+    color: var(--ac-color-gray);
 }
 
 .item-popup-title.custom,
@@ -77,12 +77,12 @@
 }
 
 .item-popup-line {
-    border-bottom: 1px #888 solid;
+    border-bottom: 1px var(--ac-color-gray) solid;
     margin: 4px 0;
 }
 
 .item-popup-hotkeys {
-    border-top: 1px #888 solid;
+    border-top: 1px var(--ac-color-gray) solid;
     padding-top: 4px;
     margin-top: 4px;
 }
@@ -95,5 +95,5 @@
 }
 
 .item-popup-hotkeys .pixel-hotkeys-key-label {
-    color: #AAA;
+    color: var(--ac-color-gray);
 }

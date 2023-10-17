@@ -2,6 +2,7 @@ class Resource {
     constructor() {
         this.data = {
             block: [],
+            effect: [],
             item: [],
             loottable: {},
             generator: {}
@@ -10,6 +11,12 @@ class Resource {
 
     getBlock(id) {
         return JSON.parse(JSON.stringify(this.data.block.find((e) => {
+            return e.id == id;
+        })));
+    }
+
+    getEffect(id) {
+        return JSON.parse(JSON.stringify(this.data.effect.find((e) => {
             return e.id == id;
         })));
     }

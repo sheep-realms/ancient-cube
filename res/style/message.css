@@ -8,8 +8,10 @@
 }
 
 #message .message-item {
-    color: #FFFFFF;
-    text-shadow: 0.1em 0.1em 0 #222222;
+    --ac-color: var(--ac-color-white);
+    --ac-color-bg: var(--ac-color-white-bg);
+    color: var(--ac-color);
+    text-shadow: 0.1em 0.1em 0 var(--ac-color-bg);
     background-color: rgba(0, 0, 0, 0.5);
     padding: 0.25em 0.5em 0.25em 0.75em;
     opacity: 1;
