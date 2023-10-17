@@ -57,6 +57,7 @@ const lang_zh_cn = {
         }
     },
     dead: {
+        boomerang: "你被自己丢出去的回旋镖杀死了",
         chest_open_cost: "你在开启 {name} 时透支了所有生命",
         chest_open_cost_unknow: "你在开启宝箱时透支了所有生命",
         magic_effect: "你被一种名为 {name} 的魔法杀死了",
@@ -179,6 +180,10 @@ const lang_zh_cn = {
         soul_camera_using: {
             name: "已激活的灵魂相机",
             description: "一种用途未知的古物，看起来内部的装置正在运转，并发出了奇妙的光芒。"
+        },
+        soul_trace_boomerang: {
+            name: "活体追踪回旋镖",
+            description: "一种远古魔道具，丢出后会自动追踪攻击附近的活体......包括你自己。"
         },
         spear: {
             name: "长枪",

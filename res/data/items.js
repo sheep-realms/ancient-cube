@@ -144,6 +144,19 @@ let db_items = [
             }
         }
     }, {
+        id: 'soul_trace_boomerang',
+        type: 'weapon',
+        data: {
+            attribute: {
+                attack: 6,
+                defense: 0,
+                attack_cost: 1,
+                defense_cost: 0,
+                health: 75
+            },
+            not_damage_chest: true
+        }
+    }, {
         id: 'golden_chest',
         type: 'chest'
     }, {

@@ -212,7 +212,7 @@ class Player {
             if (this.hotbar[this.selectedSlot]?.type == 'weapon') {
                 // 尝试攻击
                 let atk = this.hotbar[this.selectedSlot].attack();
-                if (atk.state == 'success') {
+                if (atk.state == 'success' && !this.hotbar[this.selectedSlot].data?.not_damage_chest) {
                     // 攻击成功，宝箱损坏
                     r.block.damaged = true;
                     openChest = false;
@@ -247,6 +247,17 @@ class Player {
                     itemUsingException = atk;
                 }
             }
+        }
+
+        if (r.type != 'monster' && this.hotbar[this.selectedSlot].id == 'soul_trace_boomerang') {
+            this.damage(
+                this.hotbar[this.selectedSlot].attribute.attack,
+                'boomerang',
+                {
+                    type: 'item',
+                    name: this.hotbar[this.selectedSlot]
+                }
+            );
         }
 
         this.boundEvent.goto(r);

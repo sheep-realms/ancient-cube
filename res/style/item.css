@@ -46,6 +46,7 @@
 .item-icon[data-item-id='crowbar'] { --icon-pos-x: -7; --icon-pos-y: 0; }
 .item-icon[data-item-id='rapier'] { --icon-pos-x: -8; --icon-pos-y: 0; }
 .item-icon[data-item-id='teach_weapon'] { --icon-pos-x: -9; --icon-pos-y: 0; }
+.item-icon[data-item-id='soul_trace_boomerang'] { --icon-pos-x: -10; --icon-pos-y: 0; }
 
 .item-icon[data-item-id='golden_chest'] { --icon-pos-x: 0; --icon-pos-y: 0; }
 .item-icon[data-item-id='silver_chest'] { --icon-pos-x: -1; --icon-pos-y: 0; }
