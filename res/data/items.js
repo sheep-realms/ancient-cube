@@ -1,25 +1,32 @@
 let db_items = [
     {
         id: 'magnifier',
-        type: 'search'
+        type: 'search',
+        quality: 'normal'
     }, {
         id: 'emerald',
-        type: 'item'
+        type: 'item',
+        quality: 'normal'
     }, {
         id: 'monster_crystal',
-        type: 'item'
+        type: 'item',
+        quality: 'normal'
     }, {
         id: 'soul_camera',
-        type: 'item'
+        type: 'item',
+        quality: 'senior'
     }, {
         id: 'soul_camera_using',
-        type: 'item'
+        type: 'item',
+        quality: 'senior'
     }, {
         id: 'soul_camera_used',
-        type: 'item'
+        type: 'item',
+        quality: 'senior'
     }, {
         id: 'sword',
         type: 'weapon',
+        quality: 'normal',
         data: {
             attribute: {
                 attack: 2,
@@ -32,6 +39,7 @@ let db_items = [
     }, {
         id: 'dagger',
         type: 'weapon',
+        quality: 'normal',
         data: {
             attribute: {
                 attack: 1,
@@ -44,6 +52,7 @@ let db_items = [
     }, {
         id: 'knife',
         type: 'weapon',
+        quality: 'normal',
         data: {
             attribute: {
                 attack: 1,
@@ -56,6 +65,7 @@ let db_items = [
     }, {
         id: 'spear',
         type: 'weapon',
+        quality: 'normal',
         data: {
             attribute: {
                 attack: 2,
@@ -68,6 +78,7 @@ let db_items = [
     }, {
         id: 'kunai',
         type: 'weapon',
+        quality: 'normal',
         data: {
             attribute: {
                 attack: 3,
@@ -80,6 +91,7 @@ let db_items = [
     }, {
         id: 'broadsword',
         type: 'weapon',
+        quality: 'normal',
         data: {
             attribute: {
                 attack: 4,
@@ -98,6 +110,7 @@ let db_items = [
     }, {
         id: 'hammer',
         type: 'weapon',
+        quality: 'normal',
         data: {
             attribute: {
                 attack: 3,
@@ -110,6 +123,7 @@ let db_items = [
     }, {
         id: 'crowbar',
         type: 'weapon',
+        quality: 'normal',
         data: {
             attribute: {
                 attack: 2,
@@ -122,6 +136,7 @@ let db_items = [
     }, {
         id: 'rapier',
         type: 'weapon',
+        quality: 'normal',
         data: {
             attribute: {
                 attack: 2,
@@ -134,6 +149,7 @@ let db_items = [
     }, {
         id: 'teach_weapon',
         type: 'weapon',
+        quality: 'normal',
         data: {
             attribute: {
                 attack: 0,
@@ -146,6 +162,7 @@ let db_items = [
     }, {
         id: 'soul_trace_boomerang',
         type: 'weapon',
+        quality: 'senior',
         data: {
             attribute: {
                 attack: 6,
@@ -157,17 +174,35 @@ let db_items = [
             not_damage_chest: true
         }
     }, {
+        id: 'debug_sword',
+        type: 'weapon',
+        quality: 'super_rarity',
+        data: {
+            attribute: {
+                attack: 1024,
+                defense: 1024,
+                attack_cost: 0,
+                defense_cost: 0,
+                health: 32768
+            },
+            not_damage_chest: true
+        }
+    }, {
         id: 'golden_chest',
-        type: 'chest'
+        type: 'chest',
+        quality: 'super_rarity'
     }, {
         id: 'silver_chest',
-        type: 'chest'
+        type: 'chest',
+        quality: 'rarity'
     }, {
         id: 'copper_chest',
-        type: 'chest'
+        type: 'chest',
+        quality: 'senior'
     }, {
         id: 'blood_chest',
         type: 'chest',
+        quality: 'rarity',
         data: {
             chest: {
                 open_cost: {
@@ -178,6 +213,7 @@ let db_items = [
     }, {
         id: 'emerald_chest',
         type: 'chest',
+        quality: 'rarity',
         data: {
             chest: {
                 open_cost: {
@@ -190,16 +226,19 @@ let db_items = [
         }
     }, {
         id: 'bottle',
-        type: 'water_bottle'
+        type: 'water_bottle',
+        quality: 'normal'
     }, {
         id: 'water_bottle',
         type: 'water_bottle',
+        quality: 'normal',
         data: {
             liquid: 'water'
         }
     }, {
         id: 'instant_health_potion_t2',
         type: 'water_bottle',
+        quality: 'senior',
         data: {
             effect: [
                 {
@@ -213,6 +252,7 @@ let db_items = [
     }, {
         id: 'instant_damage_potion_t2',
         type: 'water_bottle',
+        quality: 'senior',
         data: {
             effect: [
                 {

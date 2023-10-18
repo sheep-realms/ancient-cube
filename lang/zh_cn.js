@@ -121,6 +121,10 @@ const lang_zh_cn = {
             name: "短剑",
             description: "小巧灵活，可攻可守。"
         },
+        debug_sword: {
+            name: "DEBUG SWORD",
+            description: "程序员调试使用的武器。"
+        },
         emerald: {
             name: "绿宝石",
             description: "一种可以充当货币的宝石。"

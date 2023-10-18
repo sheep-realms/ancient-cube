@@ -24,6 +24,7 @@ class Item {
     constructor(id) {
         this.id       = '';
         this.type     = '';
+        this.quality  = 'normal';
         this.count    = 1;
         this.custom   = {};
         this.damage   = 0;
@@ -46,10 +47,11 @@ class Item {
      * @returns {Item} 物品
      */
     create(id) {
-        let obj   = resource.getItem(id);
+        let obj      = resource.getItem(id);
         if (obj == undefined) return;
-        this.id   = obj.id;
-        this.type = obj.type;
+        this.id      = obj.id;
+        this.type    = obj.type;
+        this.quality = obj.quality;
         if (obj?.data != undefined) {
             if (obj.data?.attribute != undefined) {
                 this.attribute = obj.data.attribute;

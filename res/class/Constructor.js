@@ -304,7 +304,7 @@ class ItemPopup {
     constructor() {}
 
     static getPopup(item) {
-        return `<div class="item-popup">
+        return `<div class="item-popup quality-${item.quality}">
             ${ ItemPopup.getPopupTitle(item) }
             ${ ItemPopup.getPopupContent(item) }
         </div>`;

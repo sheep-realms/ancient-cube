@@ -88,4 +88,8 @@ class Tester {
         };
         this.player.give(chest);
     }
+
+    getDebugItem() {
+        this.player.give(ItemGenerator.get('debug_sword'));
+    }
 }
