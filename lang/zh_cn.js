@@ -14,11 +14,13 @@ const lang_zh_cn = {
                 exceed_maximum_value: "逻辑错误：'{n}' 太大了，最大只能为 {max}",
                 exceed_minimum_value: "逻辑错误：'{n}' 太小了，最小只能为 {min}",
                 invalid_json: "语法错误：无效的 JSON",
+                invalid_key_name: "语法错误：'{name}' 不是一个有效的键名",
                 invalid_number: "语法错误：无效的数字",
                 invalid_block: "不存在名为 '{value}' 的方块",
                 invalid_item: "不存在名为 '{value}' 的物品",
                 invalid_loottable: "不存在名为 '{value}' 的战利品表",
-                missing_parameter: "语法错误：缺少必要参数"
+                missing_parameter: "语法错误：缺少必要参数",
+                unknow_option: "语法错误：不存在名为 '{name}' 的选项",
             }
         },
         damage: {
@@ -53,6 +55,16 @@ const lang_zh_cn = {
             fail: {
                 health_maximum: "玩家生命已达最大值",
                 invalid_request: "无法使玩家恢复生命"
+            }
+        },
+        var: {
+            success: {
+                del: "已删除 {stack} 堆中变量 {name}",
+                get: "{stack} 堆中变量 {name} 的值为 {value}",
+                set: "已设置 {stack} 堆中变量 {name} 的值为 {value}"
+            },
+            fail: {
+                var_undefined: "{stack} 堆中变量 {name} 未定义"
             }
         }
     },

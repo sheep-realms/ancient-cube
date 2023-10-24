@@ -74,8 +74,38 @@ class Commander {
                         required: true
                     }
                 ]
+            }, {
+                name: 'var',
+                parameters: [
+                    {
+                        type: 'key',
+                        required: true
+                    }, {
+                        type: 'select',
+                        value: ['=', '+', '-', '*', '/', '%', '++', '--', '^', '&', '|', '>>', '<<', '>>>', 'del', 'get', 'max', 'min']
+                    }, {
+                        type: 'text'
+                    }
+                ]
+            }, {
+                name: 'varg',
+                parameters: [
+                    {
+                        type: 'key',
+                        required: true
+                    }, {
+                        type: 'select',
+                        value: ['=', '+', '-', '*', '/', '%', '++', '--', '^', '&', '|', '>>', '<<', '>>>', 'del', 'get', 'max', 'min']
+                    }, {
+                        type: 'text'
+                    }
+                ]
             }
         ];
+        this.variable = {
+            global: {}
+        };
+        this.stack = 'global';
     }
 
     deployment() {
@@ -158,6 +188,8 @@ class Commander {
             fail = 0,
             failLog = [];
 
+        this.__setStack(this.__getUUID);
+
         for (let i = 0; i < commands.length; i++) {
             let r = this.run(commands[i]);
             if (r.state == 'success') {
@@ -170,6 +202,8 @@ class Commander {
                 });
             }
         }
+
+        this.__clearStack();
 
         return {
             state: {
@@ -198,6 +232,10 @@ class Commander {
                 }
             }
 
+            if (inputCmds[0].search(/^@[a-zA-Z_]\w{0,63}$/) != -1) {
+                inputCmds[0] = this.__getVar(inputCmds[0].substring(1));
+            }
+
             let p, pcheck;
             switch (par.type) {
                 case 'text':
@@ -209,7 +247,7 @@ class Commander {
                     p = Number(inputCmds.shift());
                     pcheck = this.__parameterCheckNumber(p, par);
                     if (pcheck.state != 'success') return pcheck;
-                    newCmd.push(p)
+                    newCmd.push(p);
                     break;
 
                 case 'json':
@@ -224,14 +262,28 @@ class Commander {
                             { state: 'fail', failReason: 'invalid_json' }
                         );
                     }
-                    newCmd.push(pjson)
+                    newCmd.push(pjson);
                     break;
 
                 case 'value':
                     p = inputCmds.shift();
                     pcheck = this.__parameterCheckValueList(par.value, p);
                     if (pcheck.state != 'success') return pcheck;
-                    newCmd.push(p)
+                    newCmd.push(p);
+                    break;
+
+                case 'key':
+                    p = inputCmds.shift();
+                    pcheck = this.__parameterCheckKey(p);
+                    if (pcheck.state != 'success') return pcheck;
+                    newCmd.push(p);
+                    break;
+
+                case 'select':
+                    p = inputCmds.shift();
+                    pcheck = this.__parameterOption(par.value, p);
+                    if (pcheck.state != 'success') return pcheck;
+                    newCmd.push(p);
                     break;
             
                 default:
@@ -294,6 +346,30 @@ class Commander {
         return { state: 'success', data: {} };
     }
 
+    __parameterCheckKey(value) {
+        if (value.search(/^[a-zA-Z_]\w{0,63}$/) == 0) {
+            return { state: 'success', data: {} };
+        } else {
+            return this.__messageConstructor(
+                'common',
+                { state: 'fail', failReason: 'invalid_key_name' },
+                { name: value }
+            );
+        }
+    }
+
+    __parameterOption(options, value) {
+        if (options.indexOf(value) != -1) {
+            return { state: 'success', data: {} };
+        } else {
+            return this.__messageConstructor(
+                'common',
+                { state: 'fail', failReason: 'unknow_option' },
+                { name: value }
+            );
+        }
+    }
+
     __messageConstructor(command, rt, variable = {}, after = undefined) {
         if (rt.state == 'success') {
             rt.message = {
@@ -307,6 +383,49 @@ class Commander {
             };
         }
         return rt;
+    }
+
+    __getUUID() {
+        let timestamp = new Date().getTime();
+        let perforNow = (typeof performance !== 'undefined' && performance.now && performance.now() * 1000) || 0;
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+            let random = Math.random() * 16;
+            if (timestamp > 0) {
+                random = (timestamp + random) % 16 | 0;
+                timestamp = Math.floor(timestamp / 16);
+            } else {
+                random = (perforNow + random) % 16 | 0;
+                perforNow = Math.floor(perforNow / 16);
+            }
+            return (c === 'x' ? random : (random & 0x3) | 0x8).toString(16);
+        });
+    }
+
+    __setStack(key) {
+        if (key == 'global') return;
+        this.variable[key] = {};
+        this.stack = key;
+    }
+
+    __clearStack() {
+        if (this.stack == 'global') return;
+        delete this.variable[this.stack];
+        this.stack = 'global';
+    }
+
+    __getVar(name, stack = this.stack) {
+        let v = this.variable[stack][name];
+        if (v == undefined) v = this.variable['global'][name];
+        return v;
+    }
+
+    __setVar(name, value = undefined, stack = this.stack) {
+        if (Number.isNaN(Number(value)) != true) value = Number(value);
+        this.variable[stack][name] = value;
+    }
+
+    __delVar(name, stack = this.stack) {
+        delete this.variable[stack][name];
     }
 
     damage(value, type = 'unknow', form = {}) {
@@ -387,5 +506,124 @@ class Commander {
     say(message) {
         this.link.messager.send(message);
         return { state: 'success', data: {} };
+    }
+
+    var(name, action = undefined, value = undefined, stack = this.stack) {
+        if (Number.isNaN(Number(value)) != true) value = Number(value);
+
+        if (action == 'get') {
+            let v1 = this.__getVar(name, stack);
+            return this.__messageConstructor(
+                'var',
+                { 
+                    state: 'success',
+                    data: {
+                        stack: stack,
+                        name: name,
+                        value: v1
+                    }
+                },
+                {
+                    stack: stack,
+                    name: name,
+                    value: v1
+                },
+                'get'
+            );
+        }
+
+        if (action == '=' || action == undefined) {
+            this.__setVar(name, value, stack);
+            let v1 = this.__getVar(name, stack);
+            return this.__messageConstructor(
+                'var',
+                { 
+                    state: 'success',
+                    data: {
+                        stack: stack,
+                        name: name,
+                        value: v1
+                    }
+                },
+                {
+                    stack: stack,
+                    name: name,
+                    value: v1
+                },
+                'set'
+            );
+        }
+
+        if (this.__getVar(name, stack) == undefined) {
+            return this.__messageConstructor(
+                'var',
+                { state: 'fail', failReason: 'var_undefined' },
+                { stack: stack, name: name }
+            );
+        }
+
+        let v = this.__getVar(name, stack);
+
+        switch (action) {
+            case '+'  : this.__setVar(name, v +   value,        stack); break;
+            case '-'  : this.__setVar(name, v -   value,        stack); break;
+            case '*'  : this.__setVar(name, v *   value,        stack); break;
+            case '/'  : this.__setVar(name, v /   value,        stack); break;
+            case '%'  : this.__setVar(name, v %   value,        stack); break;
+            case '++' : this.__setVar(name, v + 1,              stack); break;
+            case '--' : this.__setVar(name, v - 1,              stack); break;
+            case '^'  : this.__setVar(name, v ^   value,        stack); break;
+            case '|'  : this.__setVar(name, v |   value,        stack); break;
+            case '&'  : this.__setVar(name, v &   value,        stack); break;
+            case '<<' : this.__setVar(name, v <<  value,        stack); break;
+            case '>>' : this.__setVar(name, v >>  value,        stack); break;
+            case '>>>': this.__setVar(name, v >>> value,        stack); break;
+            case 'max': this.__setVar(name, Math.max(v, value), stack); break;
+            case 'min': this.__setVar(name, Math.min(v, value), stack); break;
+
+            case 'del':
+                this.__delVar(name, stack);
+                return this.__messageConstructor(
+                    'var',
+                    { 
+                        state: 'success',
+                        data: {
+                            name: name
+                        }
+                    },
+                    {
+                        stack: stack,
+                        name: name
+                    },
+                    'del'
+                );
+        
+            default:
+                break;
+        }
+
+        v = this.__getVar(name, stack);
+
+        return this.__messageConstructor(
+            'var',
+            { 
+                state: 'success',
+                data: {
+                    stack: stack,
+                    name: name,
+                    value: v
+                }
+            },
+            {
+                stack: stack,
+                name: name,
+                value: v
+            },
+            'set'
+        );
+    }
+
+    varg(name, action = undefined, value = undefined, stack = 'global') {
+        return this.var(name, action, value, stack);
     }
 }
