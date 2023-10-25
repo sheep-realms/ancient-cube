@@ -19,12 +19,20 @@ class Commander {
                         type: 'number',
                         required: true,
                         value: {
-                            min: 1
+                            min: 0.01
                         }
                     }, {
                         type: 'string'
                     }, {
                         type: 'json'
+                    }
+                ]
+            }, {
+                name: 'getplayerdata',
+                parameters: [
+                    {
+                        type: 'select',
+                        value: ['health', 'health_max', 'selected_slot', 'last_pos_x', 'last_pos_y']
                     }
                 ]
             }, {
@@ -62,7 +70,7 @@ class Commander {
                         type: 'number',
                         required: true,
                         value: {
-                            min: 1
+                            min: 0.01
                         }
                     }
                 ]
@@ -82,7 +90,7 @@ class Commander {
                         required: true
                     }, {
                         type: 'select',
-                        value: ['=', '+', '-', '*', '/', '%', '++', '--', '^', '&', '|', '>>', '<<', '>>>', 'del', 'get', 'max', 'min']
+                        value: ['=', '+', '-', '*', '/', '/^', '/_', '//', '%', '^^', '++', '--', '^', '&', '|', '>>', '<<', '>>>', 'del', 'get', 'max', 'min', 'return']
                     }, {
                         type: 'text'
                     }
@@ -95,7 +103,7 @@ class Commander {
                         required: true
                     }, {
                         type: 'select',
-                        value: ['=', '+', '-', '*', '/', '%', '++', '--', '^', '&', '|', '>>', '<<', '>>>', 'del', 'get', 'max', 'min']
+                        value: ['=', '+', '-', '*', '/', '/^', '/_', '//', '%', '^^', '++', '--', '^', '&', '|', '>>', '<<', '>>>', 'del', 'get', 'max', 'min', 'return']
                     }, {
                         type: 'text'
                     }
@@ -225,7 +233,7 @@ class Commander {
                 if (par.required) {
                     return this.__messageConstructor(
                         'common',
-                        { state: 'fail', failReason: 'missing_parameter' }
+                        StateMessage.getFail('missing_parameter')
                     );
                 } else {
                     break;
@@ -259,7 +267,7 @@ class Commander {
                     } catch (error) {
                         return this.__messageConstructor(
                             'common',
-                            { state: 'fail', failReason: 'invalid_json' }
+                            StateMessage.getFail('invalid_json')
                         );
                     }
                     newCmd.push(pjson);
@@ -291,19 +299,18 @@ class Commander {
                     break;
             }
         }
-        return {
-            state: 'success',
-            data: {
+        return StateMessage.getSuccess(
+            {
                 parameters: newCmd
             }
-        };
+        );
     }
 
     __parameterCheckNumber(value, parameter) {
         if (Number.isNaN(value)) {
             return this.__messageConstructor(
                 'common',
-                { state: 'fail', failReason: 'invalid_number' }
+                StateMessage.getFail('invalid_number')
             );
         }
 
@@ -312,7 +319,7 @@ class Commander {
                 if (value > parameter.value.max) {
                     return this.__messageConstructor(
                         'common',
-                        { state: 'fail', failReason: 'exceed_maximum_value' },
+                        StateMessage.getFail('exceed_maximum_value'),
                         { n: value, max: parameter.value.max }
                     );
                 }
@@ -322,14 +329,14 @@ class Commander {
                 if (value < parameter.value.min) {
                     return this.__messageConstructor(
                         'common',
-                        { state: 'fail', failReason: 'exceed_minimum_value' },
+                        StateMessage.getFail('exceed_minimum_value'),
                         { n: value, min: parameter.value.min }
                     );
                 }
             }
         }
 
-        return { state: 'success', data: {} };
+        return StateMessage.getSuccess();
     }
 
     __parameterCheckValueList(type, value) {
@@ -338,21 +345,21 @@ class Commander {
         if (i == -1) {
             return this.__messageConstructor(
                 'common',
-                { state: 'fail', failReason: 'invalid_' + type },
+                StateMessage.getFail('invalid_' + type),
                 { value: value }
             );
         };
 
-        return { state: 'success', data: {} };
+        return StateMessage.getSuccess();
     }
 
     __parameterCheckKey(value) {
         if (value.search(/^[a-zA-Z_]\w{0,63}$/) == 0) {
-            return { state: 'success', data: {} };
+            return StateMessage.getSuccess();
         } else {
             return this.__messageConstructor(
                 'common',
-                { state: 'fail', failReason: 'invalid_key_name' },
+                StateMessage.getFail('invalid_key_name'),
                 { name: value }
             );
         }
@@ -360,11 +367,11 @@ class Commander {
 
     __parameterOption(options, value) {
         if (options.indexOf(value) != -1) {
-            return { state: 'success', data: {} };
+            return StateMessage.getSuccess();
         } else {
             return this.__messageConstructor(
                 'common',
-                { state: 'fail', failReason: 'unknow_option' },
+                StateMessage.getFail('unknow_option'),
                 { name: value }
             );
         }
@@ -437,6 +444,31 @@ class Commander {
         }
     }
 
+    getplayerdata(value) {
+        let data = {
+            health: this.link.player.health,
+            health_max: this.link.player.healthMax,
+            selected_slot: this.link.player.selectedSlot,
+            last_pos_x: this.link.player.lastPos[1],
+            last_pos_y: this.link.player.lastPos[0]
+        };
+        let v = data[value];
+
+        return this.__messageConstructor(
+            'getplayerdata',
+            StateMessage.getSuccess(
+                {
+                    value: v
+                },
+                v
+            ),
+            {
+                value: v,
+                data_name: $t( 'command.getplayerdata.data_name.' + value )
+            }
+        );
+    }
+
     give(id, count = 1, data = {}) {
         let item = ItemGenerator.get(id);
         item.data = {...item.data, ...data};
@@ -505,7 +537,7 @@ class Commander {
 
     say(message) {
         this.link.messager.send(message);
-        return { state: 'success', data: {} };
+        return StateMessage.getSuccess();
     }
 
     var(name, action = undefined, value = undefined, stack = this.stack) {
@@ -515,14 +547,13 @@ class Commander {
             let v1 = this.__getVar(name, stack);
             return this.__messageConstructor(
                 'var',
-                { 
-                    state: 'success',
-                    data: {
+                StateMessage.getSuccess(
+                    {
                         stack: stack,
                         name: name,
                         value: v1
                     }
-                },
+                ),
                 {
                     stack: stack,
                     name: name,
@@ -537,14 +568,34 @@ class Commander {
             let v1 = this.__getVar(name, stack);
             return this.__messageConstructor(
                 'var',
-                { 
-                    state: 'success',
-                    data: {
+                StateMessage.getSuccess(
+                    {
                         stack: stack,
                         name: name,
                         value: v1
                     }
+                ),
+                {
+                    stack: stack,
+                    name: name,
+                    value: v1
                 },
+                'set'
+            );
+        }
+
+        if (action == 'return') {
+            this.__setVar(name, this.run(value).value, stack);
+            let v1 = this.__getVar(name, stack);
+            return this.__messageConstructor(
+                'var',
+                StateMessage.getSuccess(
+                    {
+                        stack: stack,
+                        name: name,
+                        value: v1
+                    }
+                ),
                 {
                     stack: stack,
                     name: name,
@@ -557,7 +608,7 @@ class Commander {
         if (this.__getVar(name, stack) == undefined) {
             return this.__messageConstructor(
                 'var',
-                { state: 'fail', failReason: 'var_undefined' },
+                StateMessage.getFail('var_undefined'),
                 { stack: stack, name: name }
             );
         }
@@ -565,32 +616,35 @@ class Commander {
         let v = this.__getVar(name, stack);
 
         switch (action) {
-            case '+'  : this.__setVar(name, v +   value,        stack); break;
-            case '-'  : this.__setVar(name, v -   value,        stack); break;
-            case '*'  : this.__setVar(name, v *   value,        stack); break;
-            case '/'  : this.__setVar(name, v /   value,        stack); break;
-            case '%'  : this.__setVar(name, v %   value,        stack); break;
-            case '++' : this.__setVar(name, v + 1,              stack); break;
-            case '--' : this.__setVar(name, v - 1,              stack); break;
-            case '^'  : this.__setVar(name, v ^   value,        stack); break;
-            case '|'  : this.__setVar(name, v |   value,        stack); break;
-            case '&'  : this.__setVar(name, v &   value,        stack); break;
-            case '<<' : this.__setVar(name, v <<  value,        stack); break;
-            case '>>' : this.__setVar(name, v >>  value,        stack); break;
-            case '>>>': this.__setVar(name, v >>> value,        stack); break;
-            case 'max': this.__setVar(name, Math.max(v, value), stack); break;
-            case 'min': this.__setVar(name, Math.min(v, value), stack); break;
+            case '+'  : this.__setVar(name, v +   value,           stack); break;
+            case '-'  : this.__setVar(name, v -   value,           stack); break;
+            case '*'  : this.__setVar(name, v *   value,           stack); break;
+            case '/'  : this.__setVar(name, v /   value,           stack); break;
+            case '/^' : this.__setVar(name, Math.ceil (v / value), stack); break;
+            case '/_' : this.__setVar(name, Math.floor(v / value), stack); break;
+            case '//' : this.__setVar(name, Math.round(v / value), stack); break;
+            case '%'  : this.__setVar(name, v %   value,           stack); break;
+            case '^^' : this.__setVar(name, Math.pow  (v , value), stack); break;
+            case '++' : this.__setVar(name, v + 1,                 stack); break;
+            case '--' : this.__setVar(name, v - 1,                 stack); break;
+            case '^'  : this.__setVar(name, v ^   value,           stack); break;
+            case '|'  : this.__setVar(name, v |   value,           stack); break;
+            case '&'  : this.__setVar(name, v &   value,           stack); break;
+            case '<<' : this.__setVar(name, v <<  value,           stack); break;
+            case '>>' : this.__setVar(name, v >>  value,           stack); break;
+            case '>>>': this.__setVar(name, v >>> value,           stack); break;
+            case 'max': this.__setVar(name, Math.max(v, value),    stack); break;
+            case 'min': this.__setVar(name, Math.min(v, value),    stack); break;
 
             case 'del':
                 this.__delVar(name, stack);
                 return this.__messageConstructor(
                     'var',
-                    { 
-                        state: 'success',
-                        data: {
+                    StateMessage.getSuccess(
+                        {
                             name: name
                         }
-                    },
+                    ),
                     {
                         stack: stack,
                         name: name
@@ -606,14 +660,13 @@ class Commander {
 
         return this.__messageConstructor(
             'var',
-            { 
-                state: 'success',
-                data: {
+            StateMessage.getSuccess(
+                {
                     stack: stack,
                     name: name,
                     value: v
                 }
-            },
+            ),
             {
                 stack: stack,
                 name: name,

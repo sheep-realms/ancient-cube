@@ -294,9 +294,10 @@ class Player {
      * @returns {Number} 剩余HP
      */
     damage(value, type = 'unknow', form = {}) {
-        if (this.isDead || game.debug.player_no_damage)         return { state: 'fail', failReason: 'invalid_request' };
+        if (this.isDead || game.debug.player_no_damage)         return StateMessage.getFail('invalid_request');
+        value = Math.ceil(value);
         if (value       >  game.config.security.damage_maximum) value = game.config.security.damage_maximum;
-        if (value       <= 0)                                   return { state: 'fail', failReason: 'invalid_number' };
+        if (value       <= 0)                                   return StateMessage.getFail('invalid_number');
         let lastHealth  = this.health;
         let deathDefend = false;
         if (value == this.health && value > 1) {
@@ -326,22 +327,23 @@ class Player {
             log.error('Player Health Exception: Player.healthMax <= 0', 'class/Player.js > Player > damage()');
         }
 
-        return {
-            state:      'success',
-            data: {
+        return StateMessage.getSuccess(
+            {
                 damage: Math.min(lastHealth, value),
                 health: this.health
-            }
-        };
+            },
+            Math.min(lastHealth, value)
+        );
     }
 
     /**
      * 治疗玩家
      */
     regeneration(value) {
-        if (this.isDead && !game.debug.player_dead_action) return { state: 'fail', failReason: 'invalid_request' };
-        if (value       <= 0)                              return { state: 'fail', failReason: 'invalid_number' };
-        if (this.health >= this.healthMax)                 return { state: 'fail', failReason: 'health_maximum' };
+        if (this.isDead && !game.debug.player_dead_action) return StateMessage.getFail('invalid_request');
+        value = Math.ceil(value);
+        if (value       <= 0)                              return StateMessage.getFail('invalid_number');
+        if (this.health >= this.healthMax)                 return StateMessage.getFail('health_maximum');
         let lastHealth  = this.health;
         
         this.health += Math.min(this.healthMax - this.health, value);
@@ -356,13 +358,13 @@ class Player {
 
         // this.statistics.setStatistic('custom', 'damage_taken', Math.min(this.health, value));
 
-        return {
-            state:        'success',
-            data: {
+        return StateMessage.getSuccess(
+            {
                 rollback: Math.min(this.healthMax - lastHealth, value),
                 health:   this.health
-            }
-        };
+            },
+            Math.min(this.healthMax - lastHealth, value)
+        );
     }
 
     effect(value) {
@@ -399,9 +401,9 @@ class Player {
      * @returns {Object} 状态和数据
      */
     give(item) {
-        if (this.isDead && !game.debug.player_dead_action) return { state: 'fail', failReason: 'invalid_request' };
-        if (item instanceof Item == false)                 return { state: 'fail', failReason: 'invalid_item' };
-        if (item.id == '')                                 return { state: 'fail', failReason: 'item_void' };
+        if (this.isDead && !game.debug.player_dead_action) return StateMessage.getFail('invalid_request');
+        if (item instanceof Item == false)                 return StateMessage.getFail('invalid_item');
+        if (item.id == '')                                 return StateMessage.getFail('item_void');
 
         // 查找同类物品
         let items = this.inventory.filter(function(e) {
@@ -431,12 +433,11 @@ class Player {
 
         if (!this.__inGiveItems) this.updateInventory();
 
-        return {
-            state:    'success',
-            data: {
+        return StateMessage.getSuccess(
+            {
                 item: item,
             }
-        }
+        );
     }
 
     /**
@@ -445,7 +446,7 @@ class Player {
      * @returns {Array<Object>} 状态和数据
      */
     giveItems(items = []) {
-        if (this.isDead && !game.debug.player_dead_action) return { state: 'fail', failReason: 'invalid_request' };
+        if (this.isDead && !game.debug.player_dead_action) return StateMessage.getFail('invalid_request');
         let rs = [];
 
         this.__inGiveItems = true;
@@ -456,12 +457,11 @@ class Player {
 
         this.updateInventory();
 
-        return {
-            state: 'success',
-            data: {
+        return StateMessage.getSuccess(
+            {
                 returns: rs
             }
-        };
+        );
     }
 
     /**
@@ -493,8 +493,8 @@ class Player {
      */
     payCostItem(itemId, count = 0) {
         let obj = this.filterInventoryItemsById(itemId);
-        if (count <= 0 || typeof count != 'number') return { state: 'fail', failReason: 'invalid_request' };
-        if (obj.count < count)                      return { state: 'fail', failReason: 'insufficient_funds' };
+        if (count <= 0 || typeof count != 'number') return StateMessage.getFail('invalid_request');
+        if (obj.count < count)                      return StateMessage.getFail('insufficient_funds');
 
         for (let i = 0; i < obj.items.length; i++) {
             let msg = obj.items[i].removeCount(count);
@@ -510,13 +510,10 @@ class Player {
 
         if (count > 0) {
             log.error('Logic Error: Unknow Exception', 'class/Player.js > Player > payCostItem()');
-            return { state: 'fail', failReason: 'exception' };
+            return StateMessage.getFail('exception');
         }
 
-        return {
-            state: 'success',
-            data: {}
-        };
+        return StateMessage.getSuccess();
     }
 
     /**
@@ -526,16 +523,16 @@ class Player {
      * @returns {Object} 状态和数据
      */
     replaceItem(index, item) {
-        if (this.isDead && !game.debug.player_dead_action) return;
-        if (item instanceof Item == false) return { state: 'fail', failReason: 'item_invalid' };
+        if (this.isDead && !game.debug.player_dead_action) return StateMessage.getFail('invalid_request');
+        if (item instanceof Item == false)                 return StateMessage.getFail('item_invalid');
         this.inventory[index] = item;
-        return {
-            state:              'success',
-            data: {
+        return StateMessage.getSuccess(
+            {
                 item:           item,
                 inventoryIndex: index
-            }
-        }
+            },
+            index
+        );
     }
 
     /**
@@ -545,10 +542,10 @@ class Player {
      * @returns {Object} 状态和数据
      */
     switchHotbarItem(solt, index) {
-        if (this.isDead && !game.debug.player_dead_action) return { state: 'fail', failReason: 'invalid_request' };
+        if (this.isDead && !game.debug.player_dead_action) return StateMessage.getFail('invalid_request');
         let item, hotbarItem;
         if (this.inventory[index] == undefined && this.hotbar[solt] == undefined) {
-            return { state: 'fail', failReason: 'null' };
+            return StateMessage.getFail('null');
         } else if (this.hotbar[solt] == undefined) {
             item                  = this.inventory.splice(index, 1)[0];
             this.hotbar[solt]     = item;
@@ -566,13 +563,13 @@ class Player {
         this.updateHotbar();
         this.updateInventory();
 
-        return {
-            state: 'success',
-            data: {
+        return StateMessage.getSuccess(
+            {
                 solt: solt,
                 inventoryIndex: index
-            }
-        }
+            },
+            index
+        );
     }
 
     /**
@@ -588,7 +585,7 @@ class Player {
      * @param {Number} stage 楼层索引
      */
     switchStage(stage) {
-        if (this.isDead && !game.debug.player_dead_action) return;
+        if (this.isDead && !game.debug.player_dead_action) return StateMessage.getFail('invalid_request');
         this.clearDiscard();
         this.world.switchStage(stage);
         this.boundEvent.updateMap(this.world.getSelectedRoom().getSelectedStage());
@@ -600,7 +597,7 @@ class Player {
      * @param {Number} value 栏位索引
      */
     selectSlot(value) {
-        if (this.isDead && !game.debug.player_dead_action) return;
+        if (this.isDead && !game.debug.player_dead_action) return StateMessage.getFail('invalid_request');
         this.selectedSlot = value;
         this.updateHotbar();
     }
@@ -610,7 +607,7 @@ class Player {
      * @param {Number} index 栏位索引
      */
     useInventoryItem(index) {
-        if (this.isDead && !game.debug.player_dead_action) return { state: 'fail', failReason: 'invalid_request' };
+        if (this.isDead && !game.debug.player_dead_action) return StateMessage.getFail('invalid_request');
         let r;
         if (this.inventory[index] != undefined) {
             switch (this.inventory[index].type) {
@@ -663,7 +660,7 @@ class Player {
      * @param {Number} index 栏位索引
      */
     discardItem(index) {
-        if (this.isDead && !game.debug.player_dead_action) return;
+        if (this.isDead && !game.debug.player_dead_action) return StateMessage.getFail('invalid_request');
         if (this.inventory[index] != undefined) {
             let item = this.inventory.splice(index, 1)[0];
             this.discarded.unshift(item);
@@ -675,7 +672,7 @@ class Player {
      * 回收最后一个丢弃的物品
      */
     recoveryItem() {
-        if (this.isDead && !game.debug.player_dead_action) return;
+        if (this.isDead && !game.debug.player_dead_action) return StateMessage.getFail('invalid_request');
         if (this.discarded.length > 1) {
             let item = this.discarded.shift();
             this.inventory.push(item);
@@ -687,7 +684,7 @@ class Player {
      * 清空丢弃物品
      */
     clearDiscard() {
-        if (this.isDead && !game.debug.player_dead_action) return;
+        if (this.isDead && !game.debug.player_dead_action) return StateMessage.getFail('invalid_request');
         this.discarded = [];
         this.updateInventory();
     }

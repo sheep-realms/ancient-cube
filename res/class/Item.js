@@ -150,17 +150,16 @@ class Weapon extends Item {
      * @returns {Object} 消息
      */
     attack() {
-        if (this.disabled)             return { state: 'fail', failReason: 'item_disabled' };
-        if (this.attribute.attack < 0) return { state: 'fail', failReason: 'action_invalid' };
+        if (this.disabled)             return StateMessage.getFail('item_disabled');
+        if (this.attribute.attack < 0) return StateMessage.getFail('action_invalid');
 
         if (!game.debug.item_no_damage) {
             this.damage++;
         }
         if (this.damage >= this.attribute.health) this.disabled = true;
         
-        return {
-            state:          'success',
-            data: {
+        return StateMessage.getSuccess(
+            {
                 attack:     this.attribute.attack,
                 damageType: this.attribute.damage_type,
                 cost:       this.attribute.attack_cost,
@@ -169,8 +168,9 @@ class Weapon extends Item {
                     max:    this.attribute.health
                 },
                 disabled:   this.disabled
-            }
-        };
+            },
+            this.attribute.attack
+        );
     }
 
     /**
@@ -178,8 +178,8 @@ class Weapon extends Item {
      * @returns {Object} 消息
      */
     defense(damageValue) {
-        if (this.disabled)              return { state: 'fail', failReason: 'item_disabled' };
-        if (this.attribute.defense < 0) return { state: 'fail', failReason: 'action_invalid' };
+        if (this.disabled)              return StateMessage.getFail('item_disabled');
+        if (this.attribute.defense < 0) return StateMessage.getFail('action_invalid');
         
         if (!game.debug.item_no_damage) {
             this.damage++;
@@ -189,9 +189,8 @@ class Weapon extends Item {
         let dv = damageValue - this.attribute.defense;
         if (dv < 0) dv = 0;
 
-        return {
-            state:                'success',
-            data: {
+        return StateMessage.getSuccess(
+            {
                 defense:          this.attribute.defense,
                 undefendedDamage: dv,
                 cost:             this.attribute.defense_cost,
@@ -200,8 +199,9 @@ class Weapon extends Item {
                     max:          this.attribute.health
                 },
                 disabled:         this.disabled
-            }
-        }
+            },
+            dv
+        );
     }
 
     /**
@@ -234,7 +234,7 @@ class ItemChest extends Item {
      * @returns {Array<Item>} 物品列表
      */
     open() {
-        if (this.disabled) return { state: 'fail', failReason: 'item_disabled' };
+        if (this.disabled) return StateMessage.getFail('item_disabled');
 
         if (this.data.chest.open_cost?.health) {
             if (this.origin.player.health > this.data.chest.open_cost.health) {
@@ -247,7 +247,7 @@ class ItemChest extends Item {
                     }
                 );
             } else {
-                return { state: 'fail', failReason: 'health_low' };
+                return StateMessage.getFail('health_low');
             }
         }
 
@@ -257,7 +257,7 @@ class ItemChest extends Item {
                 this.data.chest.open_cost.item.count
             );
             if (msg.state != 'success') {
-                return { state: 'fail', failReason: 'insufficient_funds' };
+                return StateMessage.getFail('insufficient_funds');
             }
         }
 
@@ -280,12 +280,11 @@ class ItemChest extends Item {
 
         this.setCount(0);
 
-        return {
-            state: 'success',
-            data: {
+        return StateMessage.getSuccess(
+            {
                 items: items
             }
-        };
+        );
     }
 
     /**
@@ -313,20 +312,19 @@ class WaterBottle extends Item {
     }
 
     drink() {
-        if (this.disabled)                 return { state: 'fail', failReason: 'item_disabled' };
-        if (this.data.liquid == undefined) return { state: 'fail', failReason: 'item_disabled' }
+        if (this.disabled)                 return StateMessage.getFail('item_disabled');
+        if (this.data.liquid == undefined) return StateMessage.getFail('item_disabled');
         let efc = this.data.effect;
         this.liquid = undefined;
         if (this.data.effect.length > 0) this.origin.player.effect(this.data.effect);
         this.setCount(0);
 
-        return {
-            state: 'success',
-            data: {
+        return StateMessage.getSuccess(
+            {
                 effect: efc,
                 item: new WaterBottle('bottle')
             }
-        }
+        );
     }
 
     /**

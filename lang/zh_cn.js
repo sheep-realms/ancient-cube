@@ -29,6 +29,16 @@ const lang_zh_cn = {
                 invalid_request: "无法对玩家造成伤害"
             }
         },
+        getplayerdata: {
+            success: "玩家的 {data_name} 值为 {value}",
+            data_name: {
+                health: "生命",
+                health_max: "最大生命",
+                selected_slot: "已选中快捷栏位",
+                last_pos_x: "上一步 X 坐标",
+                last_pos_y: "上一步 Y 坐标"
+            }
+        },
         give: {
             success: "已给予玩家 {name} * {n}",
             fail: {
