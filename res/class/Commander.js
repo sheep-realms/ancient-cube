@@ -90,7 +90,7 @@ class Commander {
                         required: true
                     }, {
                         type: 'select',
-                        value: ['=', '+', '-', '*', '/', '/^', '/_', '//', '%', '^^', '++', '--', '^', '&', '|', '>>', '<<', '>>>', 'del', 'get', 'max', 'min', 'return']
+                        value: ['=', '+', '-', '*', '/', '/^', '/_', '//', '%', '^^', '++', '--', '&+', '^', '&', '|', '>>', '<<', '>>>', 'del', 'get', 'max', 'min', 'typeof', 'return']
                     }, {
                         type: 'text'
                     }
@@ -103,7 +103,7 @@ class Commander {
                         required: true
                     }, {
                         type: 'select',
-                        value: ['=', '+', '-', '*', '/', '/^', '/_', '//', '%', '^^', '++', '--', '^', '&', '|', '>>', '<<', '>>>', 'del', 'get', 'max', 'min', 'return']
+                        value: ['=', '+', '-', '*', '/', '/^', '/_', '//', '%', '^^', '++', '--', '&+', '^', '&', '|', '>>', '<<', '>>>', 'del', 'get', 'max', 'min', 'typeof', 'return']
                     }, {
                         type: 'text'
                     }
@@ -194,9 +194,10 @@ class Commander {
 
         let success = 0,
             fail = 0,
-            failLog = [];
+            failLog = [],
+            uuid = this.__getUUID();
 
-        this.__setStack(this.__getUUID);
+        this.__setStack(uuid);
 
         for (let i = 0; i < commands.length; i++) {
             let r = this.run(commands[i]);
@@ -220,7 +221,8 @@ class Commander {
             },
             log: {
                 fail: failLog
-            }
+            },
+            uuid: uuid
         };
     }
 
@@ -605,7 +607,7 @@ class Commander {
             );
         }
 
-        if (this.__getVar(name, stack) == undefined) {
+        if (this.__getVar(name, stack) == undefined && action != 'typeof') {
             return this.__messageConstructor(
                 'var',
                 StateMessage.getFail('var_undefined'),
@@ -616,25 +618,27 @@ class Commander {
         let v = this.__getVar(name, stack);
 
         switch (action) {
-            case '+'  : this.__setVar(name, v +   value,           stack); break;
-            case '-'  : this.__setVar(name, v -   value,           stack); break;
-            case '*'  : this.__setVar(name, v *   value,           stack); break;
-            case '/'  : this.__setVar(name, v /   value,           stack); break;
-            case '/^' : this.__setVar(name, Math.ceil (v / value), stack); break;
-            case '/_' : this.__setVar(name, Math.floor(v / value), stack); break;
-            case '//' : this.__setVar(name, Math.round(v / value), stack); break;
-            case '%'  : this.__setVar(name, v %   value,           stack); break;
-            case '^^' : this.__setVar(name, Math.pow  (v , value), stack); break;
-            case '++' : this.__setVar(name, v + 1,                 stack); break;
-            case '--' : this.__setVar(name, v - 1,                 stack); break;
-            case '^'  : this.__setVar(name, v ^   value,           stack); break;
-            case '|'  : this.__setVar(name, v |   value,           stack); break;
-            case '&'  : this.__setVar(name, v &   value,           stack); break;
-            case '<<' : this.__setVar(name, v <<  value,           stack); break;
-            case '>>' : this.__setVar(name, v >>  value,           stack); break;
-            case '>>>': this.__setVar(name, v >>> value,           stack); break;
-            case 'max': this.__setVar(name, Math.max(v, value),    stack); break;
-            case 'min': this.__setVar(name, Math.min(v, value),    stack); break;
+            case '+'     : this.__setVar(name, v +   value,               stack); break;
+            case '-'     : this.__setVar(name, v -   value,               stack); break;
+            case '*'     : this.__setVar(name, v *   value,               stack); break;
+            case '/'     : this.__setVar(name, v /   value,               stack); break;
+            case '/^'    : this.__setVar(name, Math.ceil (v / value),     stack); break;
+            case '/_'    : this.__setVar(name, Math.floor(v / value),     stack); break;
+            case '//'    : this.__setVar(name, Math.round(v / value),     stack); break;
+            case '%'     : this.__setVar(name, v %   value,               stack); break;
+            case '^^'    : this.__setVar(name, Math.pow  (v , value),     stack); break;
+            case '++'    : this.__setVar(name, v + 1,                     stack); break;
+            case '--'    : this.__setVar(name, v - 1,                     stack); break;
+            case '&+'    : this.__setVar(name, String(v) + String(value), stack); break;
+            case '^'     : this.__setVar(name, v ^   value,               stack); break;
+            case '|'     : this.__setVar(name, v |   value,               stack); break;
+            case '&'     : this.__setVar(name, v &   value,               stack); break;
+            case '<<'    : this.__setVar(name, v <<  value,               stack); break;
+            case '>>'    : this.__setVar(name, v >>  value,               stack); break;
+            case '>>>'   : this.__setVar(name, v >>> value,               stack); break;
+            case 'max'   : this.__setVar(name, Math.max(v, value),        stack); break;
+            case 'min'   : this.__setVar(name, Math.min(v, value),        stack); break;
+            case 'typeof': this.__setVar(name, typeof value,              stack); break;
 
             case 'del':
                 this.__delVar(name, stack);
